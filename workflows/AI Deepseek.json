@@ -1,0 +1,159 @@
+{
+  "name": "AI Deepseek",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        16
+      ],
+      "id": "f4916592-4224-46cb-8bb6-d743f477362d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        240
+      ],
+      "id": "356e4739-ff54-4a3a-9253-04793c7afd45",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "sFuzOe0ydJ9CEn0H",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Этот инструмент получает финансовые данные из Financial Modeling Prep. \nТы должен передавать JSON с двумя ключами: \n- 'toolName' (обязательно): строка с командой, которую нужно выполнить. \n- 'params' (обязательно): объект с параметрами для этой команды.\n\nСПИСОК ДОСТУПНЫХ КОМАНД ('toolName'):\n\n1. 'Insider.Trading.Latest': получает список последних сделок инсайдеров.\n   Параметры в 'params':\n   - 'page': номер страницы (чтобы пролистывать результаты).\n   - 'limit': сколько записей вернуть.\n\n2. 'Insider.Trading.ReportingName': находит все сделки конкретного инсайдера (покупателя или продавца).\n   Параметры в 'params':\n   - 'name': имя инсайдера (например \"Elon Musk\").\n\n3. 'Insider.Trading.Search': находит все сделки инсайдеров по конкретной компании.\n   Параметры в 'params':\n   - 'symbol': тикер компании (например \"AAPL\").\n   - 'page': номер страницы (чтобы пролистывать результаты).\n   - 'limit': сколько записей вернуть.\n\n4. 'Company.Profile': получает информацию о компании по её тикеру.\n   Параметры в 'params':\n   - 'symbol': тикер компании (например \"AAPL\").\n   Возвращает: название компании, индустрию, сектор, описание.\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "v21zxm3pi6T3hIPV",
+          "mode": "list",
+          "cachedResultName": "Insider Trades — FPM API Router"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "toolName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('toolName', ``, 'string') }}",
+            "params": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('params', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "toolName",
+              "displayName": "toolName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "params",
+              "displayName": "params",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        240
+      ],
+      "id": "c6ec7c27-9f16-42e3-a53a-4e7b3161f9b6",
+      "name": "Call n8n Workflow Tool"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.input }}",
+        "options": {
+          "maxIterations": 300
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -432,
+        16
+      ],
+      "id": "2c21e67f-9c30-4548-b91d-e19b90b09ad1",
+      "name": "AI Agent"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "input": "Собери агрегированные данные из доступных эндпоинтов FMP.\n\nЗадача: выведи список 10 последних компании, по которым прошли сделки инсайдеров на покупку.\n\nПравила формирования:\n1. Используй данные из эндпоинтов insider-trading/latest, insider-trading/reporting-name, insider-trading/search и profile.\n2. Для каждой компании нужно:\n - Тикер и название компании.\n - Индустрию и сектор.\n - Рыночную капитализацию (MarketCap), округлённую (до сотых) до миллиардов долларов с постфиксом B.\n - Всех последних покупателей (insiders) по этой компании, с указанием:\n • Имя и должность.\n • Сумму покупки (количество акций × цена акции), переведённую (с округлением до сотых) в миллионы долларов с постфиксом M.\n • Вид ценной бумаги (например Common Stock, Warrants).\n • Дату сделки (Filing date).\n - Если у инсайдера несколько сделок по разным ценам, посчитай сумму отдельно для каждой сделки, сложи итоговую сумму и укажи в скобках количество сделок.\n - Текстовое описание компании (About) из профиля.\n - Ссылку (именно на этот ресурс) https://www.profitspi.com/stock/stock-charts.ashx?chart=<TICKER>, где <TICKER> заменяется на тикер компании.\n\n3. Ранжируй компании по дате последней сделки (самые свежие сверху).\n\nФормат вывода по каждой компании:\n<Тикер>, <Название компании>\n<Индустрия>, <Сектор>\nMarketCap: <значение>B\n<Имя инсайдера> (<Должность>) - <сумма>M, <тип бумаги> (Filing date <дата>)\n... (все инсайдеры компании)\nAbout: <описание>\n<ссылка на изображение на profitspi.com>\n<ссылки (url) на SEC по данным сделкам>\n\nВыведи так последовательно 10 компании. После вызовов инструментов сформируй и выведи финальный список в требуемом формате.",
+          "sessionId": "test-chat-123"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n Workflow Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fa1c246d-c7ed-49f6-84f1-7c805a527441",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d3f4a3b127cb87bc84470563af6a1f06f66603f8f86e5c640a99cd751a7b3883"
+  },
+  "id": "UjsfGKOyyTRIqBh8",
+  "tags": []
+}
