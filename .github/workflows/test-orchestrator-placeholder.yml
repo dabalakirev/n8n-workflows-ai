@@ -1,0 +1,266 @@
+# 🧪 Test Orchestrator Integration - PLACEHOLDER
+
+# This GitHub Action will be activated when Issue #2 is completed
+# Current Status: DISABLED until Test Orchestrator workflow is ready
+
+name: 🧪 Test Orchestrator Integration
+
+on:
+  # Temporarily disabled - will be enabled after Test Orchestrator is created
+  # push:
+  #   branches: [ main ]
+  #   paths: 
+  #     - 'workflows/dev/**/*.json'
+  # pull_request:
+  #   branches: [ main ]  
+  #   paths:
+  #     - 'workflows/dev/**/*.json'
+
+  # Manual trigger for testing when ready
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - quick
+          - full
+          - regression
+
+jobs:
+  # This job is currently set to always skip
+  # Will be activated when Test Orchestrator webhook is ready
+  test-orchestrator:
+    name: 🚀 Run Test Orchestrator
+    runs-on: ubuntu-latest
+    if: false  # DISABLED - Remove this line when Test Orchestrator is ready
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Test Environment
+      run: |
+        echo "🧪 Setting up test environment for n8n workflows"
+        echo "Test suite: ${{ github.event.inputs.test_suite || 'full' }}"
+        
+    - name: 📋 Prepare Test Data
+      run: |
+        echo "📊 Preparing test data for workflows..."
+        
+        # Create test payload for Test Orchestrator
+        cat > test-payload.json << EOF
+        {
+          "testSuite": "${{ github.event.inputs.test_suite || 'full' }}",
+          "workflows": ["ai-deepseek", "fmp-router"],
+          "testData": {
+            "ai-deepseek": {
+              "input": "Test financial query for automated testing",
+              "sessionId": "github-actions-${{ github.run_id }}"
+            },
+            "fmp-router": {
+              "toolName": "Insider.Trading.Latest",
+              "params": {
+                "limit": 5,
+                "page": 1
+              }
+            }
+          },
+          "metadata": {
+            "source": "github-actions",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "run_id": "${{ github.run_id }}"
+          }
+        }
+        EOF
+        
+        echo "Test payload created:"
+        cat test-payload.json
+        
+    - name: 🌐 Call Test Orchestrator Webhook
+      id: test-execution
+      run: |
+        echo "🚀 Calling Test Orchestrator webhook..."
+        
+        # This will be the actual webhook URL when Test Orchestrator is ready
+        # WEBHOOK_URL="${{ secrets.TEST_ORCHESTRATOR_WEBHOOK_URL }}"
+        WEBHOOK_URL="https://n8n.example.com/webhook/test-orchestrator"
+        
+        echo "Webhook URL: $WEBHOOK_URL"
+        
+        # Execute webhook call with timeout
+        response=$(curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "User-Agent: GitHub-Actions/${{ github.run_id }}" \
+          -d @test-payload.json \
+          --max-time 120 \
+          --retry 3 \
+          --retry-delay 5 \
+          --write-out "HTTPSTATUS:%{http_code}" \
+          --silent \
+          "$WEBHOOK_URL")
+          
+        # Extract HTTP status and body
+        http_code=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+        body=$(echo $response | sed -E 's/HTTPSTATUS\:[0-9]{3}$//')
+        
+        echo "HTTP Status: $http_code"
+        echo "Response Body: $body"
+        
+        # Save results for next steps
+        echo "http_code=$http_code" >> $GITHUB_OUTPUT
+        echo "response_body=$body" >> $GITHUB_OUTPUT
+        
+        # Check if request was successful
+        if [ "$http_code" -ne 200 ]; then
+          echo "❌ Test Orchestrator webhook failed with HTTP $http_code"
+          exit 1
+        fi
+        
+    - name: 📊 Parse Test Results
+      id: parse-results
+      run: |
+        echo "📋 Parsing test results from Test Orchestrator..."
+        
+        response_body="${{ steps.test-execution.outputs.response_body }}"
+        echo "Raw response: $response_body"
+        
+        # Parse JSON response (expected format from testing-strategy.md)
+        total_tests=$(echo "$response_body" | jq -r '.summary.total // 0')
+        passed_tests=$(echo "$response_body" | jq -r '.summary.passed // 0') 
+        failed_tests=$(echo "$response_body" | jq -r '.summary.failed // 0')
+        duration=$(echo "$response_body" | jq -r '.summary.duration // "unknown"')
+        
+        echo "📊 TEST RESULTS SUMMARY"
+        echo "======================"
+        echo "Total tests: $total_tests"
+        echo "Passed: $passed_tests" 
+        echo "Failed: $failed_tests"
+        echo "Duration: $duration"
+        
+        # Save results for reporting
+        echo "total_tests=$total_tests" >> $GITHUB_OUTPUT
+        echo "passed_tests=$passed_tests" >> $GITHUB_OUTPUT
+        echo "failed_tests=$failed_tests" >> $GITHUB_OUTPUT
+        echo "duration=$duration" >> $GITHUB_OUTPUT
+        
+        # Fail the job if any tests failed
+        if [ "$failed_tests" -gt 0 ]; then
+          echo "❌ $failed_tests test(s) failed!"
+          exit 1
+        fi
+        
+        echo "✅ All tests passed!"
+        
+    - name: 📝 Generate Test Report
+      if: always()
+      run: |
+        echo "📋 AUTOMATED TEST REPORT" >> $GITHUB_STEP_SUMMARY
+        echo "========================" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🕐 **Execution Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "🔄 **Test Suite**: ${{ github.event.inputs.test_suite || 'full' }}" >> $GITHUB_STEP_SUMMARY
+        echo "📝 **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "🌿 **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.test-execution.result }}" = "success" ]; then
+          echo "## ✅ Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Tests**: ${{ steps.parse-results.outputs.total_tests }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Passed**: ${{ steps.parse-results.outputs.passed_tests }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Failed**: ${{ steps.parse-results.outputs.failed_tests }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Duration**: ${{ steps.parse-results.outputs.duration }}" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## ❌ Test Execution Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Test Orchestrator could not be reached or returned an error." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Possible causes:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Test Orchestrator workflow not active in n8n" >> $GITHUB_STEP_SUMMARY
+          echo "- Webhook URL not configured correctly" >> $GITHUB_STEP_SUMMARY
+          echo "- Network connectivity issues" >> $GITHUB_STEP_SUMMARY
+          echo "- Test data format incompatible" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: 💬 Comment on PR (if applicable)
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const testResults = {
+            total: '${{ steps.parse-results.outputs.total_tests }}',
+            passed: '${{ steps.parse-results.outputs.passed_tests }}',
+            failed: '${{ steps.parse-results.outputs.failed_tests }}',
+            duration: '${{ steps.parse-results.outputs.duration }}'
+          };
+          
+          const success = '${{ steps.parse-results.outputs.failed_tests }}' === '0';
+          const status = success ? '✅ PASSED' : '❌ FAILED';
+          
+          const comment = `## 🧪 Automated Test Results - ${status}
+          
+          **Test Suite**: ${{ github.event.inputs.test_suite || 'full' }}
+          **Execution Time**: ${new Date().toISOString()}
+          
+          ### 📊 Results Summary
+          - **Total Tests**: ${testResults.total}
+          - **Passed**: ${testResults.passed}
+          - **Failed**: ${testResults.failed}  
+          - **Duration**: ${testResults.duration}
+          
+          ${success ? 
+            '🎉 **All tests passed!** This PR is ready for review.' : 
+            '⚠️ **Tests failed.** Please review the failures before merging.'
+          }
+          
+          ---
+          *Automated by Test Orchestrator via GitHub Actions*`;
+          
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  # Placeholder job that always runs to show the feature is coming
+  placeholder-info:
+    name: 📋 Test Orchestrator Status  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📢 Current Status
+      run: |
+        echo "🚧 TEST ORCHESTRATOR INTEGRATION - COMING SOON"
+        echo "=============================================="
+        echo ""
+        echo "📋 Status: PLACEHOLDER - Waiting for Issue #2 completion"
+        echo "🎯 Purpose: Automated testing of n8n workflows via Test Orchestrator"
+        echo "📅 ETA: Milestone v1.1 - Testing Framework"
+        echo ""
+        echo "🔗 Related Issues:"
+        echo "  - Issue #2: Create Test Orchestrator workflow"
+        echo "  - Issue #3: Add Execute Workflow Triggers to DEV workflows"
+        echo ""
+        echo "📖 Documentation:"
+        echo "  - Testing Strategy: docs/testing-strategy.md"
+        echo "  - Project Roadmap: docs/roadmap.md"
+        echo ""
+        echo "⚡ Next Steps:"
+        echo "  1. Complete Test Orchestrator workflow creation"
+        echo "  2. Add webhook endpoint configuration"
+        echo "  3. Update DEV workflows with Execute Workflow Triggers"
+        echo "  4. Enable this GitHub Action"
+        echo "  5. Configure webhook URL in repository secrets"
+        echo ""
+        echo "🧪 Expected Features (when active):"
+        echo "  - Automated testing on every push to main"
+        echo "  - PR blocking on test failures"
+        echo "  - Detailed test reporting" 
+        echo "  - Integration with n8n Test Orchestrator"
+        echo ""
+        echo "✅ This placeholder confirms the CI/CD pipeline is ready"
+        echo "   for Test Orchestrator integration!"
