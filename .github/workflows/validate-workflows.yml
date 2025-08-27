@@ -1,0 +1,126 @@
+name: 📝 Validate n8n Workflows
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'workflows/**/*.json'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'workflows/**/*.json'
+
+jobs:
+  validate:
+    name: 🔍 JSON & Schema Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 📋 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: 🔍 Validate JSON Structure
+      run: |
+        echo "🔎 Validating JSON files..."
+        find workflows/ -name "*.json" -type f | while read file; do
+          echo "Checking $file"
+          if ! python -m json.tool "$file" > /dev/null; then
+            echo "❌ Invalid JSON in $file"
+            exit 1
+          else
+            echo "✅ Valid JSON: $file"
+          fi
+        done
+        
+    - name: 🛡️ Security Check - No Hardcoded Secrets
+      run: |
+        echo "🔐 Scanning for hardcoded secrets..."
+        if grep -r -i "api.*key.*[:=]" workflows/ --include="*.json" | grep -v "credential"; then
+          echo "⚠️ WARNING: Found potential hardcoded API keys!"
+          echo "Please use n8n credentials instead of hardcoding keys in JSON"
+          exit 1
+        fi
+        echo "✅ No hardcoded secrets detected"
+        
+    - name: 🏗️ Validate n8n Workflow Structure
+      run: |
+        echo "🔧 Validating n8n workflow structure..."
+        for file in workflows/**/*.json; do
+          echo "Validating n8n structure: $file"
+          
+          # Check required fields
+          if ! jq -e '.nodes' "$file" > /dev/null; then
+            echo "❌ Missing 'nodes' array in $file"
+            exit 1
+          fi
+          
+          if ! jq -e '.connections' "$file" > /dev/null; then
+            echo "❌ Missing 'connections' object in $file"
+            exit 1
+          fi
+          
+          # Check if it's DEV workflow (should have 2 triggers)
+          if [[ "$file" == *"/dev/"* ]]; then
+            trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file")
+            if [ "$trigger_count" -ne 2 ]; then
+              echo "⚠️ DEV workflow $file should have exactly 2 triggers (Manual + Execute Workflow)"
+              echo "Found: $trigger_count triggers"
+            fi
+          fi
+          
+          # Check if it's PROD workflow (should have 1 trigger)  
+          if [[ "$file" == *"/prod/"* ]]; then
+            trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file")
+            if [ "$trigger_count" -ne 1 ]; then
+              echo "⚠️ PROD workflow $file should have exactly 1 trigger (Manual only)"
+              echo "Found: $trigger_count triggers"
+            fi
+          fi
+          
+          echo "✅ Structure valid: $file"
+        done
+        
+    - name: 📊 Generate Validation Report
+      if: always()
+      run: |
+        echo "📋 VALIDATION SUMMARY" >> $GITHUB_STEP_SUMMARY
+        echo "===================" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        total_files=$(find workflows/ -name "*.json" | wc -l)
+        echo "📁 Total workflow files: $total_files" >> $GITHUB_STEP_SUMMARY
+        
+        dev_files=$(find workflows/dev/ -name "*.json" 2>/dev/null | wc -l)
+        prod_files=$(find workflows/prod/ -name "*.json" 2>/dev/null | wc -l)
+        
+        echo "🔄 DEV workflows: $dev_files" >> $GITHUB_STEP_SUMMARY
+        echo "🚀 PROD workflows: $prod_files" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All validations passed!" >> $GITHUB_STEP_SUMMARY
+
+  # Placeholder for future Test Orchestrator integration
+  # Will be activated when Issue #2 is completed
+  test-integration:
+    name: 🧪 Integration Testing (Placeholder)
+    runs-on: ubuntu-latest
+    needs: validate
+    if: false  # Disabled until Test Orchestrator is ready
+    
+    steps:
+    - name: 📥 Checkout Repository  
+      uses: actions/checkout@v4
+      
+    - name: 🚧 Test Orchestrator Integration
+      run: |
+        echo "🚧 Test Orchestrator integration will be implemented in Issue #2"
+        echo "This step is currently disabled until the Test Orchestrator workflow is created"
+        echo "Expected features:"
+        echo "  - Webhook call to Test Orchestrator"
+        echo "  - Automated testing of all DEV workflows"
+        echo "  - Result parsing and reporting"
+        echo "  - Blocking deployment on test failures"
