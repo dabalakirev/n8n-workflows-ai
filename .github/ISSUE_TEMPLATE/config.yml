@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🤖 AI Agent Support
+    url: https://github.com/dabalakirev/n8n-workflows-ai/discussions
+    about: Вопросы по работе с AI агентом и настройке MCP
+  - name: 📖 Documentation
+    url: https://github.com/dabalakirev/n8n-workflows-ai/blob/main/README.md
+    about: Основная документация проекта
