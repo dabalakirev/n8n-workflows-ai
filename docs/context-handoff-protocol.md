@@ -18,6 +18,28 @@
 3. Подтверждает понимание контекста
 4. Продолжает работу с указанного места
 
+## 🧪 Тестовая архитектура
+
+### Структура DEV workflows:
+**Все DEV workflows имеют ДВА триггера:**
+```
+DEV Workflow:
+├── Manual Trigger (основной, для ручного запуска)
+└── Execute Workflow Trigger (тестовый, для вызова оркестратором)
+    ↑
+    └── Test Orchestrator
+```
+
+### Test Orchestrator:
+- Специальный workflow с Webhook триггером
+- Вызывает все DEV workflows через Execute Workflow узлы
+- Собирает результаты тестирования
+- Возвращает сводный отчет
+
+### PROD vs DEV различия:
+- **DEV**: 2 триггера (Manual + Execute Workflow)
+- **PROD**: 1 триггер (только Manual)
+
 ## 📋 Template для передачи контекста:
 
 ```markdown
@@ -34,13 +56,21 @@
 - **Modified Files**: [list]
 
 ## n8n State  
-- **DEV Workflows**: [status of each]
+- **DEV Workflows**: [status of each + testing triggers]
 - **PROD Workflows**: [status of each]
+- **Test Orchestrator**: [webhook URL, last test results]
 - **Issues**: [current blockers/problems]
+
+## Testing Context
+- **Last Test Run**: [date/time]
+- **Test Results**: [pass/fail summary]
+- **Test Coverage**: [which workflows tested]
+- **Known Test Issues**: [current testing problems]
 
 ## Context for Next Agent
 - **Role Needed**: [Architect/Developer/Tester]
 - **Immediate Tasks**: [priority list]
+- **Testing Tasks**: [specific tests needed]
 - **Important Context**: [critical info to remember]
 ```
 
@@ -49,6 +79,7 @@
 ```
 docs/
 ├── current-session-state.md    # Live state
+├── testing-strategy.md         # Testing approach with orchestrator
 ├── session-history/            # Archive of handoffs
 │   ├── session-001-handoff.md
 │   ├── session-002-handoff.md
