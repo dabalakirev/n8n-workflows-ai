@@ -1,0 +1,73 @@
+{
+  "name": "FMP API Router (PROD)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [336, -64],
+      "id": "9484af7b-42ac-408c-bff5-2403d0b65ca2",
+      "name": "When clicking 'Execute workflow'"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Конфигурация Роутера ---\nconst FMP_BASE_URL = 'https://financialmodelingprep.com';\n\nconst routingTable = {\n  'Insider.Trading.Latest': { path: '/stable/insider-trading/latest', paramIn: 'query' },\n  'Insider.Trading.ReportingName': { path: '/stable/insider-trading/reporting-name', paramIn: 'query' },\n  'Insider.Trading.Search': { path: '/stable/insider-trading/search', paramIn: 'query' },\n  'Company.Profile': { path: '/stable/profile', paramIn: 'query' },\n};\n\n\n// --- Логика Роутера ---\n\n// ВАЖНО: Вставьте сюда ваш API ключ\nconst apiKey = 'S5tVOZNLoKcHwfq9fGwPSHgnXQZNWPRt';\n\n// Получаем данные напрямую от агента (из узла Start)\nconst toolName = $json.toolName;\nconst params = $json.params || {};\n\n// Добавляем API ключ к параметрам запроса\nparams.apikey = apiKey;\n\nconst route = routingTable[toolName];\nif (!route) {\n  throw new Error(`Ошибка: Команда \"${toolName}\" не найдена в таблице маршрутизации.`);\n}\n\nlet finalUrl = FMP_BASE_URL + route.path;\n\nif (route.paramIn === 'query' && Object.keys(params).length > 0) {\n  const queryParts = [];\n  for (const key in params) {\n    if (params[key] !== undefined && params[key] !== null) {\n      queryParts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));\n    }\n  }\n  if (queryParts.length > 0) {\n    finalUrl += '?' + queryParts.join('&');\n  }\n} else if (route.paramIn === 'path') {\n  for (const key in params) {\n    if (route.path.includes(`\\${${key}}`)) {\n      finalUrl = finalUrl.replace(`\\${${key}}`, params[key]);\n    }\n  }\n}\n\nconst output = {\n  url: finalUrl,\n};\n\nreturn output;"
+      },
+      "id": "9f62c456-1684-494a-8ae3-faa15f318508",
+      "name": "Code Router Logic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [592, -64],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"url\"] }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [832, -64],
+      "id": "06da6545-14c5-4f78-ba8f-9876c7953ffc",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Code Router Logic": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Code Router Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [[]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a765e2c8-511d-4204-b84a-9ed4c41f5c86-prod",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d3f4a3b127cb87bc84470563af6a1f06f66603f8f86e5c640a99cd751a7b3883"
+  },
+  "tags": []
+}
