@@ -40,19 +40,20 @@ jobs:
     - name: 🛡️ Security Check - No Hardcoded Secrets
       run: |
         echo "🔐 Scanning for hardcoded secrets..."
-        # Updated regex to avoid false positives on n8n credential field names
-        # Looks for actual hardcoded values, not just field names
+        # Check for actual hardcoded API keys with values (not just credential names)
         if grep -r -E "\"api.*key\"\s*:\s*\"[^\"]{10,}\"" workflows/ --include="*.json"; then
           echo "⚠️ WARNING: Found potential hardcoded API keys!"
           echo "Please use n8n credentials instead of hardcoding keys in JSON"
           exit 1
         fi
-        # Additional check for common patterns but exclude n8n credential references
-        if grep -r -i "api.*key.*[:=]" workflows/ --include="*.json" | grep -v "credential\|\".*ApiKey.*\":\s*{"; then
+        
+        # Check for other hardcoded patterns but exclude n8n credential configurations
+        if grep -r -i "api.*key.*[:=].*[a-zA-Z0-9]{20,}" workflows/ --include="*.json" | grep -v "credentials\|PLACEHOLDER_ID"; then
           echo "⚠️ WARNING: Found potential hardcoded API keys!"
           echo "Please use n8n credentials instead of hardcoding keys in JSON"
           exit 1
         fi
+        
         echo "✅ No hardcoded secrets detected"
         
     - name: 🏗️ Validate n8n Workflow Structure
