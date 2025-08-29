@@ -8,6 +8,12 @@ on:
   pull_request:
     types: [opened, closed]
 
+# Fix for 403 "Resource not accessible by integration" error
+permissions:
+  issues: write
+  contents: read
+  pull-requests: write
+
 jobs:
   auto-label:
     name: 🏷️ Auto-assign Labels
