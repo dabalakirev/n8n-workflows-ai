@@ -19,12 +19,16 @@
 ### **🎯 Цель:** Понять задание и определить scope работ
 
 **Обязательные действия:**
+- **Context Awareness Check** - проверить актуальность информации:
+  - Новые комментарии к связанным Issues
+  - Recent GitHub Actions результаты  
+  - Updates в зависимых задачах
 - **Analyze Assignment** - понять что требуется сделать
 - **Identify Key Actions** - определить основные действия для выполнения
 - **Determine Documentation Impact** - какая документация потребует обновления
 - **Assess Issues Impact** - какие Issues будут затронуты (создание/обновление/закрытие)
 
-**Результат:** Понимание полного scope задания
+**Результат:** Понимание полного scope задания с актуальным контекстом
 
 ---
 
@@ -99,7 +103,7 @@
 - **Create new documentation** - для новых features/процессов
 - **Cross-reference updates** - поддерживать связи между документами
 
-#### **🔗 System Integration (NEW)**
+#### **🔗 System Integration**
 **MANDATORY для КАЖДОГО созданного документа:**
 - **Update README.md** - добавить новую документацию в navigation
 - **Add protocol references** - обновить relevant AI protocols с links
@@ -111,7 +115,7 @@
 - **Results summary** - итоговые результаты и deliverables
 - **Lessons learned** - важные findings для будущих задач
 
-#### **🎯 Integration Verification Checklist (NEW)**
+#### **🎯 Integration Verification Checklist**
 **При создании ЛЮБОГО документа проверить:**
 - [ ] **README.md updated** с новой документацией?
 - [ ] **Navigation paths** созданы для discovery?
@@ -129,6 +133,7 @@
 
 | Action Type | When Required | Example |
 |------------|---------------|---------|
+| **Context Awareness** | **Always в Planning** | **Check recent comments, Actions** |
 | **Issues Management** | Always | Create/Update/Close Issues |
 | **Documentation** | When functionality changes | Update README, guides, specs |
 | **System Integration** | **ALWAYS при создании docs** | **README updates, navigation links** |
@@ -142,9 +147,10 @@
 - Промежуточные technical steps
 
 ### **✅ What MUST be planned:**
+- **Context awareness activities**
 - Командные коммуникации
 - Документальные изменения
-- **System integration requirements (NEW)**
+- **System integration requirements**
 - Issues lifecycle management
 - Knowledge sharing activities
 
@@ -153,19 +159,21 @@
 ## 🎯 Success Criteria - ENHANCED
 
 **Задание считается выполненным когда:**
+- ✅ **Context проверен и актуален**
 - ✅ Все planned actions завершены
 - ✅ Соответствующие Issues обновлены/закрыты
 - ✅ Документация актуализирована
-- ✅ **README.md updated с новой документацией (NEW)**
-- ✅ **Navigation paths созданы для discovery (NEW)**
-- ✅ **System integration completed (NEW)**
+- ✅ **README.md updated с новой документацией**
+- ✅ **Navigation paths созданы для discovery**
+- ✅ **System integration completed**
 - ✅ Команда informative о результатах
 
 **Задание НЕ завершено если:**
+- ❌ **Context не проверен перед началом**
 - ❌ Issues остались без обновления
 - ❌ Документация не отражает изменения
-- ❌ **Новые документы изолированы и недоступны (NEW)**
-- ❌ **README или protocols не обновлены (NEW)**
+- ❌ **Новые документы изолированы и недоступны**
+- ❌ **README или protocols не обновлены**
 - ❌ Нет communication о результатах
 - ❌ Broken cross-references в документации
 
@@ -175,7 +183,7 @@
 
 ### **Example 1: Bug Fix Task**
 ```
-Planning: Understand bug, identify fix approach, determine docs impact
+Planning: Check recent comments on Issue, understand bug, identify fix approach
 Propose: Fix steps + Issue closure + documentation updates
 Execute: Implement fix, test, document
 Document: Close Issue, update troubleshooting docs, UPDATE README navigation, communicate fix
@@ -183,7 +191,7 @@ Document: Close Issue, update troubleshooting docs, UPDATE README navigation, co
 
 ### **Example 2: New Feature Task**  
 ```
-Planning: Feature requirements, design approach, documentation needs
+Planning: Check project status, feature requirements, design approach, documentation needs
 Propose: Implementation plan + new Issues + comprehensive docs + system integration
 Execute: Build feature, test, integrate
 Document: Update Issues, create user guides, ADD TO README navigation, UPDATE protocols, announce feature
@@ -191,7 +199,7 @@ Document: Update Issues, create user guides, ADD TO README navigation, UPDATE pr
 
 ### **Example 3: Documentation Task** - ENHANCED
 ```
-Planning: Documentation gaps, target audience, related Issues, WHERE TO INTEGRATE
+Planning: Check recent activity, documentation gaps, target audience, related Issues, WHERE TO INTEGRATE
 Propose: Documentation structure + Issue updates + README updates + navigation integration
 Execute: Write documentation, review, publish
 Document: Close Issues, UPDATE README, ADD PROTOCOL REFERENCES, create navigation, TEST discovery paths
@@ -210,7 +218,7 @@ Document: Close Issues, UPDATE README, ADD PROTOCOL REFERENCES, create navigatio
 
 ### **When switching between AI agents:**
 - Current agent должен завершить Document phase (INCLUDING system integration)
-- New agent начинает с Planning phase для новых задач
+- New agent начинает с Planning phase (INCLUDING context awareness check)
 - Ongoing tasks передаются с current execution status
 - All created documentation должно быть discoverable для new agent
 
@@ -226,21 +234,23 @@ Document: Close Issues, UPDATE README, ADD PROTOCOL REFERENCES, create navigatio
 - **Cross-links** from related documents
 
 ### **Integration Verification Questions:**
-1. **Discovery:** "Как future AI agent найдет эту документацию?"
-2. **Navigation:** "Где создать links для accessibility?"
-3. **Integration:** "Какие protocols нужно обновить?"
-4. **Workflow:** "Влияет ли на AI execution flow?"
+1. **Context:** "Что изменилось с последнего обновления?"
+2. **Discovery:** "Как future AI agent найдет эту документацию?"
+3. **Navigation:** "Где создать links для accessibility?"
+4. **Integration:** "Какие protocols нужно обновить?"
+5. **Workflow:** "Влияет ли на AI execution flow?"
 
 ### **Enforcement:**
-**Documentation tasks НЕ считаются complete пока document остается isolated.**
+- **Context awareness НЕ optional** - обязательно в Planning phase
+- **Documentation tasks НЕ считаются complete** пока document остается isolated
 
 ---
 
-**Protocol Version:** 1.1  
+**Protocol Version:** 1.2  
 **Updated:** August 2025  
-**Changes:** Added mandatory system integration requirements to prevent isolated documentation
+**Changes:** Added Context Awareness Check to Planning phase for better situational awareness
 **Scope:** Applies to all AI agent activities in the project
 
 ---
 
-*This enhanced protocol ensures that all created documentation remains discoverable and integrated into the project's knowledge system, preventing isolation of important information.*
+*This enhanced protocol ensures AI agents always have current context before starting work and that all documentation remains discoverable and integrated.*
