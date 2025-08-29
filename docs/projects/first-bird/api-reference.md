@@ -1,26 +1,26 @@
 # FMP API Reference - First Bird Project
 
-**Financial Modeling Prep API** integration reference для проекта First Bird
+**Financial Modeling Prep API** - справочник интеграции для проекта First Bird
 
-## 🔗 API Overview
+## 🔗 Обзор API
 
 **Base URL:** `https://financialmodelingprep.com`  
-**Authentication:** API Key required  
+**Аутентификация:** Требуется API Key  
 **Rate Limits:** Зависит от subscription plan  
-**Documentation:** [financialmodelingprep.com/developer/docs](https://financialmodelingprep.com/developer/docs)
+**Документация:** [financialmodelingprep.com/developer/docs](https://financialmodelingprep.com/developer/docs)
 
-## 🛠️ Supported Endpoints
+## 🛠️ Поддерживаемые Endpoints
 
 ### **1. Insider Trading - Latest**
-**Command:** `Insider.Trading.Latest`  
+**Команда:** `Insider.Trading.Latest`  
 **Endpoint:** `/stable/insider-trading/latest`  
-**Method:** GET
+**Метод:** GET
 
-**Parameters:**
-- `page` (optional): Page number для pagination
-- `limit` (optional): Number of records to return
+**Параметры:**
+- `page` (опциональный): Номер страницы для pagination
+- `limit` (опциональный): Количество записей для возврата
 
-**Example Request:**
+**Пример запроса:**
 ```json
 {
   "toolName": "Insider.Trading.Latest",
@@ -31,22 +31,22 @@
 }
 ```
 
-**Response Data:**
-- Transaction details (buy/sell)
-- Company information
-- Insider name и title  
-- Transaction date и amounts
-- Stock price information
+**Возвращаемые данные:**
+- Детали транзакций (покупка/продажа)
+- Информация о компании
+- Имя и должность инсайдера  
+- Даты транзакций и суммы
+- Информация о ценах акций
 
 ### **2. Insider Trading - By Reporting Name**
-**Command:** `Insider.Trading.ReportingName`  
+**Команда:** `Insider.Trading.ReportingName`  
 **Endpoint:** `/stable/insider-trading/reporting-name`  
-**Method:** GET
+**Метод:** GET
 
-**Parameters:**
-- `name` (required): Insider name для search
+**Параметры:**
+- `name` (обязательный): Имя инсайдера для поиска
 
-**Example Request:**
+**Пример запроса:**
 ```json
 {
   "toolName": "Insider.Trading.ReportingName", 
@@ -56,22 +56,22 @@
 }
 ```
 
-**Use Cases:**
-- Track specific executive transactions
-- Monitor insider activity patterns
-- Research individual trading behavior
+**Случаи использования:**
+- Отслеживание транзакций конкретных руководителей
+- Мониторинг паттернов активности инсайдеров
+- Исследование индивидуального торгового поведения
 
 ### **3. Insider Trading - Company Search**
-**Command:** `Insider.Trading.Search`  
+**Команда:** `Insider.Trading.Search`  
 **Endpoint:** `/stable/insider-trading/search`  
-**Method:** GET
+**Метод:** GET
 
-**Parameters:**
-- `symbol` (required): Company ticker symbol
-- `page` (optional): Page number для pagination  
-- `limit` (optional): Number of records to return
+**Параметры:**
+- `symbol` (обязательный): Тикер компании
+- `page` (опциональный): Номер страницы для pagination  
+- `limit` (опциональный): Количество записей для возврата
 
-**Example Request:**
+**Пример запроса:**
 ```json
 {
   "toolName": "Insider.Trading.Search",
@@ -83,20 +83,20 @@
 }
 ```
 
-**Use Cases:**
-- Company-specific insider analysis
-- Historical trading pattern research
-- Investment decision support
+**Случаи использования:**
+- Анализ инсайдерских операций конкретной компании
+- Исследование исторических паттернов торговли
+- Поддержка инвестиционных решений
 
 ### **4. Company Profile**
-**Command:** `Company.Profile`  
+**Команда:** `Company.Profile`  
 **Endpoint:** `/stable/profile`  
-**Method:** GET
+**Метод:** GET
 
-**Parameters:**
-- `symbol` (required): Company ticker symbol
+**Параметры:**
+- `symbol` (обязательный): Тикер компании
 
-**Example Request:**
+**Пример запроса:**
 ```json
 {
   "toolName": "Company.Profile",
@@ -106,16 +106,16 @@
 }
 ```
 
-**Response Data:**
-- Company name и description
-- Industry и sector classification
-- Market capitalization
-- Contact information
-- Business overview
+**Возвращаемые данные:**
+- Название и описание компании
+- Классификация по индустрии и сектору
+- Рыночная капитализация
+- Контактная информация
+- Обзор бизнеса
 
-## 🔧 Router Implementation
+## 🔧 Реализация Router
 
-### **Routing Table:**
+### **Таблица маршрутизации:**
 ```javascript
 const routingTable = {
   'Insider.Trading.Latest': { path: '/stable/insider-trading/latest', paramIn: 'query' },
@@ -125,27 +125,27 @@ const routingTable = {
 };
 ```
 
-### **Authentication Handling:**
+### **Обработка аутентификации:**
 ```javascript
 // API key автоматически добавляется к каждому запросу
-params.apikey = $credentials.fmpApiKey;
+params.apikey = apiKey;
 ```
 
-### **URL Construction:**
+### **Построение URL:**
 ```javascript
-// Query parameters автоматически encoded
+// Query parameters автоматически кодируются
 const queryParts = [];
-for (const k in params) {
-  if (params[k] !== undefined && params[k] !== null) {
-    queryParts.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
+for (const key in params) {
+  if (params[key] !== undefined && params[key] !== null) {
+    queryParts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
   }
 }
 finalUrl += '?' + queryParts.join('&');
 ```
 
-## 📊 API Response Formats
+## 📊 Форматы ответов API
 
-### **Insider Trading Response:**
+### **Ответ Insider Trading:**
 ```json
 [
   {
@@ -163,7 +163,7 @@ finalUrl += '?' + queryParts.join('&');
 ]
 ```
 
-### **Company Profile Response:**
+### **Ответ Company Profile:**
 ```json
 [
   {
@@ -171,7 +171,7 @@ finalUrl += '?' + queryParts.join('&');
     "companyName": "Apple Inc.", 
     "industry": "Consumer Electronics",
     "sector": "Technology",
-    "description": "Apple Inc. designs, manufactures...",
+    "description": "Apple Inc. проектирует, производит...",
     "ceo": "Tim Cook",
     "employees": 164000,
     "city": "Cupertino",
@@ -181,75 +181,75 @@ finalUrl += '?' + queryParts.join('&');
 ]
 ```
 
-## ⚠️ Error Handling
+## ⚠️ Обработка ошибок
 
-### **Common Error Scenarios:**
+### **Распространенные сценарии ошибок:**
 
-#### **Invalid API Key:**
+#### **Неверный API Key:**
 ```json
 {
   "Error Message": "Invalid API key. Please retry or visit our documentation to create one FREE https://financialmodelingprep.com/developer/docs"
 }
 ```
 
-#### **Invalid Symbol:**
+#### **Неверный символ:**
 ```json
 {
   "Error Message": "Invalid symbol"
 }
 ```
 
-#### **Rate Limit Exceeded:**
+#### **Превышен лимит запросов:**
 ```json
 {
   "Error Message": "API calls limit reached. Please upgrade your plan or wait until the next period."
 }
 ```
 
-### **Router Error Handling:**
+### **Обработка ошибок в Router:**
 ```javascript
 if (!route) {
   throw new Error(`Ошибка: Команда "${toolName}" не найдена в таблице маршрутизации.`);
 }
 
 if (!apiKey) {
-  throw new Error('FMP API Key не настроен. Создайте credential "FMP API Key" в n8n.');
+  throw new Error('FMP API Key не настроен в конфигурации workflow.');
 }
 ```
 
-## 🔐 Security Best Practices
+## 🔐 Лучшие практики безопасности
 
-### **API Key Management:**
-- **Never hardcode** API keys в workflow files
-- **Use n8n credentials** для secure key storage
-- **Rotate keys** regularly для security
-- **Monitor usage** для unexpected activity
+### **Управление API Key:**
+- **Никогда не вставляйте** API keys в workflow файлы
+- **Используйте n8n credentials** для secure key storage
+- **Регулярно обновляйте** ключи для безопасности
+- **Мониторьте использование** для выявления неожиданной активности
 
-### **Data Protection:**
-- **Financial data** processed но не stored long-term
-- **Temporary processing** только в memory during execution
-- **No logging** sensitive financial information
-- **Secure transmission** через HTTPS only
+### **Защита данных:**
+- **Финансовые данные** обрабатываются, но не хранятся long-term
+- **Временная обработка** только в memory во время выполнения
+- **Без логирования** sensitive financial information
+- **Безопасная передача** только через HTTPS
 
-## 📈 Performance Optimization
+## 📈 Оптимизация производительности
 
-### **API Efficiency:**
-- **Pagination** для large datasets
-- **Appropriate limits** prevent timeout issues
-- **Caching** where applicable (future enhancement)
-- **Batch requests** when possible
+### **Эффективность API:**
+- **Pagination** для больших datasets
+- **Подходящие limits** предотвращают timeout issues
+- **Кэширование** где применимо (будущее улучшение)
+- **Batch requests** когда возможно
 
 ### **Rate Limiting:**
-- **Monitor usage** против subscription limits
-- **Implement delays** если approaching limits
+- **Мониторинг использования** против subscription limits
+- **Реализация задержек** при приближении к лимитам
 - **Error recovery** для rate limit scenarios
-- **Usage tracking** для cost management
+- **Отслеживание использования** для cost management
 
-## 🧪 Testing Procedures
+## 🧪 Процедуры тестирования
 
-### **Endpoint Testing:**
+### **Тестирование Endpoints:**
 ```json
-// Test data для каждого endpoint
+// Тестовые данные для каждого endpoint
 {
   "Insider.Trading.Latest": { "limit": 5 },
   "Insider.Trading.ReportingName": { "name": "Elon Musk" },
@@ -258,36 +258,56 @@ if (!apiKey) {
 }
 ```
 
-### **Validation Criteria:**
-- **Response structure** matches expected format
-- **Data types** correct для each field
-- **Required fields** present в response
-- **Error handling** proper для invalid inputs
+### **Критерии валидации:**
+- **Структура ответа** соответствует ожидаемому формату
+- **Типы данных** правильные для каждого поля
+- **Обязательные поля** присутствуют в ответе
+- **Обработка ошибок** правильная для invalid inputs
 
-### **Test Automation:**
-- **DEV workflows** contain test triggers
-- **Test Orchestrator** integration for automated testing
+### **Автоматизация тестирования:**
+- **DEV workflows** содержат test triggers
+- **Test Orchestrator** integration для automated testing
 - **Response validation** через automated checks
 - **Performance monitoring** response times
 
-## 🔄 Extension Guidelines
+## 🎯 Текущая интеграция (v1.2)
 
-### **Adding New Endpoints:**
+### **Активные workflows:**
+- **✅ AI Deepseek DEV** (ID: 0VAipR4PLHbtkIzw) - использует FMP Router
+- **✅ FMP API Router DEV** (ID: UmUET85BJqPbpRPp) - обрабатывает все FMP calls
+- **✅ Test Orchestrator** (ID: ElnSprIVyJXKlkl3) - тестирует FMP integration
 
-1. **Update Routing Table:**
+### **Test Orchestrator Integration:**
+```json
+// Пример тестового запроса
+{
+  "testData": {
+    "fmp-router": {
+      "toolName": "Insider.Trading.Latest",
+      "params": { "limit": 5 }
+    }
+  }
+}
+```
+
+## 🔄 Руководство по расширению
+
+### **Добавление новых endpoints:**
+
+1. **Обновить таблицу маршрутизации:**
 ```javascript
 'New.Endpoint.Command': { path: '/stable/new-endpoint', paramIn: 'query' }
 ```
 
-2. **Document Parameters:**
+2. **Документировать параметры:**
 ```markdown
 ### **New Endpoint**
-**Command:** `New.Endpoint.Command`
-**Parameters:** 
-- `param1` (required): Description
+**Команда:** `New.Endpoint.Command`
+**Параметры:** 
+- `param1` (обязательный): Описание
 ```
 
-3. **Add Test Cases:**
+3. **Добавить тест-кейсы:**
 ```json
 {
   "toolName": "New.Endpoint.Command",
@@ -295,19 +315,19 @@ if (!apiKey) {
 }
 ```
 
-4. **Update AI Agent Description:**
-- Add command to AI Agent tool description
-- Include parameter requirements
-- Provide usage examples
+4. **Обновить описание AI Agent:**
+- Добавить команду в description AI Agent tool
+- Включить requirements параметров
+- Предоставить примеры использования
 
-### **Maintenance:**
-- **Regular testing** всех endpoints
-- **Documentation updates** для API changes
-- **Error monitoring** для new issues
-- **Performance tracking** для optimization
+### **Обслуживание:**
+- **Регулярное тестирование** всех endpoints
+- **Обновления документации** для изменений API
+- **Мониторинг ошибок** для новых issues
+- **Отслеживание производительности** для оптимизации
 
 ---
 
-**Этот API reference обеспечивает complete coverage FMP integration для First Bird project с focus на security, performance, и maintainability.**
+**Этот справочник API обеспечивает полное покрытие FMP integration для проекта First Bird с фокусом на безопасность, производительность и maintainability.**
 
-*Last Updated: August 2025 - Issue #21 Project-Centric Architecture*
+*Последнее обновление: Август 2025 - v1.2 Testing Framework Active*
