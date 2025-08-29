@@ -10,7 +10,7 @@
 - [🐦 Текущий Проект: "First Bird"](#-текущий-проект-first-bird)
 - [🛠️ Платформенные Инструменты](#️-платформенные-инструменты)
 - [🗺️ Roadmap Платформы](#️-roadmap-платформы)
-- [🏗️ Архитектура и Структура Окружения](#️-архитектура-и-структура-окружения)
+- [🏗️ Project-Centric Архитектура](#️-project-centric-архитектура)
 - [🚀 Начало Работы](#-начало-работы)
 - [🧪 Testing Framework Платформы](#-testing-framework-платформы)
 - [🔧 Технологии Платформы](#-технологии-платформы)
@@ -60,12 +60,18 @@ n8n-workflows-ai Platform
 - **🤖 AI Deepseek** - Анализ финансовых данных с AI language model
 - **🔗 FMP API Router** - Financial Modeling Prep API routing и data transformation
 
+### **Project Documentation:**
+- **📖 [Project Overview](docs/projects/first-bird/README.md)** - Complete project details
+- **🔗 [API Reference](docs/projects/first-bird/api-reference.md)** - FMP API integration guide
+- **🛠️ [Workflow Guide](docs/projects/first-bird/workflow-guide.md)** - Usage instructions
+- **⚙️ [Workflow README](workflows/first-bird/README.md)** - Technical workflow details
+
 ### **Статус Проекта:**
 ```
 📊 First Bird Progress:        ██████████ 100% (workflows реализованы)
 🧪 Testing Integration:        ████████░░  80% (Test Orchestrator готов)
-📚 Documentation:              ████████░░  80% (protocols & guides готовы)
-🚀 Production Readiness:       ███████░░░  70% (готов к deployment)
+📚 Documentation:              ██████████ 100% (complete project docs)
+🚀 Production Readiness:       ████████░░  80% (готов к deployment)
 ```
 
 ---
@@ -80,6 +86,7 @@ n8n-workflows-ai Platform
 
 ### 🚀 **GitHub Actions Pipeline**
 - **Workflow Validation:** JSON structure и n8n schema validation
+- **Project-Centric Validation:** Multi-project structure compliance
 - **Issue Automation:** Labels, milestones, lifecycle management
 - **Release Management:** Automated versioning и deployment
 - **Quality Gates:** Automated testing перед production deployment
@@ -96,18 +103,19 @@ n8n-workflows-ai Platform
 
 ### 📅 **Текущий Статус: Milestone v1.1 - Documentation & Infrastructure**
 ```
-v1.1 Documentation & Infrastructure:  ██████████ 90% (platform foundation)
+v1.1 Documentation & Infrastructure:  ████████░░ 90% (project-centric complete)
 v1.2 Testing Framework:               ████░░░░░░ 40% (Test Orchestrator готов)
 v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-project scaling)
 
-Общий Прогресс Платформы:             ███████░░░ 75%
+Общий Прогресс Платформы:             ████████░░ 80%
 ```
 
 ### 🎯 **Вехи Платформы:**
 - **🏗️ v1.1 - Platform Foundation** (Сентябрь 2025) - *Documentation & Infrastructure*
-  - Завершить AI Agent protocols и development procedures
-  - Оптимизировать GitHub environment для productivity
-  - Установить release и version management systems
+  - ✅ Project-Centric Architecture реализована
+  - ✅ AI Agent protocols и development procedures готовы
+  - ✅ GitHub Actions optimized для multi-project support
+  - 🔄 Release и version management systems (в процессе)
   
 - **🧪 v1.2 - Testing Framework** (Октябрь-Ноябрь 2025) - *Universal Testing Infrastructure*
   - Активировать Test Orchestrator для automated testing
@@ -123,31 +131,46 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 
 ---
 
-## 🏗️ Архитектура и Структура Окружения
+## 🏗️ Project-Centric Архитектура
+
+### **Project Structure:**
+```
+workflows/
+├── first-bird/             # Financial Data Automation project
+│   ├── dev/                # DEV workflows (2 triggers each)
+│   │   ├── ai-deepseek-dev.json      (Manual + Execute Workflow)
+│   │   └── fmp-router-dev.json       (Manual + Execute Workflow) 
+│   ├── prod/               # PROD workflows (1 trigger each)
+│   │   ├── ai-deepseek-prod.json     (Manual only)
+│   │   └── fmp-router-prod.json      (Manual only)
+│   └── README.md           # Project-specific workflow documentation
+├── [future-project]/       # Template для новых проектов
+│   ├── dev/                # DEV environment для проекта
+│   ├── prod/               # PROD environment для проекта  
+│   └── README.md           # Project documentation
+└── README.md              # Platform workflows guide
+```
+
+### **Documentation Structure:**
+```
+docs/
+├── [платформенная документация]     # Universal protocols
+└── projects/               # Project-specific documentation  
+    └── first-bird/         # First Bird project docs
+        ├── README.md       # Project overview
+        ├── api-reference.md # FMP API documentation
+        └── workflow-guide.md # Usage guide
+```
 
 ### **Multi-Environment Support:**
 - **DEV Environment** - Development и testing (2 triggers: Manual + Execute Workflow)
 - **PROD Environment** - Production deployments (1 trigger: Manual только)
 - **Test Framework** - Automated quality assurance через Test Orchestrator
 
-### **Структура Repository:**
-```
-├── workflows/           # Реализации project workflows
-│   ├── dev/            # DEV версии с testing triggers
-│   └── prod/           # PROD версии (production-ready)
-├── docs/               # Документация платформы и protocols
-│   ├── roadmap.md                       # Platform development roadmap
-│   ├── ai-agent-execution-protocol.md   # AI Agent structured workflows
-│   ├── ai-agent-roles-protocols.md     # AI Agent roles в SDLC
-│   ├── context-handoff-protocol.md     # AI context transfer procedures
-│   ├── testing-strategy.md             # Platform testing methodology
-│   ├── github-issues-protocol.md       # Issue management procedures
-│   ├── backup-essentials.md            # Data protection procedures
-│   └── security-best-practices.md      # Security standards & guidelines
-└── .github/
-    ├── workflows/      # GitHub Actions (CI/CD automation)
-    └── ISSUE_TEMPLATE/ # Standardized issue templates
-```
+### **Platform Navigation:**
+- **📋 [Workflows Overview](workflows/README.md)** - Platform workflow architecture
+- **🐦 [First Bird Project](workflows/first-bird/README.md)** - Project workflow details
+- **📚 [Platform Protocols](docs/)** - Development guidelines и procedures
 
 ---
 
@@ -163,19 +186,20 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 7. **ВАЖНО:** Изучить backup и security requirements перед major changes
 
 ### **Для Developers:**
-1. Clone repository и изучить platform structure
+1. Clone repository и изучить project-centric structure
 2. Изучить **[Platform Roadmap](docs/roadmap.md)** для понимания архитектуры
-3. Импортировать project workflows в n8n DEV/PROD environments
-4. Настроить development environment следуя platform protocols
+3. Изучить **[First Bird Project](docs/projects/first-bird/README.md)** как пример
+4. Импортировать project workflows из `workflows/first-bird/` в n8n
 5. Следовать **[Security Best Practices](docs/security-best-practices.md)** для credentials
 6. Следовать **[Backup Essentials](docs/backup-essentials.md)** перед major changes
 
 ### **Для Новых Проектов:**
-1. Изучить platform architecture и существующую project structure
-2. Создать project-specific workflows в DEV environment
-3. Следовать platform testing procedures с Test Orchestrator
-4. Использовать platform documentation templates и protocols
-5. Deploy в PROD environment следуя установленным procedures
+1. Изучить **[Platform Architecture](workflows/README.md)** и project structure
+2. Создать new project папку в `workflows/[project-name]/`
+3. Следовать project structure template: `dev/`, `prod/`, `README.md`
+4. Создать project documentation в `docs/projects/[project-name]/`
+5. Следовать platform testing procedures с Test Orchestrator
+6. Deploy в PROD environment следуя установленным procedures
 
 ---
 
@@ -184,6 +208,7 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 ### ✅ **Universal Test Orchestrator:**
 - **Возможности:** Тестирует ЛЮБЫЕ n8n workflows созданные на платформе
 - **Архитектура:** Platform-level tool обслуживающий все проекты
+- **Project Support:** Работает с любой project structure
 - **Интеграция:** Работает с DEV environments (dual triggers: Manual + Execute Workflow)
 - **Автоматизация:** Интегрирован с GitHub Actions для automated testing
 - **Scalability:** Готов тестировать множество проектов по мере роста платформы
@@ -191,6 +216,7 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 ### 📊 **Testing Methodology:**
 - **DEV Workflows:** Dual triggers позволяют manual и automated testing
 - **PROD Workflows:** Single manual trigger для production stability
+- **Multi-Project Testing:** Test Orchestrator поддерживает все projects
 - **Quality Gates:** Automated testing блокирует defective deployments
 - **Test Coverage:** Цель 100% automation критических workflow paths
 
@@ -200,7 +226,7 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 
 - **n8n** - Core automation platform
 - **GitHub** - Version control, project management, и CI/CD
-- **GitHub Actions** - Automated pipeline и quality gates
+- **GitHub Actions** - Automated pipeline и multi-project quality gates
 - **GitHub Issues** - Structured task и change management
 - **MCP (Model Context Protocol)** - AI agent platform integration
 - **Test Orchestrator** - Universal workflow testing framework
@@ -211,10 +237,11 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 
 - **Текущие Проекты**: 1 (First Bird - financial automation)
 - **Platform Tools**: Test Orchestrator, GitHub Actions, Documentation System
-- **Активные Issues**: 11 platform и project issues (смотри [GitHub Issues](../../issues))
+- **Активные Issues**: 10 platform и project issues (смотри [GitHub Issues](../../issues))
+- **Project Structure**: Project-centric architecture implemented
 - **Automation Coverage**: Цель 100% DEV workflows (в разработке)
-- **Архитектура**: Multi-environment с контролируемой DEV → PROD migration
-- **Документация**: Comprehensive coverage всех platform processes
+- **Архитектура**: Multi-project с контролируемой DEV → PROD migration
+- **Документация**: Complete coverage всех platform и project processes
 
 ---
 
@@ -222,43 +249,50 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 
 ### **Для всех Участников Платформы:**
 1. **Следовать Platform Protocols** - все установленные процедуры обязательны
-2. **No Changes Without Issues** - structured change management required
-3. **Следовать Platform Roadmap** - выравнивание с milestone priorities
-4. **Security First** - обязательные security practices (см. [Security Best Practices](docs/security-best-practices.md))
-5. **Backup Before Major Changes** - защита данных required (см. [Backup Essentials](docs/backup-essentials.md))
-6. **Universal Testing** - все изменения должны пройти Test Orchestrator validation
-7. **Documentation Integration** - все архитектурные решения должны быть задокументированы
-8. **Protocol Compliance** - установленные workflows должны соблюдаться
+2. **Project-Centric Structure** - новые проекты следуют установленной архитектуре
+3. **No Changes Without Issues** - structured change management required
+4. **Следовать Platform Roadmap** - выравнивание с milestone priorities
+5. **Security First** - обязательные security practices (см. [Security Best Practices](docs/security-best-practices.md))
+6. **Backup Before Major Changes** - защита данных required (см. [Backup Essentials](docs/backup-essentials.md))
+7. **Universal Testing** - все изменения должны пройти Test Orchestrator validation
+8. **Documentation Integration** - все project решения должны быть задокументированы
 
 ### **Для AI Agents:**
 1. **Follow AI Agent Execution Protocol** - обязательно для каждого assignment
 2. **Use Appropriate AI Agent Role** - согласно [AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)
-3. **Context Integration** - читать platform documentation перед началом работы
-4. **Roadmap Awareness** - проверять текущие priorities и milestones
+3. **Project Context Awareness** - понимать project-specific requirements
+4. **Platform Integration** - следовать universal protocols
 5. **Issue Management** - создавать и обновлять Issues для всех планируемых изменений
-6. **Documentation Updates** - поддерживать platform documentation с изменениями
-7. **Security and Backup Compliance** - проверять requirements согласно protocols
+6. **Documentation Updates** - поддерживать project и platform documentation
 
 ---
 
 ## 🎯 Будущие Проекты
 
-Платформа спроектирована для scalability и готова поддерживать дополнительные automation проекты:
+Платформа спроектирована для scalability и готова поддерживать множественные automation проекты:
 
-- **Multi-Project Architecture** - Repository structure поддерживает project separation
-- **Universal Testing Framework** - Test Orchestrator работает с любыми n8n workflows
-- **Reusable Protocols** - AI Agent и development procedures применимы ко всем проектам
-- **Scalable CI/CD** - GitHub Actions pipeline адаптируется к множеству проектов
-- **Documentation Templates** - Установленные паттерны для new project documentation
+- **✅ Project-Centric Architecture** - Repository structure поддерживает unlimited projects
+- **✅ Universal Testing Framework** - Test Orchestrator работает с любыми project workflows
+- **✅ Reusable Protocols** - AI Agent и development procedures применимы ко всем проектам
+- **✅ Scalable CI/CD** - GitHub Actions pipeline поддерживает multi-project validation
+- **✅ Documentation Templates** - Установленные паттерны для new project documentation
+
+### **Potential Future Projects:**
+- **E-commerce Automation** (Shopify/WooCommerce APIs)
+- **Social Media Management** (Twitter/LinkedIn automation)
+- **IoT Data Processing** (sensor data workflows)
+- **Content Management** (CMS/blogging automation)
 
 ---
 
 ## 📞 Поддержка Платформы
 
 - **Issues**: Использовать GitHub Issues с standardized templates
-- **Документация**: Comprehensive guides в `docs/` directory
+- **Platform Documentation**: Comprehensive guides в `docs/` directory
+- **Project Documentation**: Project-specific guides в `docs/projects/[project-name]/`
+- **Workflow Documentation**: Technical details в `workflows/[project-name]/README.md`
 - **Roadmap**: Текущий development status в [docs/roadmap.md](docs/roadmap.md)
-- **AI Agent Support**: Следовать AI Agent Execution Protocol и Context Handoff Protocol
+- **AI Agent Support**: Следовать AI Agent Execution Protocol
 - **Security Support**: Security guidelines в [docs/security-best-practices.md](docs/security-best-practices.md)
 - **Backup Support**: Recovery procedures в [docs/backup-essentials.md](docs/backup-essentials.md)
 
@@ -325,4 +359,6 @@ v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-
 
 ---
 
-**Эта платформа демонстрирует современную AI-powered automation разработку со structured protocols, comprehensive security practices, universal testing framework, надёжными backup procedures и scalable multi-project architecture.**
+**Эта платформа демонстрирует современную AI-powered automation разработку с project-centric architecture, structured protocols, comprehensive documentation, universal testing framework и scalable multi-project support.**
+
+*Updated: August 2025 - Issue #21 Project-Centric Architecture Implementation*
