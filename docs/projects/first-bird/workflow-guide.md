@@ -1,71 +1,78 @@
 # Workflow Usage Guide - First Bird Project
 
-**Практическое руководство** по использованию First Bird workflows для financial data automation
+**Практическое руководство** по использованию First Bird workflows для финансовой автоматизации данных
 
-## 🚀 Quick Start
+## 🚀 Быстрый старт
 
-### **1. Prerequisites**
+### **1. Предварительные требования**
 - **n8n Cloud или Self-hosted** instance готов
-- **FMP API Subscription** (Financial Modeling Prep)
+- **FMP API Subscription** (Financial Modeling Prep) активна
 - **DeepSeek API Access** для AI functionality
 
-### **2. Credential Setup**
+### **2. Настройка Credentials**
 ```
-n8n Credentials Required:
+Необходимые n8n Credentials:
 ├── DeepSeek API → "DeepSeek account"
-└── FMP API Key → "FMP API Key" (Generic Credential)
+└── FMP API Key → встроен в workflow (настроен)
 ```
 
-### **3. Workflow Import**
+### **3. Текущая структура (v1.2)**
 ```
-Импортировать workflows в правильном порядке:
-1. FMP API Router (first) - должен быть активен
-2. AI Deepseek (second) - ссылается на Router
-```
-
-## 🏗️ Workflow Architecture
-
-### **Data Flow Overview:**
-```
-User Query → AI Deepseek → FMP API Router → Financial API → Analysis → Response
+First Bird DEV Project (n8n: EAq65uG63UPwwuhk):
+├── 🤖 AI Deepseek DEV      (ID: 0VAipR4PLHbtkIzw)
+├── 🔗 FMP API Router DEV   (ID: UmUET85BJqPbpRPp)
+└── 🧪 Test Orchestrator    (ID: ElnSprIVyJXKlkl3)
 ```
 
-### **Environment Separation:**
-- **DEV:** Testing, debugging, development
-- **PROD:** Production use, stable operations
+## 🏗️ Архитектура Workflow
 
-## 🤖 AI Deepseek Workflow
+### **Основной поток данных:**
+```
+User Query → AI Deepseek DEV → FMP API Router DEV → Financial API → Analysis → Response
+```
 
-### **Usage Patterns:**
+### **Testing поток:**
+```
+Test Request → Test Orchestrator → Execute Both Workflows → Generate Report → Results
+```
 
-#### **Simple Financial Questions:**
+### **Разделение сред:**
+- **✅ DEV Environment:** Активный, testing, debugging, dual triggers
+- **🔄 PROD Environment:** Планируется, single Manual trigger только
+
+## 🤖 AI Deepseek DEV Workflow
+
+### **Паттерны использования:**
+
+#### **Простые финансовые вопросы:**
 ```json
 Input: "Какие были последние сделки инсайдеров?"
-Process: AI → FMP Router → Latest insider trades → Analysis
+Process: AI → FMP Router DEV → Latest insider trades → Analysis
 Output: "Последние 10 сделок инсайдеров: [data + insights]"
 ```
 
-#### **Company-Specific Analysis:**
+#### **Анализ конкретной компании:**
 ```json
 Input: "Покажи профиль Apple и последние сделки инсайдеров по AAPL"
 Process: AI → Multiple FMP calls → Company.Profile + Insider.Trading.Search
 Output: "Apple Inc. (Consumer Electronics): [profile] + [insider data analysis]"
 ```
 
-#### **Person-Specific Queries:**
+#### **Персональные запросы:**
 ```json
 Input: "Что покупал Elon Musk в последнее время?"
-Process: AI → FMP Router → ReportingName search → Analysis
+Process: AI → FMP Router DEV → ReportingName search → Analysis
 Output: "[Elon Musk's recent transactions + AI insights]"
 ```
 
-### **AI Capabilities:**
-- **Natural Language Processing** financial queries
-- **Multi-step Data Retrieval** через FMP Router
+### **Возможности AI:**
+- **Natural Language Processing** финансовых запросов
+- **Multi-step Data Retrieval** через FMP Router DEV
 - **Intelligent Analysis** и contextual insights
 - **Follow-up Questions** handling
+- **Integration** с Test Orchestrator для automated testing
 
-### **Example Queries:**
+### **Примеры запросов:**
 ```
 "Найди компании с самыми активными покупками инсайдеров"
 "Покажи профили топ-5 компаний из Technology сектора"  
@@ -73,11 +80,15 @@ Output: "[Elon Musk's recent transactions + AI insights]"
 "Сравни активность инсайдеров Apple и Microsoft"
 ```
 
-## 🔗 FMP API Router Workflow
+### **Dual Triggers (DEV):**
+- **Manual Trigger:** Для ручного тестирования и debugging
+- **Execute Workflow Trigger:** Для Test Orchestrator integration
 
-### **Direct API Usage:**
+## 🔗 FMP API Router DEV Workflow
 
-#### **Latest Insider Trades:**
+### **Прямое использование API:**
+
+#### **Последние сделки инсайдеров:**
 ```json
 {
   "toolName": "Insider.Trading.Latest",
@@ -88,7 +99,7 @@ Output: "[Elon Musk's recent transactions + AI insights]"
 }
 ```
 
-#### **Company Profile:**
+#### **Профиль компании:**
 ```json
 {
   "toolName": "Company.Profile", 
@@ -98,7 +109,7 @@ Output: "[Elon Musk's recent transactions + AI insights]"
 }
 ```
 
-#### **Insider by Name:**
+#### **Поиск по инсайдеру:**
 ```json
 {
   "toolName": "Insider.Trading.ReportingName",
@@ -108,7 +119,7 @@ Output: "[Elon Musk's recent transactions + AI insights]"
 }
 ```
 
-#### **Company Insider Activity:**
+#### **Активность инсайдеров компании:**
 ```json
 {
   "toolName": "Insider.Trading.Search",
@@ -119,177 +130,203 @@ Output: "[Elon Musk's recent transactions + AI insights]"
 }
 ```
 
-### **Router Features:**
-- **Dynamic URL Construction** на базе routing table
+### **Функции Router:**
+- **Динамическое построение URL** на базе routing table
 - **Parameter Validation** и encoding
-- **Automatic API Key Injection**
+- **Автоматическое добавление API Key**
 - **Error Handling** с meaningful messages
+- **Dual Triggers** для manual и automated testing
 
-## 🧪 Testing Workflows
+## 🧪 Test Orchestrator Workflow
 
-### **DEV Environment Testing:**
+### **✅ Automated Testing Ready (v1.2)**
 
-#### **Manual Testing:**
-1. **Open DEV workflow** в n8n
-2. **Use pinned test data** или modify inputs
-3. **Execute manually** через Manual Trigger
-4. **Review results** и verify expected behavior
+#### **Webhook Testing:**
+```bash
+# POST to Test Orchestrator
+curl -X POST "https://n8n-instance/webhook/test-orchestrator" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "testSuite": "full",
+    "testData": {
+      "ai-deepseek": {
+        "input": "Get latest insider trading data for AAPL",
+        "sessionId": "test-123"
+      },
+      "fmp-router": {
+        "toolName": "Insider.Trading.Latest",
+        "params": {"limit": 5}
+      }
+    }
+  }'
+```
 
-#### **Automated Testing:**
-1. **Test Orchestrator** triggers Execute Workflow Trigger
-2. **Automated validation** response structure и content
-3. **Performance monitoring** response times
-4. **Error scenario testing** invalid inputs
+#### **Test Response Format:**
+```json
+{
+  "executionId": "exec-1234567890",
+  "overallStatus": "ALL_PASSED",
+  "testResults": {
+    "ai-deepseek": {"status": "pass", "output": "Success"},
+    "fmp-router": {"status": "pass", "output": "Success"}
+  },
+  "summary": {"total": 2, "passed": 2, "failed": 0, "successRate": "100%"}
+}
+```
 
 ### **Test Scenarios:**
 
-#### **AI Deepseek Tests:**
+#### **Automated Test Cases:**
 ```json
-Test Cases:
-├── "Latest insider trades analysis"
-├── "AAPL company profile and insider activity"  
-├── "Elon Musk trading history"
-└── "Invalid company symbol handling"
-```
-
-#### **FMP Router Tests:**
-```json
-Test Cases:
-├── Each supported endpoint individually
-├── Parameter validation (required/optional)
-├── Error scenarios (invalid API key, symbol)
-└── Response time performance
+Test Suite Coverage:
+├── "AI Deepseek DEV" → Financial query analysis
+├── "FMP Router DEV" → API endpoint functionality  
+├── "Integration Flow" → AI → Router → Response
+└── "Error Handling" → Invalid inputs и API errors
 ```
 
 ## 🔧 Configuration Management
 
-### **Environment-Specific Settings:**
+### **Current Configuration (DEV):**
+- **Environment:** First Bird DEV Project
+- **Dual Triggers:** Manual + Execute Workflow для всех workflows
+- **API Keys:** Configured и working
+- **Testing:** Fully automated через Test Orchestrator
+- **Monitoring:** n8n execution logs + test reports
 
-#### **DEV Configuration:**
-- **Dual Triggers:** Manual + Execute Workflow
-- **Test Data:** Pinned data для quick testing
-- **Debug Mode:** Verbose logging enabled
-- **Rate Limits:** Conservative для testing
-
-#### **PROD Configuration:**  
+### **Future Configuration (PROD):**
+- **Environment:** First Bird PROD Project (planned)
 - **Single Trigger:** Manual only для stability
-- **Real Data:** Live API responses
-- **Optimized:** Performance-focused settings
-- **Monitoring:** Error tracking enabled
+- **Production Keys:** Separate credentials для PROD
+- **Monitoring:** Enhanced error tracking
 
-### **Credential Management:**
+### **Credential Setup:**
 ```
-Environment Separation:
-├── DEV Credentials → Development API keys (limited)
-└── PROD Credentials → Production API keys (full access)
+Current Status:
+├── ✅ DeepSeek API → Configured в AI Deepseek DEV
+├── ✅ FMP API Key → Configured в FMP Router DEV
+└── ✅ Test Orchestrator → Webhook активен
 ```
 
 ## 📊 Performance Optimization
 
 ### **Response Time Targets:**
-- **Simple Queries:** < 3 seconds
-- **Complex Analysis:** < 7 seconds  
-- **API Router:** < 2 seconds per call
-- **Error Scenarios:** < 1 second
+- **Simple Queries:** < 3 секунды
+- **Complex Analysis:** < 7 секунд  
+- **API Router:** < 2 секунды per call
+- **Test Suite:** < 30 секунд full execution
 
 ### **Optimization Strategies:**
 - **Parameter Validation** early в workflow
 - **Efficient API Calls** minimize unnecessary requests  
 - **Error Handling** quick failure recovery
-- **Caching** (future enhancement)
+- **Test Automation** reduce manual testing time
 
 ## ⚠️ Troubleshooting
 
-### **Common Issues:**
+### **Распространенные проблемы:**
 
 #### **"Invalid API key" Error:**
 ```
-Solution:
-1. Check FMP API Key credential в n8n
-2. Verify API key active в FMP dashboard
-3. Confirm credential name matches workflow
+Решение:
+1. Проверить FMP API Key в workflow configuration
+2. Verify API key активен в FMP dashboard
+3. Confirm workflow has correct API key reference
 ```
 
 #### **"Command not found" Error:**
 ```
-Solution:
+Решение:
 1. Check toolName spelling в request
-2. Verify routing table has command
-3. Review supported commands list
+2. Verify routing table содержит command
+3. Review supported commands list в API reference
 ```
 
-#### **Slow Response Times:**
+#### **Test Orchestrator не отвечает:**
 ```
-Solution:
-1. Check FMP API rate limits
-2. Monitor n8n execution resources
-3. Optimize query parameters (limit, page)
-4. Consider API plan upgrade
+Решение:
+1. Verify webhook активен в n8n
+2. Check Test Orchestrator workflow активирован
+3. Test individual workflows manually first
+4. Review webhook URL configuration
 ```
 
-#### **AI Agent Not Responding:**
+#### **AI Agent не отвечает:**
 ```
-Solution:
+Решение:
 1. Verify DeepSeek API credential
 2. Check AI Agent configuration
-3. Review tool integration setup
-4. Test FMP Router independently
+3. Test FMP Router DEV independently
+4. Review tool integration setup
 ```
 
 ### **Debug Procedures:**
-1. **Test components separately** (AI vs Router)
+1. **Test components separately** (AI vs Router vs Orchestrator)
 2. **Review execution logs** в n8n
-3. **Validate credentials** are accessible
+3. **Validate Test Orchestrator** через webhook call
 4. **Check API service status** для external services
 
-## 🔐 Security Best Practices
+## 🔐 Лучшие практики безопасности
 
 ### **Credential Security:**
-- **Never expose** API keys в logs или responses
-- **Regular rotation** of API credentials
+- **Никогда не expose** API keys в logs или responses
+- **Regular rotation** of API credentials планируется
 - **Monitor usage** для unexpected patterns
-- **Access controls** production credentials
+- **Environment isolation** DEV vs future PROD
 
 ### **Data Security:**
-- **Temporary processing** financial data not stored
-- **Secure transmission** HTTPS only
+- **Temporary processing** - financial data не stored
+- **Secure transmission** - HTTPS только
 - **Error logging** excludes sensitive information
-- **User privacy** queries not permanently logged
+- **Test data** - используются safe, non-sensitive examples
 
 ## 📈 Usage Analytics
 
-### **Monitoring Metrics:**
-- **Query Success Rate** >95% target
-- **Average Response Time** performance tracking
-- **Error Frequency** patterns analysis
-- **API Usage** cost monitoring
+### **Текущий мониторинг:**
+- **Test Success Rate** - через Test Orchestrator reports
+- **Manual Execution** - через n8n execution logs
+- **API Usage** - FMP API call tracking
+- **Error Patterns** - analysis через execution history
 
 ### **Performance Reports:**
-- **Weekly Usage** summary reports
-- **Error Analysis** trend identification  
-- **Cost Tracking** API subscription optimization
-- **User Satisfaction** query quality assessment
+- **Test Results** - automated test suite outcomes
+- **Response Times** - execution duration tracking  
+- **Error Analysis** - trend identification
+- **Integration Status** - AI + Router + Testing health
 
-## 🚀 Production Deployment
+## 🚀 Production Deployment Plan
 
 ### **Pre-Production Checklist:**
-- [ ] **All DEV tests** passing successfully
-- [ ] **Production credentials** configured и tested
-- [ ] **PROD workflows** imported и activated
-- [ ] **Monitoring setup** alerts configured
-- [ ] **Documentation** updated для production use
-- [ ] **Backup procedures** in place
+- [x] **DEV Environment** полностью функциональный
+- [x] **Testing Framework** operational через Test Orchestrator
+- [x] **Documentation** comprehensive и up-to-date
+- [ ] **PROD Project Creation** в n8n
+- [ ] **PROD Workflows** migrated и optimized
+- [ ] **Production Monitoring** setup
 
-### **Go-Live Process:**
-1. **Final DEV validation** all scenarios working
-2. **PROD credential setup** verified access
-3. **Workflow import** PROD versions deployed
-4. **Smoke testing** basic functionality confirmed
-5. **User training** provided если necessary
-6. **Monitoring activated** alerts operational
+### **Deployment Process (Future):**
+1. **Создать First Bird PROD project** в n8n
+2. **Import optimized workflows** (single triggers)
+3. **Configure production credentials**
+4. **Smoke testing** basic functionality
+5. **Documentation updates** для production use
+6. **Monitoring activation** alerts operational
+
+## 🎯 Current Status Summary
+
+### **✅ Ready и Operational:**
+- **DEV Workflows** - Fully functional
+- **Testing Framework** - Automated через Test Orchestrator
+- **API Integration** - Working с Financial Modeling Prep
+- **Documentation** - Complete и up-to-date
+
+### **🔄 Next Steps:**
+- **PROD Environment** creation
+- **DEV → PROD Migration** с optimizations
+- **Enhanced Monitoring** для production use
 
 ---
 
-**Этот guide обеспечивает complete coverage использования First Bird workflows от setup до production deployment.**
+**Этот guide отражает текущее состояние First Bird project с полным Testing Framework v1.2 и готовностью к PROD развертыванию.**
 
-*Last Updated: August 2025 - Project-Centric Architecture Implementation*
+*Последнее обновление: Август 2025 - v1.2 Testing Framework Active*
