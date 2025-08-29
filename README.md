@@ -6,29 +6,30 @@
 
 **AI-Powered Automation Platform** для разработки n8n workflows с test-driven development и современными DevOps практиками
 
-## Table of Contents
-- [🎯 Platform Overview](#-platform-overview)
-- [🐦 Current Project: "First Bird"](#-current-project-first-bird)
-- [🛠️ Platform Tools](#️-platform-tools)
+## 📋 Содержание
+- [🎯 Обзор Платформы](#-обзор-платформы)
+- [🐦 Текущий Проект: "First Bird"](#-текущий-проект-first-bird)
+- [🛠️ Платформенные Инструменты](#️-платформенные-инструменты)
 - [🗺️ Platform Roadmap](#️-platform-roadmap)
-- [🏗️ Architecture & Environment Structure](#️-architecture--environment-structure)
+- [🏗️ Архитектура и Environment Structure](#️-архитектура-и-environment-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🧪 Platform Testing Framework](#-platform-testing-framework)
 - [🔧 Platform Technologies](#-platform-technologies)
 - [🤝 Platform Development Rules](#-platform-development-rules)
 - [🎯 Future Projects](#-future-projects)
 - [📞 Platform Support](#-platform-support)
-- [📄 License](#-license)
+- [🌐 Языковая Политика Проекта](#-языковая-политика-проекта)
+- [📄 Лицензия](#-лицензия)
 
-## 🎯 Platform Overview
+## 🎯 Обзор Платформы
 
-**n8n-workflows-ai** - это универсальная платформа для создания, тестирования и управления n8n automation проектами с использованием AI агентов и structured development protocols.
+**n8n-workflows-ai** - это универсальная платформа для создания, тестирования и управления n8n automation проектами с использованием AI agents и structured development protocols.
 
 ### 🏗️ **Platform Architecture**
 
 ```
 n8n-workflows-ai Platform
-├── 🤖 AI Agent Protocols          # Structured development with AI
+├── 🤖 AI Agent Protocols          # Structured development с AI
 ├── 🧪 Testing Framework           # Universal Test Orchestrator
 ├── 🚀 CI/CD Pipeline             # GitHub Actions automation
 ├── 📚 Documentation System       # Comprehensive guides & protocols
@@ -38,56 +39,56 @@ n8n-workflows-ai Platform
 
 ### ⚡ **Platform Capabilities**
 
-- **AI-Assisted Development** with structured roles and protocols
-- **Universal Testing Framework** via Test Orchestrator
-- **Multi-Project Support** with DEV/PROD environment separation
-- **Automated CI/CD** through GitHub Actions
-- **Comprehensive Documentation** with protocols and best practices
-- **Scalable Architecture** ready for new automation projects
+- **AI-Assisted Development** с structured roles и protocols
+- **Universal Testing Framework** через Test Orchestrator
+- **Multi-Project Support** с DEV/PROD environment separation
+- **Automated CI/CD** через GitHub Actions
+- **Comprehensive Documentation** с protocols и best practices
+- **Scalable Architecture** готовая для новых automation projects
 
 ---
 
-## 🐦 Current Project: "First Bird"
+## 🐦 Текущий Проект: "First Bird"
 
-**Financial Data Automation** - pilot project demonstrating platform capabilities
+**Financial Data Automation** - пилотный проект демонстрирующий platform capabilities
 
 ### **Project Scope:**
 - **Data Source:** Financial Modeling Prep API
-- **AI Analysis:** Market insights and financial data processing
+- **AI Analysis:** Market insights и financial data processing
 - **Automation Goals:** Streamlined financial data workflows
 
 ### **Project Workflows:**
-- **🤖 AI Deepseek** - Financial data analysis with AI language model
-- **🔗 FMP API Router** - Financial Modeling Prep API routing and data transformation
+- **🤖 AI Deepseek** - Financial data analysis с AI language model
+- **🔗 FMP API Router** - Financial Modeling Prep API routing и data transformation
 
 ### **Project Status:**
 ```
-📊 First Bird Progress:        ██████████ 100% (workflows implemented)
-🧪 Testing Integration:        ████████░░  80% (Test Orchestrator ready)
-📚 Documentation:              ████████░░  80% (protocols & guides complete)
-🚀 Production Readiness:       ███████░░░  70% (ready for deployment)
+📊 First Bird Progress:        ██████████ 100% (workflows реализованы)
+🧪 Testing Integration:        ████████░░  80% (Test Orchestrator готов)
+📚 Documentation:              ████████░░  80% (protocols & guides готовы)
+🚀 Production Readiness:       ███████░░░  70% (готов к deployment)
 ```
 
 ---
 
-## 🛠️ Platform Tools
+## 🛠️ Платформенные Инструменты
 
 ### 🧪 **Test Orchestrator** *(Universal Testing Tool)*
-- **Purpose:** Automated testing for ANY n8n workflows
-- **Scope:** Platform-level tool, not project-specific
+- **Назначение:** Automated testing для ЛЮБЫХ n8n workflows
+- **Scope:** Platform-level tool, не project-specific
 - **Capabilities:** Execute workflow testing, result aggregation, comprehensive reporting
-- **Usage:** Works with all projects created on the platform
+- **Usage:** Работает со всеми projects созданными на platform
 
 ### 🚀 **GitHub Actions Pipeline**
-- **Workflow Validation:** JSON structure and n8n schema validation
+- **Workflow Validation:** JSON structure и n8n schema validation
 - **Issue Automation:** Labels, milestones, lifecycle management
-- **Release Management:** Automated versioning and deployment
-- **Quality Gates:** Automated testing before production deployment
+- **Release Management:** Automated versioning и deployment
+- **Quality Gates:** Automated testing перед production deployment
 
 ### 📚 **Documentation System**
 - **AI Agent Protocols** - Structured development workflows
-- **Development Guides** - Best practices and procedures
-- **Security Standards** - Credential management and data protection
+- **Development Guides** - Best practices и procedures
+- **Security Standards** - Credential management и data protection
 - **Testing Procedures** - Quality assurance processes
 
 ---
@@ -97,48 +98,48 @@ n8n-workflows-ai Platform
 ### 📅 **Current Status: Milestone v1.1 - Documentation & Infrastructure**
 ```
 v1.1 Documentation & Infrastructure:  ██████████ 90% (platform foundation)
-v1.2 Testing Framework:               ████░░░░░░ 40% (Test Orchestrator ready)
+v1.2 Testing Framework:               ████░░░░░░ 40% (Test Orchestrator готов)
 v1.3 Advanced Features:               ░░░░░░░░░░  0% (multi-project scaling)
 
 Overall Platform Progress:            ███████░░░ 75%
 ```
 
 ### 🎯 **Platform Milestones:**
-- **🏗️ v1.1 - Platform Foundation** (Sept 2025) - *Documentation & Infrastructure*
-  - Complete AI Agent protocols and development procedures
-  - Optimize GitHub environment for productivity
-  - Establish release and version management systems
+- **🏗️ v1.1 - Platform Foundation** (Сентябрь 2025) - *Documentation & Infrastructure*
+  - Complete AI Agent protocols и development procedures
+  - Optimize GitHub environment для productivity
+  - Establish release и version management systems
   
-- **🧪 v1.2 - Testing Framework** (Oct-Nov 2025) - *Universal Testing Infrastructure*
-  - Activate Test Orchestrator for automated testing
-  - Integrate testing with CI/CD pipeline
-  - Establish quality gates for deployment
+- **🧪 v1.2 - Testing Framework** (Октябрь-Ноябрь 2025) - *Universal Testing Infrastructure*
+  - Activate Test Orchestrator для automated testing
+  - Integrate testing с CI/CD pipeline
+  - Establish quality gates для deployment
   
-- **🚀 v1.3 - Multi-Project Platform** (Dec 2025) - *Scaling & Advanced Features*
-  - Multi-project support and management
+- **🚀 v1.3 - Multi-Project Platform** (Декабрь 2025) - *Scaling & Advanced Features*
+  - Multi-project support и management
   - Performance optimization suite
-  - Enterprise integrations and features
+  - Enterprise integrations и features
 
 📖 **[Detailed Platform Roadmap →](docs/roadmap.md)**
 
 ---
 
-## 🏗️ Architecture & Environment Structure
+## 🏗️ Архитектура и Environment Structure
 
 ### **Multi-Environment Support:**
-- **DEV Environment** - Development and testing (2 triggers: Manual + Execute Workflow)
-- **PROD Environment** - Production deployments (1 trigger: Manual only)
-- **Test Framework** - Automated quality assurance via Test Orchestrator
+- **DEV Environment** - Development и testing (2 triggers: Manual + Execute Workflow)
+- **PROD Environment** - Production deployments (1 trigger: Manual только)
+- **Test Framework** - Automated quality assurance через Test Orchestrator
 
 ### **Repository Structure:**
 ```
 ├── workflows/           # Project workflow implementations
-│   ├── dev/            # DEV versions with testing triggers
+│   ├── dev/            # DEV versions с testing triggers
 │   └── prod/           # PROD versions (production-ready)
-├── docs/               # Platform documentation and protocols
+├── docs/               # Platform documentation и protocols
 │   ├── roadmap.md                       # Platform development roadmap
 │   ├── ai-agent-execution-protocol.md   # AI Agent structured workflows
-│   ├── ai-agent-roles-protocols.md     # AI Agent roles in SDLC
+│   ├── ai-agent-roles-protocols.md     # AI Agent roles в SDLC
 │   ├── context-handoff-protocol.md     # AI context transfer procedures
 │   ├── testing-strategy.md             # Platform testing methodology
 │   ├── github-issues-protocol.md       # Issue management procedures
@@ -153,55 +154,55 @@ Overall Platform Progress:            ███████░░░ 75%
 
 ## 🚀 Getting Started
 
-### **For AI Agents:**
-1. **Read AI Agent Execution Protocol** - mandatory workflow for all assignments
-2. **Study AI Agent Roles & Protocols** - understand SDLC roles and processes
-3. **Review all platform protocols** in `docs/` directory
-4. **Check Platform Roadmap** for current priorities and milestone status
-5. **Verify platform status** through `n8n_health_check`
-6. **Follow 5-step execution flow** for every assignment
-7. **IMPORTANT:** Review backup and security requirements before major changes
+### **Для AI Agents:**
+1. **Read AI Agent Execution Protocol** - mandatory workflow для всех assignments
+2. **Study AI Agent Roles & Protocols** - понимание SDLC roles и processes
+3. **Review all platform protocols** в `docs/` directory
+4. **Check Platform Roadmap** для current priorities и milestone status
+5. **Verify platform status** через `n8n_health_check`
+6. **Follow 5-step execution flow** для каждого assignment
+7. **ВАЖНО:** Review backup и security requirements перед major changes
 
-### **For Developers:**
-1. Clone repository and explore platform structure
-2. Study **[Platform Roadmap](docs/roadmap.md)** for architecture understanding
-3. Import project workflows into n8n DEV/PROD environments
-4. Configure development environment following platform protocols
-5. Follow **[Security Best Practices](docs/security-best-practices.md)** for credentials
-6. Follow **[Backup Essentials](docs/backup-essentials.md)** before major changes
+### **Для Developers:**
+1. Clone repository и explore platform structure
+2. Study **[Platform Roadmap](docs/roadmap.md)** для architecture understanding
+3. Import project workflows в n8n DEV/PROD environments
+4. Configure development environment следуя platform protocols
+5. Follow **[Security Best Practices](docs/security-best-practices.md)** для credentials
+6. Follow **[Backup Essentials](docs/backup-essentials.md)** перед major changes
 
-### **For New Projects:**
-1. Study platform architecture and existing project structure
-2. Create project-specific workflows in DEV environment
-3. Follow platform testing procedures with Test Orchestrator
-4. Use platform documentation templates and protocols
-5. Deploy to PROD environment following established procedures
+### **Для New Projects:**
+1. Study platform architecture и existing project structure
+2. Create project-specific workflows в DEV environment
+3. Follow platform testing procedures с Test Orchestrator
+4. Use platform documentation templates и protocols
+5. Deploy в PROD environment следуя established procedures
 
 ---
 
 ## 🧪 Platform Testing Framework
 
 ### ✅ **Universal Test Orchestrator:**
-- **Capability:** Tests ANY n8n workflows created on the platform
-- **Architecture:** Platform-level tool serving all projects
-- **Integration:** Works with DEV environments (dual triggers: Manual + Execute Workflow)
-- **Automation:** Integrated with GitHub Actions for automated testing
-- **Scalability:** Ready to test multiple projects as platform grows
+- **Capability:** Tests ЛЮБЫЕ n8n workflows созданные на platform
+- **Architecture:** Platform-level tool обслуживающий все projects
+- **Integration:** Работает с DEV environments (dual triggers: Manual + Execute Workflow)
+- **Automation:** Integrated с GitHub Actions для automated testing
+- **Scalability:** Готов тестировать multiple projects по мере роста platform
 
 ### 📊 **Testing Methodology:**
-- **DEV Workflows:** Dual triggers enable both manual and automated testing
-- **PROD Workflows:** Single manual trigger for production stability
-- **Quality Gates:** Automated testing blocks defective deployments
-- **Test Coverage:** Target 100% automation of critical workflow paths
+- **DEV Workflows:** Dual triggers позволяют manual и automated testing
+- **PROD Workflows:** Single manual trigger для production stability
+- **Quality Gates:** Automated testing блокирует defective deployments
+- **Test Coverage:** Target 100% automation критических workflow paths
 
 ---
 
 ## 🔧 Platform Technologies
 
 - **n8n** - Core automation platform
-- **GitHub** - Version control, project management, and CI/CD
-- **GitHub Actions** - Automated pipeline and quality gates
-- **GitHub Issues** - Structured task and change management
+- **GitHub** - Version control, project management, и CI/CD
+- **GitHub Actions** - Automated pipeline и quality gates
+- **GitHub Issues** - Structured task и change management
 - **MCP (Model Context Protocol)** - AI agent platform integration
 - **Test Orchestrator** - Universal workflow testing framework
 
@@ -211,90 +212,116 @@ Overall Platform Progress:            ███████░░░ 75%
 
 - **Current Projects**: 1 (First Bird - financial automation)
 - **Platform Tools**: Test Orchestrator, GitHub Actions, Documentation System
-- **Active Issues**: 11 platform and project issues (view on [GitHub Issues](../../issues))
-- **Automation Coverage**: Target 100% DEV workflows (in development)
-- **Architecture**: Multi-environment with controlled DEV → PROD migration
-- **Documentation**: Comprehensive coverage of all platform processes
+- **Active Issues**: 11 platform и project issues (смотри на [GitHub Issues](../../issues))
+- **Automation Coverage**: Target 100% DEV workflows (в development)
+- **Architecture**: Multi-environment с controlled DEV → PROD migration
+- **Documentation**: Comprehensive coverage всех platform processes
 
 ---
 
 ## 🤝 Platform Development Rules
 
-### **For All Platform Contributors:**
-1. **Follow Platform Protocols** - all established procedures are mandatory
+### **Для всех Platform Contributors:**
+1. **Follow Platform Protocols** - все established procedures обязательны
 2. **No Changes Without Issues** - structured change management required
-3. **Follow Platform Roadmap** - align with milestone priorities
-4. **Security First** - mandatory security practices (see [Security Best Practices](docs/security-best-practices.md))
-5. **Backup Before Major Changes** - data protection required (see [Backup Essentials](docs/backup-essentials.md))
-6. **Universal Testing** - all changes must pass Test Orchestrator validation
-7. **Documentation Integration** - all architectural decisions must be documented
-8. **Protocol Compliance** - established workflows must be followed
+3. **Follow Platform Roadmap** - align с milestone priorities
+4. **Security First** - mandatory security practices (см. [Security Best Practices](docs/security-best-practices.md))
+5. **Backup Before Major Changes** - data protection required (см. [Backup Essentials](docs/backup-essentials.md))
+6. **Universal Testing** - все changes должны pass Test Orchestrator validation
+7. **Documentation Integration** - все architectural decisions должны быть documented
+8. **Protocol Compliance** - established workflows должны быть followed
 
-### **For AI Agents:**
-1. **Follow AI Agent Execution Protocol** - mandatory for every assignment
-2. **Use Appropriate AI Agent Role** - according to [AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)
-3. **Context Integration** - read platform documentation before starting work
-4. **Roadmap Awareness** - check current priorities and milestones
-5. **Issue Management** - create and update Issues for all planned changes
-6. **Documentation Updates** - maintain platform documentation with changes
-7. **Security and Backup Compliance** - verify requirements according to protocols
+### **Для AI Agents:**
+1. **Follow AI Agent Execution Protocol** - mandatory для каждого assignment
+2. **Use Appropriate AI Agent Role** - согласно [AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)
+3. **Context Integration** - читать platform documentation перед началом work
+4. **Roadmap Awareness** - check current priorities и milestones
+5. **Issue Management** - создавать и update Issues для всех planned changes
+6. **Documentation Updates** - maintain platform documentation с changes
+7. **Security and Backup Compliance** - verify requirements согласно protocols
 
 ---
 
 ## 🎯 Future Projects
 
-The platform is designed for scalability and ready to support additional automation projects:
+Platform спроектирована для scalability и готова support additional automation projects:
 
 - **Multi-Project Architecture** - Repository structure supports project separation
-- **Universal Testing Framework** - Test Orchestrator works with any n8n workflows
-- **Reusable Protocols** - AI Agent and development procedures apply to all projects
-- **Scalable CI/CD** - GitHub Actions pipeline adapts to multiple projects
-- **Documentation Templates** - Established patterns for new project documentation
+- **Universal Testing Framework** - Test Orchestrator работает с любыми n8n workflows
+- **Reusable Protocols** - AI Agent и development procedures применимы ко всем projects
+- **Scalable CI/CD** - GitHub Actions pipeline адаптируется к multiple projects
+- **Documentation Templates** - Established patterns для new project documentation
 
 ---
 
 ## 📞 Platform Support
 
-- **Issues**: Use GitHub Issues with standardized templates
-- **Documentation**: Comprehensive guides in `docs/` directory
-- **Roadmap**: Current development status in [docs/roadmap.md](docs/roadmap.md)
-- **AI Agent Support**: Follow AI Agent Execution Protocol and Context Handoff Protocol
-- **Security Support**: Security guidelines in [docs/security-best-practices.md](docs/security-best-practices.md)
-- **Backup Support**: Recovery procedures in [docs/backup-essentials.md](docs/backup-essentials.md)
+- **Issues**: Use GitHub Issues с standardized templates
+- **Documentation**: Comprehensive guides в `docs/` directory
+- **Roadmap**: Current development status в [docs/roadmap.md](docs/roadmap.md)
+- **AI Agent Support**: Follow AI Agent Execution Protocol и Context Handoff Protocol
+- **Security Support**: Security guidelines в [docs/security-best-practices.md](docs/security-best-practices.md)
+- **Backup Support**: Recovery procedures в [docs/backup-essentials.md](docs/backup-essentials.md)
 
 ---
 
-## 📄 License
+## 🌐 Языковая Политика Проекта
+
+### **🇷🇺 Основной Язык: Русский**
+Все documentation, comments, issue descriptions и communication должны быть на русском языке для максимального понимания и accessibility среди русскоязычной команды.
+
+### **🔥 Англицизмы Горячо Приветствуются!**
+В профессиональном контексте активно поощряется использование:
+- **Technical Terms**: workflows, CI/CD, testing framework, deployment
+- **Development Terms**: commit, merge, pull request, issue, repository
+- **Platform Terms**: scalability, automation, integration, orchestrator
+- **Business Terms**: roadmap, milestones, deliverables, stakeholder
+
+### **🎯 **Translation Policy****
+Специфические термины и concepts могут переводиться на английский для международной совместимости:
+- **Friend Definition** вместо "Определение Друга"
+- **Platform Architecture** alongside "Архитектура Платформы" 
+- **Quality Gates** вместо "Шлюзы Качества"
+
+### **✅ Best Practices:**
+- Основной текст на русском с professional англицизмами
+- Technical термины остаются на английском
+- Code comments предпочтительно на английском
+- Issue titles могут содержать английские technical terms
+
+---
+
+## 📄 Лицензия
 
 **Friends Only License v1.0** 🤝
 
-This project operates under the exclusive "Friends Only" license terms:
+Данный проект работает под эксклюзивными условиями лицензии "Только для друзей":
 
-### **Permitted Users:**
-- **dabalakirev** (project creator) ✅
-- **Friends of dabalakirev** (explicitly approved individuals) ✅
-- **AI Agents working with dabalakirev** (when properly configured) 🤖
+### **Разрешённые Пользователи:**
+- **dabalakirev** (создатель проекта) ✅
+- **Друзья dabalakirev** (explicitly approved individuals) ✅
+- **AI Agents работающие с dabalakirev** (при правильной конфигурации) 🤖
 
 ### **Usage Rights:**
-- **Full access:** Create, modify, use, and deploy anything
-- **Learning purposes:** Study the code, documentation, and architecture
-- **Private use:** Run workflows for personal/friend projects
-- **Collaboration:** Work together with dabalakirev on improvements
+- **Full access:** Создавать, изменять, использовать и deploy что угодно
+- **Learning purposes:** Изучать code, documentation и architecture
+- **Private use:** Запускать workflows для personal/friend projects
+- **Collaboration:** Работать вместе с dabalakirev над improvements
 
-### **Restrictions:**
-- ❌ **Commercial use** by non-friends strictly prohibited
-- ❌ **Public redistribution** without explicit permission
-- ❌ **Corporate usage** by unknown entities forbidden
-- ❌ **Reverse engineering** for competitive purposes banned
+### **Ограничения:**
+- ❌ **Commercial use** не-друзьями строго prohibited
+- ❌ **Public redistribution** без explicit permission
+- ❌ **Corporate usage** неизвестными entities forbidden
+- ❌ **Reverse engineering** для competitive purposes banned
 
-### **Friend Definition:**
-*A "friend" is someone who dabalakirev would genuinely invite for coffee, help debug code at 2 AM, or trust with the WiFi password.* ☕
+### **🎯 **Friend Definition**:**
+*"Friend" - это человек, которого dabalakirev искренне пригласил бы на coffee, помог бы debug code в 2 AM, или доверил бы WiFi password.* ☕
 
-### **Violation Consequences:**
-Unauthorized usage will result in disappointed looks, sad emojis, and potential exclusion from future coffee invitations. 😔
+### **Consequences при Violation:**
+Unauthorized usage приведёт к disappointed looks, sad emojis и potential exclusion из future coffee invitations. 😔
 
-**For licensing inquiries or friend status verification, contact dabalakirev directly.**
+**Для licensing inquiries или friend status verification, contact dabalakirev directly.**
 
 ---
 
-**This platform demonstrates modern AI-powered automation development with structured protocols, comprehensive security practices, universal testing framework, reliable backup procedures, and scalable multi-project architecture.**
+**Эта платформа демонстрирует современную AI-powered automation разработку со structured protocols, comprehensive security practices, universal testing framework, reliable backup procedures и scalable multi-project architecture.**
