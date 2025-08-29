@@ -83,7 +83,7 @@
 
 ---
 
-## 5. 📚 Document (Документирование)
+## 5. 📚 Document (Документирование) - ENHANCED
 
 ### **🎯 Цель:** Обеспечить командную осведомленность и сохранность знаний
 
@@ -99,17 +99,27 @@
 - **Create new documentation** - для новых features/процессов
 - **Cross-reference updates** - поддерживать связи между документами
 
+#### **🔗 System Integration (NEW)**
+**MANDATORY для КАЖДОГО созданного документа:**
+- **Update README.md** - добавить новую документацию в navigation
+- **Add protocol references** - обновить relevant AI protocols с links
+- **Create discovery paths** - ensure future AI agents найдут документ
+- **Verify navigation** - проверить что документ accessible через existing paths
+
 #### **💬 Progress Communication**  
 - **Status updates** - о ходе выполнения в Issue комментариях
 - **Results summary** - итоговые результаты и deliverables
 - **Lessons learned** - важные findings для будущих задач
 
-#### **🔗 Cross-references**
-- **Link related Issues** - через "relates to #N", "fixes #N"
-- **Update document links** - при изменении структуры
-- **Maintain navigation** - README, Wiki links актуальны
+#### **🎯 Integration Verification Checklist (NEW)**
+**При создании ЛЮБОГО документа проверить:**
+- [ ] **README.md updated** с новой документацией?
+- [ ] **Navigation paths** созданы для discovery?
+- [ ] **Related protocols** updated с references?
+- [ ] **Future AI agent** сможет найти этот документ?
+- [ ] **Testing discovery:** Can AI find this through existing protocols?
 
-**Результат:** Полная командная transparency и документальное покрытие
+**Результат:** Полная командная transparency и документальное покрытие с guaranteed discoverability
 
 ---
 
@@ -121,6 +131,7 @@
 |------------|---------------|---------|
 | **Issues Management** | Always | Create/Update/Close Issues |
 | **Documentation** | When functionality changes | Update README, guides, specs |
+| **System Integration** | **ALWAYS при создании docs** | **README updates, navigation links** |
 | **Progress Communication** | Always | Comment in Issues about status |
 | **Cross-references** | When structure changes | Update links, references |
 
@@ -133,22 +144,28 @@
 ### **✅ What MUST be planned:**
 - Командные коммуникации
 - Документальные изменения
+- **System integration requirements (NEW)**
 - Issues lifecycle management
 - Knowledge sharing activities
 
 ---
 
-## 🎯 Success Criteria
+## 🎯 Success Criteria - ENHANCED
 
 **Задание считается выполненным когда:**
 - ✅ Все planned actions завершены
 - ✅ Соответствующие Issues обновлены/закрыты
 - ✅ Документация актуализирована
+- ✅ **README.md updated с новой документацией (NEW)**
+- ✅ **Navigation paths созданы для discovery (NEW)**
+- ✅ **System integration completed (NEW)**
 - ✅ Команда informative о результатах
 
 **Задание НЕ завершено если:**
 - ❌ Issues остались без обновления
 - ❌ Документация не отражает изменения
+- ❌ **Новые документы изолированы и недоступны (NEW)**
+- ❌ **README или protocols не обновлены (NEW)**
 - ❌ Нет communication о результатах
 - ❌ Broken cross-references в документации
 
@@ -161,23 +178,23 @@
 Planning: Understand bug, identify fix approach, determine docs impact
 Propose: Fix steps + Issue closure + documentation updates
 Execute: Implement fix, test, document
-Document: Close Issue, update troubleshooting docs, communicate fix
+Document: Close Issue, update troubleshooting docs, UPDATE README navigation, communicate fix
 ```
 
 ### **Example 2: New Feature Task**  
 ```
 Planning: Feature requirements, design approach, documentation needs
-Propose: Implementation plan + new Issues + comprehensive docs
+Propose: Implementation plan + new Issues + comprehensive docs + system integration
 Execute: Build feature, test, integrate
-Document: Update Issues, create user guides, announce feature
+Document: Update Issues, create user guides, ADD TO README navigation, UPDATE protocols, announce feature
 ```
 
-### **Example 3: Documentation Task**
+### **Example 3: Documentation Task** - ENHANCED
 ```
-Planning: Documentation gaps, target audience, related Issues
-Propose: Documentation structure + Issue updates + cross-references  
+Planning: Documentation gaps, target audience, related Issues, WHERE TO INTEGRATE
+Propose: Documentation structure + Issue updates + README updates + navigation integration
 Execute: Write documentation, review, publish
-Document: Close Issues, update navigation, communicate availability
+Document: Close Issues, UPDATE README, ADD PROTOCOL REFERENCES, create navigation, TEST discovery paths
 ```
 
 ---
@@ -188,18 +205,42 @@ Document: Close Issues, update navigation, communicate availability
 - **AI Agent Roles Protocol** - определяет роли, этот протокол - execution process
 - **GitHub Issues Protocol** - обеспечивает compliance с Issues management
 - **Context Handoff Protocol** - этот протокол создает context для handoff
+- **Backup Essentials** - должен быть referenced при major workflow changes
+- **All documentation** - must be discoverable через README navigation
 
 ### **When switching between AI agents:**
-- Current agent должен завершить Document phase
+- Current agent должен завершить Document phase (INCLUDING system integration)
 - New agent начинает с Planning phase для новых задач
 - Ongoing tasks передаются с current execution status
+- All created documentation должно быть discoverable для new agent
 
 ---
 
-**Protocol Version:** 1.0  
-**Created:** August 2025  
+## 🚨 Critical Integration Requirements
+
+### **For Documentation Creation:**
+**NEVER create isolated documents.** Every document MUST have:
+- **README.md entry** for navigation
+- **Protocol references** where relevant
+- **Discovery paths** for future AI agents
+- **Cross-links** from related documents
+
+### **Integration Verification Questions:**
+1. **Discovery:** "Как future AI agent найдет эту документацию?"
+2. **Navigation:** "Где создать links для accessibility?"
+3. **Integration:** "Какие protocols нужно обновить?"
+4. **Workflow:** "Влияет ли на AI execution flow?"
+
+### **Enforcement:**
+**Documentation tasks НЕ считаются complete пока document остается isolated.**
+
+---
+
+**Protocol Version:** 1.1  
+**Updated:** August 2025  
+**Changes:** Added mandatory system integration requirements to prevent isolated documentation
 **Scope:** Applies to all AI agent activities in the project
 
 ---
 
-*This protocol ensures consistent team collaboration and knowledge management while preserving AI agent autonomy in technical implementation details.*
+*This enhanced protocol ensures that all created documentation remains discoverable and integrated into the project's knowledge system, preventing isolation of important information.*
