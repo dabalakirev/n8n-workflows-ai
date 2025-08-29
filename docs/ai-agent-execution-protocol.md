@@ -1,5 +1,36 @@
 # AI Agent Execution Protocol
 
+## 🚨 **MANDATORY PROTOCOL ENFORCEMENT**
+
+### **⚠️ ПЕРЕД КАЖДЫМ ОТВЕТОМ AI Agent ОБЯЗАН:**
+
+1. **✅ Explicitly заявить текущую Phase:** `"Phase 1: Planning"` 
+2. **✅ Выполнить Context Awareness Check** (даже для "простых" задач)
+3. **✅ Никогда не пропускать phases** независимо от сложности задачи
+4. **✅ Помнить: НЕТ exceptions** для "quick fixes" или "obvious solutions"
+
+### **🔍 Pre-Response Self-Check Checklist:**
+```markdown
+Перед каждым ответом проверить:
+- [ ] Проверил ли я existing docs/files связанные с этой темой?
+- [ ] Начинаю ли я с "Phase 1: Planning"?
+- [ ] Следую ли я 5-step execution flow?
+- [ ] Проанализировал ли context перед предложением solutions?
+- [ ] Это действительно "простая" задача или я пропускаю важные детали?
+```
+
+### **🚩 Warning Signs Protocol Violation:**
+- **❌ Начинать с "I suggest..." без Planning phase**
+- **❌ Не проверять существующую documentation/files**  
+- **❌ Спешить к solutions без context analysis**
+- **❌ Думать "это слишком просто для full protocol"**
+- **❌ Пропускать Context Awareness из-за "очевидности" задачи**
+
+### **💡 Fundamental Principle:**
+> **"Context First, Solutions Second"** - Даже для seemingly obvious задач, Context Awareness Check reveals critical information that prevents errors и duplicate work.
+
+---
+
 ## 🎯 Overview
 
 Этот протокол определяет обязательную последовательность действий для AI агента при выполнении любого задания в проекте. Фокус на командной работе и документальном сопровождении.
@@ -18,11 +49,17 @@
 
 ### **🎯 Цель:** Понять задание и определить scope работ
 
-**Обязательные действия:**
-- **Context Awareness Check** - проверить актуальность информации:
-  - Новые комментарии к связанным Issues
-  - Recent GitHub Actions результаты  
-  - Updates в зависимых задачах
+### **🔍 MANDATORY Context Awareness Check:**
+**ВСЕГДА выполнять перед любым заданием (включая "простые"):**
+- **✅ Проверить existing documentation/files** связанные с задачей
+- **✅ Новые комментарии к связанным Issues**
+- **✅ Recent GitHub Actions результаты**  
+- **✅ Updates в зависимых задачах**
+- **✅ Changes в related protocols/files**
+
+**⚠️ НИКОГДА не пропускать этот шаг из-за "простоты" задачи!**
+
+### **Дополнительные обязательные действия:**
 - **Analyze Assignment** - понять что требуется сделать
 - **Identify Key Actions** - определить основные действия для выполнения
 - **Determine Documentation Impact** - какая документация потребует обновления
@@ -133,7 +170,7 @@
 
 | Action Type | When Required | Example |
 |------------|---------------|---------|
-| **Context Awareness** | **Always в Planning** | **Check recent comments, Actions** |
+| **Context Awareness** | **ВСЕГДА в Planning** | **Check existing docs, recent changes** |
 | **Issues Management** | Always | Create/Update/Close Issues |
 | **Documentation** | When functionality changes | Update README, guides, specs |
 | **System Integration** | **ALWAYS при создании docs** | **README updates, navigation links** |
@@ -246,11 +283,35 @@ Document: Close Issues, UPDATE README, ADD PROTOCOL REFERENCES, create navigatio
 
 ---
 
-**Protocol Version:** 1.2  
+## 📚 **Protocol Discipline Guidelines**
+
+### **🎯 Key Mindset:**
+- **Protocol = Discipline, не Guideline**
+- **NO shortcuts даже для "obvious" tasks**
+- **Context First, Solutions Second ALWAYS**
+- **When in doubt, follow the protocol completely**
+
+### **🚫 Common Anti-Patterns to AVOID:**
+- "This is too simple for full protocol"
+- "I already know what needs to be done"
+- "Let me quickly fix this without checking context"
+- "Skip Context Awareness, it's obvious"
+- "Rush to propose solution without planning"
+
+### **✅ Proper Mindset:**
+- "Even simple tasks benefit from systematic approach"
+- "Context Awareness reveals unexpected information"
+- "Following protocol prevents errors and rework"
+- "Structured approach improves quality"
+- "Protocol compliance builds team trust"
+
+---
+
+**Protocol Version:** 1.3  
 **Updated:** August 2025  
-**Changes:** Added Context Awareness Check to Planning phase for better situational awareness
+**Changes:** Added Mandatory Protocol Enforcement section, Pre-Response Checklist, Warning Signs, and enhanced Context Awareness requirements
 **Scope:** Applies to all AI agent activities in the project
 
 ---
 
-*This enhanced protocol ensures AI agents always have current context before starting work and that all documentation remains discoverable and integrated.*
+*This enhanced protocol with enforcement mechanisms ensures AI agents maintain discipline and never skip critical steps, regardless of perceived task simplicity.*
