@@ -18,11 +18,11 @@ Q4 2025
 
 ---
 
-## 🚀 Milestones (REPRIORITIZED)
+## 🚀 Milestones (UPDATED)
 
 ### 🏗️ **Milestone v1.1 - Documentation & Infrastructure** 
 **Status**: 🚧 In Progress  
-**Priority**: 🔴 **CRITICAL** *(UPDATED PRIORITY)*  
+**Priority**: 🔴 **CRITICAL**  
 **Timeline**: September 2025  
 **Owner**: AI Agent
 
@@ -36,7 +36,6 @@ Q4 2025
 - **#8** ✅ [DOCS] Создать AI Agent Roles & Protocols документацию *(COMPLETED)*
 
 **Critical Documentation Issues:**
-- **#9** 🔴 [DOCS] Создать Troubleshooting Guide для проекта *(Critical)*
 - **#10** 🔐 [DOCS] Создать Security Best Practices Guide *(Critical)*
 - **#11** ⚡ [DOCS] Создать Performance Guidelines *(Critical)*
 - **#12** 💾 [DOCS] Создать Backup & Recovery Procedures *(Critical)*
@@ -48,7 +47,7 @@ Q4 2025
 - **#14** ⚙️ [ENHANCEMENT] Ревизия и оптимизация GitHub окружения *(High Priority)*
 
 #### **✅ Success Criteria**
-- [ ] Все critical документы созданы (Issues #9-12)
+- [ ] Все critical документы созданы (Issues #10-12)
 - [ ] GitHub Wiki fully populated и linked
 - [ ] README enhanced с professional presentation
 - [ ] Documentation structure optimized
@@ -57,7 +56,7 @@ Q4 2025
 - [ ] 100% documentation coverage для project aspects
 
 #### **🔧 Technical Deliverables**
-- Complete documentation suite (9 core documents)
+- Complete documentation suite (8 core documents)
 - Professional README с badges и navigation
 - Comprehensive GitHub Wiki
 - Optimized repository structure
@@ -67,7 +66,7 @@ Q4 2025
 ---
 
 ### 🧪 **Milestone v1.2 - Testing Framework** 
-**Status**: 📋 Ready for Activation *(DEPRIORITIZED)*  
+**Status**: 📋 Ready for Activation  
 **Priority**: 🟡 **HIGH**  
 **Timeline**: October - November 2025  
 **Owner**: AI Agent
@@ -139,22 +138,22 @@ Q4 2025
 
 ### 📊 Progress Overview
 ```
-v1.1 Documentation & Infrastructure:  ████████░░ 80% (5/9 issues completed)
+v1.1 Documentation & Infrastructure:  ████████░░ 85% (6/8 issues completed)
 v1.2 Testing Framework:               ██░░░░░░░░ 20% (ready for activation)
 v1.3 Advanced Features:               ░░░░░░░░░░  0% (future planning)
 
-Overall Project Progress:             ███████░░░ 70%
+Overall Project Progress:             ███████░░░ 75%
 ```
 
-### 🔥 Active Work (REPRIORITIZED)
+### 🔥 Active Work (UPDATED)
 - **Current Sprint**: Documentation & Infrastructure completion
-- **Critical Path**: Issues #9, #10, #11, #12 (Documentation completion)
+- **Critical Path**: Issues #10, #11, #12 (Documentation completion)
 - **Infrastructure**: Issues #7, #13, #14 (GitHub optimization)
 - **Next Sprint**: Testing Framework activation (Issues #2, #3)
 
 ### 📈 Metrics & KPIs
-- **Issues Resolved**: 1/14 active issues  
-- **Documentation**: 5/9 critical documents completed
+- **Issues Resolved**: 2/13 active issues (Issue #9 removed)
+- **Documentation**: 5/8 critical documents completed
 - **Infrastructure**: GitHub Actions 75% complete
 - **Testing**: Framework designed, ready for implementation
 - **Automation Level**: 60% (GitHub Issues + Actions automation)
@@ -182,7 +181,7 @@ Overall Project Progress:             ███████░░░ 70%
 ## 🎯 Immediate Action Plan
 
 ### 🏃‍♂️ **Week 1-2 (Current Sprint):**
-- **Solution Architect Role**: Complete Issues #9-12 (Critical documentation)
+- **Solution Architect Role**: Complete Issues #10-12 (Critical documentation)
 - **Technical Writer Role**: Enhance README (#6) и structure review (#13)
 - **DevOps Role**: GitHub optimization (#14) и release system (#7)
 
@@ -235,4 +234,10 @@ By end of v1.3:
 
 ---
 
-*This roadmap has been updated to reflect new priorities focusing on documentation completion and infrastructure optimization. Last updated: August 2025*
+## 🗑️ **Changelog**
+- **2025-08-29**: Issue #9 (Troubleshooting Guide) удален по решению владельца
+- **2025-08-28**: Roadmap reprioritized, focus на Documentation & Infrastructure
+
+---
+
+*This roadmap has been updated to reflect new priorities and removed Issue #9. Last updated: August 2025*
