@@ -143,3 +143,5 @@ workflows/your-project/
 **Эта архитектура поддерживает unlimited проекты на единой платформе с shared infrastructure, universal testing, и consistent quality standards.**
 
 *Updated: August 2025 - Issue #21 Project-Centric Architecture Implementation*
+
+<!-- Trigger test for fixed validation script - Issue #22 resolved -->
