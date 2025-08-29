@@ -5,8 +5,9 @@
 **Каждый новый AI агент ОБЯЗАН:**
 1. **Прочитать ВСЕ протоколы** проекта перед началом работы
 2. **Строго следовать** установленным процедурам
-3. **Создавать Issues** для всех изменений согласно [GitHub Issues Protocol](github-issues-protocol.md)
-4. **Не нарушать** установленную архитектуру и процессы
+3. **Следовать AI Agent Execution Protocol** для каждого задания
+4. **Создавать Issues** для всех изменений согласно GitHub Issues Protocol
+5. **Не нарушать** установленную архитектуру и процессы
 
 ## 🔄 Процедура смены AI агента
 
@@ -16,23 +17,31 @@
 - Долгие задачи требующие "свежего старта"
 
 ### Перед завершением сессии:
-1. AI агент создает/обновляет `current-session-state.md`
-2. Коммитит все изменения в GitHub
-3. Создает четкие инструкции для следующего агента
-4. **Проверяет соблюдение всех протоколов**
+1. AI агент **завершает Document phase** текущего задания
+2. Создает/обновляет `current-session-state.md` с execution status
+3. Коммитит все изменения в GitHub
+4. Создает четкие инструкции для следующего агента
+5. **Проверяет соблюдение всех протоколов**
 
 ### При начале новой сессии:
 1. **ПЕРВОЕ ДЕЙСТВИЕ**: Читает ВСЕ файлы в `docs/` папке
 2. Изучает установленные протоколы:
+   - **[AI Agent Execution Protocol](ai-agent-execution-protocol.md)** - ОБЯЗАТЕЛЬНЫЙ workflow
    - [GitHub Issues Protocol](github-issues-protocol.md) 
    - [Testing Strategy](testing-strategy.md)
    - Этот Context Handoff Protocol
 3. Проверяет состояние n8n workflows
 4. Читает `current-session-state.md`
 5. Подтверждает понимание контекста
-6. Продолжает работу **строго следуя протоколам**
+6. **Начинает новые задания с Planning phase** согласно Execution Protocol
 
 ## 📋 Обязательные протоколы для изучения
+
+### 🤖 AI Agent Execution Protocol
+- **Обязательный 5-step flow** для всех заданий: Plan → Propose → Get Approval → Execute → Document
+- **Mandatory action types** для team collaboration
+- **Integration со всеми другими протоколами**
+- 📖 **[ОБЯЗАТЕЛЬНО К ИЗУЧЕНИЮ ПЕРВЫМ →](ai-agent-execution-protocol.md)**
 
 ### 🎫 GitHub Issues Protocol
 - **Все изменения** требуют создания Issues
@@ -74,10 +83,18 @@ DEV Workflow:
 # Session Handoff - [Date]
 
 ## Protocol Compliance Check
+- [ ] Новый агент прочитал AI Agent Execution Protocol (FIRST!)
 - [ ] Новый агент прочитал GitHub Issues Protocol
 - [ ] Новый агент прочитал Testing Strategy  
 - [ ] Новый агент прочитал Context Handoff Protocol
 - [ ] Все активные Issues проверены и поняты
+
+## Current Execution Status
+- **Active Assignment**: [Current task being worked on]
+- **Execution Phase**: [Planning/Propose/Approval/Execute/Document]
+- **Approved Plan**: [What was approved for execution]
+- **Completion Status**: [What's been completed]
+- **Next Steps**: [What needs to be done next in execution flow]
 
 ## Current Status
 - **Project Phase**: [Development/Testing/Documentation]
@@ -112,21 +129,24 @@ DEV Workflow:
 - **Immediate Tasks**: [priority list with Issue numbers]
 - **Testing Tasks**: [specific tests needed with Issue numbers]
 - **Protocol Requirements**: [specific protocol compliance needed]
+- **Execution Context**: [current assignment execution status]
 - **Important Context**: [critical info to remember]
 
 ## Next Agent Instructions
-1. READ ALL DOCUMENTATION in docs/ folder FIRST
-2. Check all active GitHub Issues before making ANY changes
-3. Create Issues for any planned work according to protocol
-4. Follow Testing Strategy for all workflow modifications
-5. Update this handoff document before ending session
+1. READ AI Agent Execution Protocol FIRST - mandatory workflow
+2. READ ALL OTHER DOCUMENTATION in docs/ folder  
+3. Check current execution status and continue from appropriate phase
+4. Check all active GitHub Issues before making ANY changes
+5. Follow 5-step execution flow for all new assignments
+6. Update this handoff document before ending session
 ```
 
 ## 📁 Файловая структура для continuity:
 
 ```
 docs/
-├── current-session-state.md           # Live state (MUST READ FIRST)
+├── ai-agent-execution-protocol.md     # FIRST TO READ - mandatory workflow
+├── current-session-state.md           # Live state (READ AFTER execution protocol)
 ├── github-issues-protocol.md          # ОБЯЗАТЕЛЬНО к изучению
 ├── testing-strategy.md                # ОБЯЗАТЕЛЬНО к изучению  
 ├── context-handoff-protocol.md        # Этот файл
@@ -141,17 +161,19 @@ docs/
 
 ### Если новый агент нарушает протоколы:
 1. **Немедленно остановить работу**
-2. **Создать Issue** о нарушении протокола  
-3. **Исправить нарушения**
+2. **Создать Issue** о нарушении протокола (если еще не в execution flow)
+3. **Исправить нарушения** 
 4. **Задокументировать** в session handoff
-5. **Продолжить работу** только после исправления
+5. **Продолжить работу** только после исправления согласно Execution Protocol
 
 ### Типичные нарушения:
+- **Пропуск AI Agent Execution Protocol** - самое серьезное нарушение
 - Изменения без создания Issues
 - Игнорирование Testing Strategy
 - Не чтение документации перед началом работы
 - Работа без понимания архитектуры проекта
+- **Выполнение действий без approval** в Execution Protocol
 
 ---
 
-**Соблюдение протоколов не опционально - это обязательное требование для всех участников проекта, включая AI агентов.**
+**Соблюдение протоколов не опционально - это обязательное требование для всех участников проекта, включая AI агентов. AI Agent Execution Protocol является основополагающим для всех операций.**
