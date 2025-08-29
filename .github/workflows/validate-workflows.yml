@@ -27,31 +27,36 @@ jobs:
     - name: 🔍 Validate JSON Structure
       run: |
         echo "🔎 Validating JSON files..."
-        find workflows/ -name "*.json" -type f | while read file; do
-          echo "Checking $file"
-          if ! python -m json.tool "$file" > /dev/null; then
-            echo "❌ Invalid JSON in $file"
-            exit 1
-          else
-            echo "✅ Valid JSON: $file"
+        find workflows/ -name "*.json" -type f 2>/dev/null | while read -r file; do
+          if [ -f "$file" ]; then
+            echo "Checking $file"
+            if ! python -m json.tool "$file" > /dev/null; then
+              echo "❌ Invalid JSON in $file"
+              exit 1
+            else
+              echo "✅ Valid JSON: $file"
+            fi
           fi
         done
         
     - name: 🛡️ Security Check - No Hardcoded Secrets
       run: |
         echo "🔐 Scanning for hardcoded secrets..."
-        # Check for actual hardcoded API keys with values (not just credential names)
-        if grep -r -E "\"api.*key\"\s*:\s*\"[^\"]{10,}\"" workflows/ --include="*.json"; then
-          echo "⚠️ WARNING: Found potential hardcoded API keys!"
-          echo "Please use n8n credentials instead of hardcoding keys in JSON"
-          exit 1
-        fi
-        
-        # Check for other hardcoded patterns but exclude n8n credential configurations
-        if grep -r -i "api.*key.*[:=].*[a-zA-Z0-9]{20,}" workflows/ --include="*.json" | grep -v "credentials\|PLACEHOLDER_ID"; then
-          echo "⚠️ WARNING: Found potential hardcoded API keys!"
-          echo "Please use n8n credentials instead of hardcoding keys in JSON"
-          exit 1
+        # Check if workflows directory exists and has JSON files
+        if [ -d "workflows/" ] && find workflows/ -name "*.json" -type f | grep -q .; then
+          # Check for actual hardcoded API keys with values (not just credential names)
+          if grep -r -E "\"api.*key\"\s*:\s*\"[^\"]{10,}\"" workflows/ --include="*.json" 2>/dev/null; then
+            echo "⚠️ WARNING: Found potential hardcoded API keys!"
+            echo "Please use n8n credentials instead of hardcoding keys in JSON"
+            exit 1
+          fi
+          
+          # Check for other hardcoded patterns but exclude n8n credential configurations
+          if grep -r -i "api.*key.*[:=].*[a-zA-Z0-9]{20,}" workflows/ --include="*.json" 2>/dev/null | grep -v "credentials\|PLACEHOLDER_ID"; then
+            echo "⚠️ WARNING: Found potential hardcoded API keys!"
+            echo "Please use n8n credentials instead of hardcoding keys in JSON"
+            exit 1
+          fi
         fi
         
         echo "✅ No hardcoded secrets detected"
@@ -59,6 +64,12 @@ jobs:
     - name: 🏗️ Validate Project-Centric n8n Workflow Structure
       run: |
         echo "🔧 Validating project-centric n8n workflow structure..."
+        
+        # Check if workflows directory exists
+        if [ ! -d "workflows/" ]; then
+          echo "⚠️ No workflows/ directory found"
+          exit 0
+        fi
         
         # Validate project structure
         for project_dir in workflows/*/; do
@@ -82,41 +93,53 @@ jobs:
           fi
         done
         
-        # Validate individual workflow files using find instead of globbing
-        find workflows/ -name "*.json" -type f | while read file; do
-          echo "Validating n8n structure: $file"
-          
-          # Check required fields
-          if ! jq -e '.nodes' "$file" > /dev/null; then
-            echo "❌ Missing 'nodes' array in $file"
-            exit 1
-          fi
-          
-          if ! jq -e '.connections' "$file" > /dev/null; then
-            echo "❌ Missing 'connections' object in $file"
-            exit 1
-          fi
-          
-          # Check if it's DEV workflow (should have 2 triggers)
-          if [[ "$file" == */dev/* ]]; then
-            trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file")
-            if [ "$trigger_count" -ne 2 ]; then
-              echo "⚠️ DEV workflow $file should have exactly 2 triggers (Manual + Execute Workflow)"
-              echo "Found: $trigger_count triggers"
+        # Validate individual workflow files using find with proper error handling
+        workflow_found=false
+        find workflows/ -name "*.json" -type f 2>/dev/null | while read -r file; do
+          if [ -f "$file" ]; then
+            workflow_found=true
+            echo "Validating n8n structure: $file"
+            
+            # Check required fields
+            if ! jq -e '.nodes' "$file" > /dev/null 2>&1; then
+              echo "❌ Missing 'nodes' array in $file"
+              exit 1
             fi
-          fi
-          
-          # Check if it's PROD workflow (should have 1 trigger)  
-          if [[ "$file" == */prod/* ]]; then
-            trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file")
-            if [ "$trigger_count" -ne 1 ]; then
-              echo "⚠️ PROD workflow $file should have exactly 1 trigger (Manual only)"
-              echo "Found: $trigger_count triggers"
+            
+            if ! jq -e '.connections' "$file" > /dev/null 2>&1; then
+              echo "❌ Missing 'connections' object in $file"
+              exit 1
             fi
+            
+            # Check if it's DEV workflow (should have 2 triggers)
+            if [[ "$file" == */dev/* ]]; then
+              trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file" 2>/dev/null || echo "0")
+              if [ "$trigger_count" -ne 2 ]; then
+                echo "⚠️ DEV workflow $file should have exactly 2 triggers (Manual + Execute Workflow)"
+                echo "Found: $trigger_count triggers"
+              fi
+            fi
+            
+            # Check if it's PROD workflow (should have 1 trigger)  
+            if [[ "$file" == */prod/* ]]; then
+              trigger_count=$(jq '[.nodes[] | select(.type | contains("Trigger"))] | length' "$file" 2>/dev/null || echo "0")
+              if [ "$trigger_count" -ne 1 ]; then
+                echo "⚠️ PROD workflow $file should have exactly 1 trigger (Manual only)"
+                echo "Found: $trigger_count triggers"
+              fi
+            fi
+            
+            echo "✅ Structure valid: $file"
           fi
-          
-          echo "✅ Structure valid: $file"
         done
+        
+        # Check if any workflows were found
+        total_workflows=$(find workflows/ -name "*.json" -type f 2>/dev/null | wc -l)
+        if [ "$total_workflows" -eq 0 ]; then
+          echo "⚠️ No workflow JSON files found in workflows/ directory"
+        else
+          echo "✅ Validated $total_workflows workflow files"
+        fi
         
     - name: 📊 Generate Project-Centric Validation Report
       if: always()
@@ -125,29 +148,33 @@ jobs:
         echo "=====================================" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        total_files=$(find workflows/ -name "*.json" | wc -l)
-        echo "📁 Total workflow files: $total_files" >> $GITHUB_STEP_SUMMARY
-        
-        # Count projects
-        project_count=$(find workflows/ -maxdepth 1 -type d ! -name workflows | wc -l)
-        echo "🎯 Active projects: $project_count" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        
-        # Per-project breakdown
-        for project_dir in workflows/*/; do
-          if [ -d "$project_dir" ] && [ "$(basename "$project_dir")" != "workflows" ]; then
-            project_name=$(basename "$project_dir")
-            dev_files=$(find "$project_dir/dev/" -name "*.json" 2>/dev/null | wc -l)
-            prod_files=$(find "$project_dir/prod/" -name "*.json" 2>/dev/null | wc -l)
-            
-            echo "🐦 **$project_name** Project:" >> $GITHUB_STEP_SUMMARY
-            echo "  - 🔄 DEV workflows: $dev_files" >> $GITHUB_STEP_SUMMARY
-            echo "  - 🚀 PROD workflows: $prod_files" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-        done
-        
-        echo "✅ All project-centric validations passed!" >> $GITHUB_STEP_SUMMARY
+        if [ -d "workflows/" ]; then
+          total_files=$(find workflows/ -name "*.json" -type f 2>/dev/null | wc -l)
+          echo "📁 Total workflow files: $total_files" >> $GITHUB_STEP_SUMMARY
+          
+          # Count projects
+          project_count=$(find workflows/ -maxdepth 1 -type d ! -name workflows 2>/dev/null | wc -l)
+          echo "🎯 Active projects: $project_count" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Per-project breakdown
+          for project_dir in workflows/*/; do
+            if [ -d "$project_dir" ] && [ "$(basename "$project_dir")" != "workflows" ]; then
+              project_name=$(basename "$project_dir")
+              dev_files=$(find "$project_dir/dev/" -name "*.json" -type f 2>/dev/null | wc -l)
+              prod_files=$(find "$project_dir/prod/" -name "*.json" -type f 2>/dev/null | wc -l)
+              
+              echo "🐦 **$project_name** Project:" >> $GITHUB_STEP_SUMMARY
+              echo "  - 🔄 DEV workflows: $dev_files" >> $GITHUB_STEP_SUMMARY
+              echo "  - 🚀 PROD workflows: $prod_files" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
+          echo "✅ All project-centric validations passed!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ No workflows/ directory found" >> $GITHUB_STEP_SUMMARY
+        fi
 
   # Placeholder for future Test Orchestrator integration
   # Will be activated when Issue #2 is completed
