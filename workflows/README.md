@@ -1,9 +1,9 @@
 # 📝 n8n Workflows - Project-Centric Architecture
 
-**Platform**: n8n-workflows-ai универсальная автоматизация с AI  
-**Архитектура**: Project → Environment (DEV/PROD) → Workflows
+**Project-Centric Workflow Management** для n8n-workflows-ai platform  
+**Structure**: Project → Environment (DEV/PROD) → Workflows
 
-## 🏗️ **Project-Centric Structure**
+## 🏗️ **Workflow Directory Structure**
 
 ```
 workflows/
@@ -12,136 +12,169 @@ workflows/
 │   │   ├── ai-deepseek-dev.json      (Manual + Execute Workflow)
 │   │   └── fmp-router-dev.json       (Manual + Execute Workflow) 
 │   ├── prod/               # PROD workflows (1 trigger each)
-│   │   ├── ai-deepseek-prod.json     (Manual only)
-│   │   └── fmp-router-prod.json      (Manual only)
-│   └── README.md           # Project-specific documentation
+│   │   ├── ai-deepseek-prod.json     (Manual only) [FUTURE]
+│   │   └── fmp-router-prod.json      (Manual only) [FUTURE]
+│   └── README.md           # Project-specific workflow documentation
 ├── [future-project]/       # Template для новых проектов
 │   ├── dev/                # DEV environment для проекта
 │   ├── prod/               # PROD environment для проекта  
-│   └── README.md           # Project documentation
-└── README.md              # Этот файл - platform workflows guide
+│   └── README.md           # Project workflow documentation
+└── README.md              # Этот файл - workflow architecture guide
 ```
 
-## 🎯 **Platform Architecture Benefits**
-
-### **Scalability**
-- **Multiple Projects** поддерживаются одной платформой
-- **Consistent Structure** для всех automation проектов  
-- **Reusable Testing** через universal Test Orchestrator
-- **Shared Infrastructure** GitHub Actions, protocols, tools
+## 🎯 **Project-Centric Workflow Benefits**
 
 ### **Project Isolation**
-- **Clear Separation** каждый проект в своей папке
-- **Independent Development** different domains/APIs/workflows
-- **Project-Specific Documentation** tailored guides и references
-- **Environment Management** DEV/PROD по проекту
+- **Clear Separation** - каждый проект в своей папке с dedicated workflows
+- **Independent Development** - different domains, APIs, и business logic
+- **Project-Specific Documentation** - tailored guides и technical references
+- **Environment Management** - DEV/PROD separation per project
+
+### **Environment Management**
+- **DEV Environment** - Development и testing workflows
+  - **Dual Triggers**: Manual (testing) + Execute Workflow (automation)
+  - **Test Integration**: Compatible с Universal Test Orchestrator
+  - **Rapid Iteration**: Fast development и debugging cycle
+  
+- **PROD Environment** - Production deployment workflows  
+  - **Single Trigger**: Manual only для production stability
+  - **Production Ready**: Optimized for reliability и performance
+  - **Controlled Access**: Limited triggers для production safety
 
 ### **Universal Tools Integration**
-- **Test Orchestrator** работает с любыми project workflows
-- **GitHub Actions** automatically validates все project structures  
-- **Platform Documentation** protocols применимы ко всем проектам
-- **AI Agent Protocols** universal processes для любых projects
+- **Test Orchestrator Compatibility** - all DEV workflows testable
+- **GitHub Actions Validation** - automatic structure compliance checking  
+- **Release Management Integration** - workflows packaged for versioning
+- **Documentation Standards** - consistent project documentation patterns
 
-## 🚀 **Current Projects**
+## 🚀 **Current Workflow Projects**
 
-### 🐦 **First Bird (Active)**
+### 🐦 **First Bird (Active Development)**
 **Domain:** Financial Data Automation  
-**API:** Financial Modeling Prep  
-**Workflows:** AI Deepseek + FMP API Router  
-**Status:** Production-ready, platform-compliant
+**API Integration:** Financial Modeling Prep API  
+**AI Processing:** DeepSeek language model for market analysis  
+**Status:** DEV workflows operational, PROD deployment pending  
 
-**Документация:** `workflows/first-bird/README.md`
+**Workflow Components:**
+- **AI Deepseek** - Financial query analysis с AI language model
+- **FMP API Router** - Universal API endpoint routing для financial data
+- **Test Integration** - Full Test Orchestrator compatibility
 
-### 🔮 **Future Projects**
-Платформа готова поддерживать дополнительные проекты:
+**Technical Documentation:** [workflows/first-bird/README.md](first-bird/README.md)
+
+### 🔮 **Future Project Templates**
+Ready-to-use structure для new automation projects:
 - **E-commerce Automation** (Shopify/WooCommerce APIs)  
 - **Social Media Management** (Twitter/LinkedIn APIs)
-- **IoT Data Processing** (sensor data automation)
-- **Content Management** (CMS/blogging workflows)
+- **IoT Data Processing** (sensor data workflows)
+- **Content Management** (CMS/blogging automation)
 
-## 🧪 **Universal Testing Framework**
+## 🧪 **Universal Testing Integration**
 
-### **Test Orchestrator Integration**
-- **Любой проект** может тестироваться через platform Test Orchestrator
-- **DEV Workflows** имеют Execute Workflow Triggers для automation
-- **PROD Workflows** содержат только Manual Triggers для stability
-- **Automated Quality Gates** через GitHub Actions pipeline
+### **Test Orchestrator Workflow Compatibility**
+- **DEV Workflows**: Designed for automated testing через Execute Workflow triggers
+- **Testing Framework**: Universal Test Orchestrator (ID: `ElnSprIVyJXKlkl3`) tests any project
+- **Multi-Project Support**: Single testing tool serves all workflow projects
+- **Automated Quality Gates**: CI/CD integration ready через testing framework
 
-### **Multi-Project Testing**  
-- **Project-Agnostic** testing procedures
-- **Scalable Test Coverage** для растущего количества проектов
-- **Universal Test Reports** aggregated insights across projects
-- **Consistent Quality Standards** применяются ко всем projects
+### **Testing Workflow Standards**
+All project workflows follow these testing standards:
+- **DEV Dual Triggers**: Manual (development) + Execute Workflow (automation)
+- **PROD Single Trigger**: Manual only для production stability  
+- **Test Data Compatibility**: Structured input/output для automated validation
+- **Error Handling**: Consistent error reporting across all workflows
 
-## 🔐 **Security & Standards**
+## 🔐 **Workflow Security & Standards**
 
-### **Platform-Wide Security**
-- **No Hardcoded Secrets** в любых project workflows
-- **Credential References** через n8n credentials management
-- **Security Scanning** автоматизированное через GitHub Actions
-- **Consistent Security Practices** across all projects
+### **Security Standards**
+- **No Hardcoded Secrets** - all credentials через n8n credential management
+- **Environment Separation** - DEV/PROD credential isolation
+- **Access Control** - trigger-based workflow access management
+- **Security Scanning** - automated validation через GitHub Actions
 
 ### **Quality Standards**
-- **JSON Syntax Validation** для всех workflow files
-- **Trigger Count Verification** (DEV=2, PROD=1) для каждого проекта
-- **Structure Compliance** автоматические checks
-- **Documentation Standards** consistent project documentation
+- **JSON Syntax Validation** - automated structure checking
+- **Trigger Count Compliance** - DEV=2 triggers, PROD=1 trigger enforcement
+- **Schema Validation** - n8n workflow schema compliance
+- **Documentation Requirements** - mandatory project README files
 
-## 📊 **Platform Management**
-
-### **GitHub Actions Pipeline**
-```yaml
-Automated Validation:
-├── JSON structure validation     # Все project workflows
-├── Security scanning            # Platform-wide security  
-├── Trigger compliance          # DEV/PROD standards
-└── Multi-project verification  # Architecture consistency
-```
+## 📊 **Workflow Management**
 
 ### **Development Workflow**
-1. **Создать project папку** в `workflows/[project-name]/`
-2. **Следовать DEV/PROD structure** для environment consistency
-3. **Создать project README** с specific documentation
-4. **Configure Testing** через Test Orchestrator integration
-5. **Production Deployment** следуя platform protocols
+1. **Create Project Folder** в `workflows/[project-name]/`
+2. **Follow Environment Structure** - создать `dev/` и `prod/` папки
+3. **Implement DEV Workflows** с dual triggers (Manual + Execute Workflow)
+4. **Create Project Documentation** в project README.md
+5. **Test Integration** через Universal Test Orchestrator
+6. **PROD Deployment** после successful DEV validation
 
-## 🎯 **New Project Template**
+### **Automated Validation Pipeline**
+```yaml
+GitHub Actions Validation:
+├── JSON Structure Check       # All workflow files syntax validation
+├── Trigger Compliance        # DEV=2, PROD=1 trigger verification  
+├── Security Scanning         # Credential и secret validation
+├── Schema Validation         # n8n workflow schema compliance
+└── Documentation Check       # Required README files verification
+```
 
-### **Minimum Project Structure:**
+## 🎯 **New Project Workflow Template**
+
+### **Minimum Project Requirements:**
 ```
 workflows/your-project/
-├── dev/                    # DEV workflows
-│   └── [workflow-name]-dev.json
-├── prod/                   # PROD workflows  
-│   └── [workflow-name]-prod.json
-└── README.md              # Project documentation
+├── dev/                    # DEV environment workflows
+│   └── [workflow-name]-dev.json    # Dual triggers: Manual + Execute Workflow
+├── prod/                   # PROD environment workflows (future)
+│   └── [workflow-name]-prod.json   # Single trigger: Manual only  
+└── README.md              # Project workflow documentation
 ```
 
-### **Required Documentation:**
-- **Project Overview** - domain, purpose, scope  
-- **Workflow Descriptions** - each workflow's functionality
-- **Configuration Requirements** - credentials, settings
-- **Testing Strategy** - DEV testing procedures
-- **Integration Points** - platform tool usage
+### **Required Project Documentation:**
+- **Project Overview** - domain, purpose, workflow scope  
+- **Workflow Descriptions** - detailed functionality для each workflow
+- **Configuration Guide** - required credentials, settings, dependencies
+- **Testing Procedures** - DEV testing scenarios и validation steps
+- **Integration Details** - Test Orchestrator compatibility и usage
 
-## 🔗 **Platform Integration**
+### **Development Standards:**
+- **Naming Convention**: `[workflow-name]-[environment].json`
+- **Trigger Standards**: DEV workflows=2 triggers, PROD workflows=1 trigger
+- **Test Compatibility**: All DEV workflows must support Execute Workflow triggers
+- **Documentation**: Project README must document all workflows и their usage
 
-### **Universal Tools**
-- **Test Orchestrator:** `platform-level testing для всех projects`
-- **GitHub Actions:** `automated validation каждого project`  
-- **Documentation System:** `consistent standards across projects`
-- **AI Agent Protocols:** `structured development для всех projects`
+## 🔗 **Platform Integration Points**
 
-### **Cross-Project Benefits**
-- **Knowledge Sharing** между проектами через shared documentation
-- **Pattern Reuse** successful architecture patterns available globally
-- **Resource Optimization** shared testing infrastructure и CI/CD
-- **Community Growth** project templates для faster onboarding
+### **Universal Platform Tools**
+- **Test Orchestrator** (ID: `ElnSprIVyJXKlkl3`) - platform-level testing для all projects
+- **GitHub Actions Pipeline** - automated validation для all project structures  
+- **Release Management** - automated workflow packaging и versioning
+- **Documentation System** - consistent project documentation standards
+
+### **Cross-Project Workflow Benefits**
+- **Pattern Reuse** - successful workflow patterns available для new projects
+- **Testing Infrastructure** - shared Test Orchestrator serves all projects
+- **Quality Standards** - universal validation rules applied to all workflows
+- **Knowledge Sharing** - project documentation patterns и best practices
+
+### **Workflow Scalability**
+- **Unlimited Projects** - directory structure supports any number of projects
+- **Independent Scaling** - each project scales independently
+- **Universal Testing** - single Test Orchestrator handles all project workflows
+- **Consistent Standards** - same quality и security standards across all projects
 
 ---
 
-**Эта архитектура поддерживает unlimited проекты на единой платформе с shared infrastructure, universal testing, и consistent quality standards.**
+## 📚 **Related Documentation**
 
-*Updated: August 2025 - Issue #21 Project-Centric Architecture Implementation*
+- **Platform Overview**: [../README.md](../README.md) - General platform capabilities и features
+- **Platform Roadmap**: [../docs/roadmap.md](../docs/roadmap.md) - Development milestones и progress
+- **Testing Strategy**: [../docs/testing-strategy.md](../docs/testing-strategy.md) - Universal testing protocols
+- **AI Agent Protocols**: [../docs/ai-agent-roles-protocols.md](../docs/ai-agent-roles-protocols.md) - Development procedures
+- **First Bird Project**: [first-bird/README.md](first-bird/README.md) - Active project technical details
 
-<!-- Trigger test for fixed validation script - Issue #22 resolved -->
+---
+
+**This workflow architecture enables unlimited automation projects on a unified platform with shared testing infrastructure, consistent quality standards, и universal development protocols.**
+
+*Updated: August 30, 2025 - Documentation Refactoring & Architecture Optimization*
