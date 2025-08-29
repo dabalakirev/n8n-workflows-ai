@@ -82,8 +82,8 @@ jobs:
           fi
         done
         
-        # Validate individual workflow files
-        for file in workflows/**/*.json; do
+        # Validate individual workflow files using find instead of globbing
+        find workflows/ -name "*.json" -type f | while read file; do
           echo "Validating n8n structure: $file"
           
           # Check required fields
