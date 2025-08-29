@@ -4,6 +4,8 @@
 
 GitHub Issues используются для **трекинга всех изменений** в проекте n8n workflows, обеспечивая прозрачность, документирование решений и контроль качества.
 
+**⚡ ВАЖНО:** Управление Issues является частью **[AI Agent Execution Protocol](ai-agent-execution-protocol.md)**. Все AI агенты должны следовать 5-step execution flow, включая обязательные Issues Management actions.
+
 ## ✅ ОБЯЗАТЕЛЬНО создаем Issues когда:
 
 ### 🔄 Изменения в workflow:
@@ -149,6 +151,26 @@ GitHub Issues используются для **трекинга всех изм
 - **Блокирующие задачи** должны быть явно указаны через `blocks #N`
 - **Связанные Issues** отмечаем через `relates to #N`
 
+## 🤖 Integration с AI Agent Execution Protocol
+
+### **Issues Management как Mandatory Action Type:**
+- **Create Issues** - в Planning/Propose phases для новых задач
+- **Update Issues** - в Execute phase для progress tracking
+- **Close Issues** - в Document phase при completion
+
+### **Execution Flow Integration:**
+```
+Planning Phase → Assess Issues Impact → Create necessary Issues
+Propose Phase → Include Issues Management в proposal
+Execute Phase → Update Issues with progress
+Document Phase → Close completed Issues, update related Issues
+```
+
+### **Team Collaboration через Issues:**
+- **Progress Communication** - все status updates в Issue comments
+- **Cross-references** - linking related Issues через #N
+- **Knowledge Sharing** - результаты и lessons learned в Issues
+
 ---
 
 ## 🎯 Цель протокола
@@ -159,5 +181,6 @@ GitHub Issues используются для **трекинга всех изм
 - **Контроль качества** через review process
 - **Историю изменений** для troubleshooting
 - **Планирование** и приоритизацию задач
+- **Team collaboration** через structured communication
 
-**Следование протоколу обязательно для всех участников проекта, включая AI агентов.**
+**Следование протоколу обязательно для всех участников проекта, включая AI агентов. Issues management является integral частью AI Agent Execution Protocol.**
