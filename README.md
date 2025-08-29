@@ -1,6 +1,24 @@
 # n8n-workflows-ai
 
+![GitHub Issues](https://img.shields.io/github/issues/dabalakirev/n8n-workflows-ai)
+![Platform Status](https://img.shields.io/badge/platform-v1.1--foundation-orange)
+![License](https://img.shields.io/badge/license-Friends%20Only-purple)
+
 **AI-Powered Automation Platform** для разработки n8n workflows с test-driven development и современными DevOps практиками
+
+## Table of Contents
+- [🎯 Platform Overview](#-platform-overview)
+- [🐦 Current Project: "First Bird"](#-current-project-first-bird)
+- [🛠️ Platform Tools](#️-platform-tools)
+- [🗺️ Platform Roadmap](#️-platform-roadmap)
+- [🏗️ Architecture & Environment Structure](#️-architecture--environment-structure)
+- [🚀 Getting Started](#-getting-started)
+- [🧪 Platform Testing Framework](#-platform-testing-framework)
+- [🔧 Platform Technologies](#-platform-technologies)
+- [🤝 Platform Development Rules](#-platform-development-rules)
+- [🎯 Future Projects](#-future-projects)
+- [📞 Platform Support](#-platform-support)
+- [📄 License](#-license)
 
 ## 🎯 Platform Overview
 
@@ -243,6 +261,39 @@ The platform is designed for scalability and ready to support additional automat
 - **AI Agent Support**: Follow AI Agent Execution Protocol and Context Handoff Protocol
 - **Security Support**: Security guidelines in [docs/security-best-practices.md](docs/security-best-practices.md)
 - **Backup Support**: Recovery procedures in [docs/backup-essentials.md](docs/backup-essentials.md)
+
+---
+
+## 📄 License
+
+**Friends Only License v1.0** 🤝
+
+This project operates under the exclusive "Friends Only" license terms:
+
+### **Permitted Users:**
+- **dabalakirev** (project creator) ✅
+- **Friends of dabalakirev** (explicitly approved individuals) ✅
+- **AI Agents working with dabalakirev** (when properly configured) 🤖
+
+### **Usage Rights:**
+- **Full access:** Create, modify, use, and deploy anything
+- **Learning purposes:** Study the code, documentation, and architecture
+- **Private use:** Run workflows for personal/friend projects
+- **Collaboration:** Work together with dabalakirev on improvements
+
+### **Restrictions:**
+- ❌ **Commercial use** by non-friends strictly prohibited
+- ❌ **Public redistribution** without explicit permission
+- ❌ **Corporate usage** by unknown entities forbidden
+- ❌ **Reverse engineering** for competitive purposes banned
+
+### **Friend Definition:**
+*A "friend" is someone who dabalakirev would genuinely invite for coffee, help debug code at 2 AM, or trust with the WiFi password.* ☕
+
+### **Violation Consequences:**
+Unauthorized usage will result in disappointed looks, sad emojis, and potential exclusion from future coffee invitations. 😔
+
+**For licensing inquiries or friend status verification, contact dabalakirev directly.**
 
 ---
 
