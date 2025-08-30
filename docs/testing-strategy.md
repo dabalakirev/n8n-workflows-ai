@@ -9,73 +9,7 @@
 Test Request → Main Workflow (с Test Webhook) → Естественное выполнение всех связанных workflows → Мониторинг результатов
 ```
 
----
-
-## 🌐 MCP Webhook Testing
-
-### **📡 Webhook Discovery Process**
-
-**Step 1: Get Workflow Details**
-```javascript
-const workflowDetails = await n8n_get_workflow_details({id: "workflow_id"});
-
-if (workflowDetails.hasWebhookTrigger) {
-  const webhookUrl = `https://dm83.app.n8n.cloud/webhook/${workflowDetails.webhookPath}`;
-}
-```
-
-**Step 2: Execute Test**
-```javascript
-// ✅ CORRECT: Use n8n MCP Tools
-const testResult = await n8n_trigger_webhook_workflow({
-  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev",
-  httpMethod: "GET",
-  waitForResponse: true
-});
-
-// ❌ NEVER: Use web_fetch for webhooks - results in 403 errors
-```
-
-### **📊 Test Data Format**
-
-**GET Request Parameters:**
-```
-https://[instance]/webhook/[path]?testType=full&parentWorkflow=name&testData.input=Test%20Query&testData.sessionId=session-id&monitoring.trackChildExecution=true
-```
-
-**Required Parameters:**
-- `testType`: "full" | "quick" | "specific"
-- `parentWorkflow`: Workflow identifier
-- `testData.input`: URL-encoded test input
-- `testData.sessionId`: Test session identifier
-
-**Expected Response Format:**
-```json
-{
-  "testExecution": {
-    "executionId": "exec-123456789",
-    "status": "success",
-    "mainWorkflow": {"name": "workflow-name", "status": "completed"},
-    "testResults": {
-      "response": "Generated response text",
-      "relatedWorkflows": [{"name": "related-workflow", "status": "completed"}]
-    }
-  }
-}
-```
-
-### **⚠️ Critical Guidelines для AI Agents**
-
-**DO's:**
-- ✅ **ALWAYS use n8n MCP tools** для webhook testing
-- ✅ **Use n8n_get_workflow_details** для finding webhooks
-- ✅ **URL-encode parameters** properly
-- ✅ **Wait for response** с waitForResponse: true
-
-**DON'Ts:**
-- ❌ **NEVER use web_fetch** для webhooks (permissions error)
-- ❌ **Don't hardcode URLs** - always discover dynamically
-- ❌ **Don't test production webhooks** (security design)
+**📚 For Detailed Testing Procedures:** See **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** for step-by-step implementation.
 
 ---
 
@@ -236,5 +170,5 @@ Related Workflows: НЕ добавляем Test Webhook (вызываются е
 **This testing strategy represents a fundamental improvement in platform methodology, eliminating complexity while improving effectiveness through natural parent-child workflow execution patterns.**
 
 **Related Documentation:**
-- **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** - Step-by-step procedures
+- **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** - **Detailed step-by-step procedures**
 - **[AI Agent Roles & Protocols](ai-agent-roles-protocols.md)** - Testing integration in AI workflows
