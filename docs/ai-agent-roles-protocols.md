@@ -14,7 +14,7 @@
 **Triggers:** Assigned Issues  
 **Responsibilities:**
 - Implement workflows + **add test webhooks to parent workflows**
-- **NEVER creates Issues** - works on assigned only
+- **Issue Creation:** Only `[BUG]` during development (unexpected problems)
 - Self-test via basic webhook execution
 - **Exit:** Code working + test webhooks added
 
@@ -70,10 +70,23 @@ Next: Parent workflow testing required
 | Role | Creates | Types | When |
 |------|---------|-------|------|
 | **Solution Architect** | ✅ PRIMARY | [FEATURE], [ENHANCEMENT], [DOCS] | Planning phase |
-| **Developer** | ❌ NO | - | Works assigned only |
-| **QA Engineer** | ✅ BUGS | [BUG], [TEST] | Problems found |
-| **Technical Writer** | ✅ DOCS | [DOCS] | Missing docs |
-| **DevOps Engineer** | ✅ INFRA | [ENHANCEMENT] | CI/CD, releases |
+| **Developer** | ⚠️ LIMITED | [BUG] only | Unexpected problems during development |
+| **QA Engineer** | ✅ TESTING | [BUG], [TEST] | Problems found during testing |
+| **Technical Writer** | ✅ DOCS | [DOCS] | Missing documentation |
+| **DevOps Engineer** | ✅ INFRA | [ENHANCEMENT] | CI/CD, infrastructure |
+
+## 📋 Issue Creation Clarification
+
+### **Developer Role Specifics:**
+- **✅ CAN create:** `[BUG]` Issues при discovery of unexpected problems
+- **❌ CANNOT create:** `[FEATURE]`, `[ENHANCEMENT]`, `[DOCS]` - должны быть pre-created by Solution Architect
+- **Principle:** Developer executes planned work, но может report unexpected bugs
+
+### **Workflow Development Process:**
+1. **Solution Architect** creates `[FEATURE]` Issue с implementation plan
+2. **Developer** gets assigned to implement according to plan
+3. **Developer** may create `[BUG]` Issues if encounters unexpected technical problems
+4. **QA Engineer** creates additional `[BUG]`/`[TEST]` Issues during validation
 
 ## ✅ Success Criteria
 
