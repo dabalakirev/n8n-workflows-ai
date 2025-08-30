@@ -413,6 +413,14 @@ User Request → Solution Architect Analysis → Issues Created → Role Assignm
 - **Обязательное планирование** командных действий независимо от роли
 - 📖 **[Детали execution workflow →](ai-agent-execution-protocol.md)**
 
+#### **MCP CI/CD Deployment Protocol:**
+- **Complete development lifecycle** от architecture до release
+- **Role-based CI/CD process** с phase-by-phase workflow
+- **MCP-first approach** с UI escalation procedures
+- **Production deployment** и professional release management
+- **Cross-role collaboration** для comprehensive project delivery
+- 📖 **[Детали CI/CD workflow →](mcp-cicd-deployment-protocol.md)**
+
 #### **GitHub Issues Protocol:**
 - Все роли следуют стандартным шаблонам Issues
 - Issues creation permissions по ролям
@@ -501,4 +509,4 @@ User Request → Solution Architect Analysis → Issues Created → Role Assignm
 
 ---
 
-*Этот документ является живым руководством и обновляется по мере развития проекта и накопления опыта работы с ролевой моделью AI агента. Последнее обновление включает интеграцию с GitHub Releases & Tags system (Issue #7) в DevOps роль.*
+*Этот документ является живым руководством и обновляется по мере развития проекта и накопления опыта работы с ролевой моделью AI агента. Последнее обновление включает интеграцию с MCP CI/CD Deployment Protocol для comprehensive development lifecycle management.*
