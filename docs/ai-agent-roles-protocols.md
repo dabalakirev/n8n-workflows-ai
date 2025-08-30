@@ -8,6 +8,151 @@
 
 ---
 
+## 🧪 Webhook Testing Protocol для AI Agents
+
+**All AI Agent roles MUST follow MCP webhook testing procedures** при работе с n8n workflow validation и testing activities.
+
+### **⚠️ CRITICAL Instructions для всех ролей:**
+
+#### **✅ ALWAYS Use n8n MCP Tools:**
+- **n8n_get_workflow_details** для discovery webhook URLs
+- **n8n_trigger_webhook_workflow** для webhook execution
+- **n8n_list_workflows** для finding testable workflows
+
+#### **❌ NEVER Use web_fetch для webhooks:**
+- web_fetch не может получить доступ к n8n webhook URLs
+- Results в 403/permissions errors
+- Используйте только n8n MCP tools для webhook operations
+
+### **📡 Webhook Discovery Process для AI Agents:**
+
+```javascript
+// Step 1: Get workflow information
+const workflow = await n8n_get_workflow_details({id: "workflow-id"});
+
+// Step 2: Check for webhook capability
+if (workflow.hasWebhookTrigger) {
+  const webhookPath = workflow.webhookPath; // e.g., "ai-deepseek-dev"
+  const webhookUrl = `https://dm83.app.n8n.cloud/webhook/${webhookPath}`;
+  
+  // Step 3: Execute webhook test
+  const result = await n8n_trigger_webhook_workflow({
+    webhookUrl: webhookUrl,
+    httpMethod: "GET",
+    waitForResponse: true
+  });
+}
+```
+
+### **🎯 Role-Specific Testing Responsibilities:**
+
+#### **🏗️ Solution Architect:**
+- **Plan test webhook integration** в parent workflows
+- **Define testing requirements** для parent-child relationships
+- **Architect testable workflow structures** с proper webhook capabilities
+
+#### **💻 Developer:**
+- **✅ MUST add test webhooks** к parent workflows during development
+- **Implement test data processing** в webhook-enabled workflows
+- **Ensure parent-child integration** через Execute Workflow triggers
+- **Follow webhook configuration templates** из successful implementations
+
+#### **🧪 QA Engineer:**
+- **✅ PRIMARY RESPONSIBILITY** - testing через parent workflow webhooks
+- **Use n8n MCP tools exclusively** для webhook testing
+- **Validate parent-child execution flow** естественным способом
+- **Create test scenarios** для различных workflow combinations
+
+#### **📚 Technical Writer:**
+- **Document webhook testing procedures** для each role
+- **Create test webhook configuration guides** 
+- **Maintain MCP tool usage documentation**
+- **Document successful testing patterns** для reuse
+
+#### **🚀 DevOps Engineer:**
+- **Integrate webhook testing** в CI/CD pipelines
+- **Replace Test Orchestrator calls** с webhook-based testing
+- **Monitor testing infrastructure** performance
+- **Maintain testing environment** webhook accessibility
+
+### **📊 Test Data Format Standards:**
+
+#### **GET Request Parameters (все роли должны использовать):**
+```
+https://[instance]/webhook/[path]?testType=full&parentWorkflow=workflow-name&testData.input=URL-encoded-input&testData.sessionId=session-id&monitoring.trackChildExecution=true
+```
+
+#### **Required Parameters:**
+- `testType`: "full" | "quick" | "specific"
+- `parentWorkflow`: Workflow identifier для tracking
+- `testData.input`: URL-encoded test input data
+- `testData.sessionId`: Unique test session ID
+
+#### **Expected Response Validation:**
+Все роли должны проверять response format:
+```json
+{
+  "testExecution": {
+    "executionId": "exec-xxx",
+    "status": "success|failure",
+    "parentWorkflow": {"name": "...", "status": "..."},
+    "testResults": {"aiResponse": "...", "childWorkflows": [...]}
+  }
+}
+```
+
+### **🔧 Common Testing Scenarios по ролям:**
+
+#### **Developer Testing Scenarios:**
+- **Basic functionality** после implementation changes
+- **Parent-child integration** при workflow modifications
+- **Error handling** для edge cases
+- **Performance** validation для optimization
+
+#### **QA Engineer Testing Scenarios:**
+- **Comprehensive parent workflow testing** через webhook triggers
+- **Child workflow natural execution** validation
+- **Data flow accuracy** между parent-child workflows
+- **Regression testing** после any changes
+
+#### **DevOps Engineer Testing Scenarios:**
+- **CI/CD integration testing** с webhook approach
+- **Environment validation** после deployments  
+- **Performance monitoring** webhook execution times
+- **Infrastructure verification** через automated webhook tests
+
+### **📈 Success Criteria для всех ролей:**
+
+#### **Technical Success:**
+- **Webhook Discovery Success**: 100% rate находить available webhooks
+- **Execution Reliability**: Consistent webhook execution success
+- **Parent-Child Integration**: Proper child workflow natural execution
+- **Response Validation**: Correct test response format compliance
+
+#### **Process Success:**
+- **MCP Tool Usage**: Zero usage web_fetch для webhook operations
+- **Testing Coverage**: Comprehensive parent workflow testing
+- **Documentation**: Complete testing procedures documentation
+- **Knowledge Transfer**: Successful webhook testing capability handoff между AI agents
+
+### **🚨 Error Prevention для всех ролей:**
+
+#### **Never Do:**
+- ❌ Use web_fetch для n8n webhook URLs
+- ❌ Hardcode webhook URLs без discovery
+- ❌ Skip parameter URL encoding
+- ❌ Test production webhooks (they don't exist)
+- ❌ Assume webhook availability без verification
+
+#### **Always Do:**
+- ✅ Use n8n_get_workflow_details для webhook discovery
+- ✅ Use n8n_trigger_webhook_workflow для execution
+- ✅ Proper URL encode all parameters
+- ✅ Test только DEV environment webhooks
+- ✅ Verify webhook availability перед testing
+
+---
+
 ## 🎯 AI Agent Roles
 
 ### 🏗️ **Solution Architect**
@@ -470,6 +615,7 @@ User Request → Solution Architect Analysis → Issues Created → Role Assignm
 - ✅ **Developer роль создает testable workflows с test webhooks**
 - ✅ **DevOps роль обеспечивает testing infrastructure с new approach integration**
 - ✅ **All roles support** simplified testing architecture
+- 📖 **[Детали testing strategy →](testing-strategy.md#-mcp-webhook-testing)**
 
 #### **✅ Release Management Integration:**
 - ✅ **DevOps роль интегрируется с GitHub Releases & Tags system**
@@ -548,4 +694,9 @@ User Request → Solution Architect Analysis → Issues Created → Role Assignm
 
 ---
 
-*Этот документ является живым руководством и обновляется по мере развития проекта и накопления опыта работы с ролевой моделью AI агента. Последнее обновление включает интеграцию с Test Webhook - Test Execution подходом для simplified и more effective testing architecture.*
+*Этот документ является живым руководством и обновляется по мере развития проекта и накопления опыта работы с ролевой моделью AI агента. Последнее обновление включает интеграцию с Test Webhook - Test Execution подходом для simplified и more effective testing architecture, плюс comprehensive webhook testing protocol для всех AI Agent roles.*
+
+### **📚 Связанная документация:**
+- **[Testing Strategy](testing-strategy.md#-mcp-webhook-testing)** - MCP webhook testing procedures
+- **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** - Comprehensive implementation guide
+- **[AI Agent Execution Protocol](ai-agent-execution-protocol.md)** - Universal execution procedures
