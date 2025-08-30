@@ -14,9 +14,9 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 ### **Project Status:**
 ```
 📊 Workflow Implementation:     ██████████ 100% (DEV workflows operational)
-🧪 Test Integration:           ██████████ 100% (Test Orchestrator connected)  
-🔄 Comprehensive Testing:      ░░░░░░░░░░   0% [ACTIVE - Issue #23]
-🚀 Production Deployment:      ░░░░░░░░░░   0% [PENDING]
+🧪 Test Webhook Integration:    ██████████ 100% (MCP webhook testing available)
+🔄 Comprehensive Testing:       ████████░░  80% (Test Webhook - Test Execution approach)
+🚀 Production Deployment:       ░░░░░░░░░░   0% (PENDING - Issue #27)
 ```
 
 ---
@@ -26,6 +26,7 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 ### 🤖 **AI Deepseek DEV** (`ai-deepseek-dev.json`)
 **n8n Workflow ID:** `0VAipR4PLHbtkIzw`  
 **Project Environment:** First Bird DEV (`EAq65uG63UPwwuhk`)
+**Webhook URL:** `https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev`
 
 **Primary Function:** AI-powered financial query processing и analysis
 
@@ -35,10 +36,12 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 - **AI Analysis** - DeepSeek language model provides market insights
 - **Intelligent Response Generation** - Structured financial analysis output
 - **Session Management** - Tracks conversation context для follow-up queries
+- **✅ Test Webhook Support** - MCP testing capabilities для automated validation
 
 **Workflow Triggers:**
 - ✅ **Manual Trigger** - For development и manual testing  
-- ✅ **Execute Workflow Trigger** - For Test Orchestrator automation
+- ✅ **Execute Workflow Trigger** - For FMP Router integration
+- ✅ **Test Webhook Trigger** - For MCP webhook testing (path: "ai-deepseek-dev")
 
 **Input Parameters:**
 - `input` (string) - Financial query или analysis request
@@ -68,7 +71,7 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 
 **Workflow Triggers:**
 - ✅ **Manual Trigger** - For development и direct API testing
-- ✅ **Execute Workflow Trigger** - For Test Orchestrator и AI Deepseek integration
+- ✅ **Execute Workflow Trigger** - For AI Deepseek integration и child workflow calls
 
 **Input Parameters:**
 - `toolName` (string) - API command to execute (e.g., "Insider.Trading.Latest")
@@ -97,6 +100,138 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 
 ---
 
+## 🧪 Test Webhook Configuration
+
+### **✅ MCP Webhook Testing Architecture**
+
+**First Bird project implements the Test Webhook - Test Execution approach** for simplified workflow testing через MCP tools.
+
+#### **🤖 AI Deepseek DEV - Test Webhook Setup:**
+
+**Webhook Configuration:**
+```json
+{
+  "id": "webhook-trigger-ai-deepseek-test",
+  "name": "Test Webhook Trigger",
+  "type": "n8n-nodes-base.webhook",
+  "typeVersion": 2,
+  "parameters": {
+    "path": "ai-deepseek-dev",
+    "options": {},
+    "responseMode": "responseNode",
+    "responseData": "allEntries"
+  }
+}
+```
+
+**Test Data Processor v2 Configuration:**
+```json
+{
+  "id": "test-data-processor-v2",
+  "name": "Test Data Processor v2",
+  "type": "n8n-nodes-base.code",
+  "typeVersion": 2,
+  "parameters": {
+    "jsCode": "// Handle GET query parameters для test webhook protocol\nconst webhookData = item.json;\nconst testData = webhookData.query || webhookData; // GET params first, then body\n\nif (testData && testData.testType) {\n  // TEST WEBHOOK DATA - Protocol processing\n  const aiInput = testData.testData?.input || 'Test query not provided';\n  const sessionId = testData.testData?.sessionId || 'test-session-default';\n  \n  results.push({\n    json: {\n      input: aiInput,\n      sessionId: sessionId,\n      __testMetadata: {\n        testType: testData.testType,\n        parentWorkflow: testData.parentWorkflow,\n        monitoring: testData.monitoring || {},\n        timestamp: new Date().toISOString()\n      }\n    }\n  });\n} else {\n  // NORMAL WORKFLOW DATA - Pass through\n  results.push({json: webhookData});\n}\n\nreturn results;"
+  }
+}
+```
+
+**Response Formatter Configuration:**
+```json
+{
+  "id": "response-formatter",
+  "name": "Response Formatter",
+  "type": "n8n-nodes-base.code",
+  "typeVersion": 2,
+  "parameters": {
+    "jsCode": "// Generate protocol-compliant test responses\nconst testMetadata = item.json?.__testMetadata;\n\nif (testMetadata) {\n  // TEST RESPONSE - Protocol-compliant formatting\n  const response = {\n    testExecution: {\n      executionId: 'exec-' + Date.now(),\n      status: 'success',\n      timestamp: new Date().toISOString(),\n      parentWorkflow: {\n        name: testMetadata.parentWorkflow || 'ai-deepseek',\n        status: 'completed',\n        testType: testMetadata.testType\n      },\n      testResults: {\n        aiResponse: item.json.output || item.json.response || 'AI analysis completed',\n        childWorkflows: [\n          {\n            name: 'fmp-router',\n            status: 'completed',\n            callCount: 'tracked-automatically'\n          }\n        ]\n      }\n    }\n  };\n  \n  return [{json: response}];\n} else {\n  // NORMAL RESPONSE - Standard workflow output\n  return [{json: item.json}];\n}"
+  }
+}
+```
+
+#### **🔧 Test Webhook Connection Pattern:**
+```
+Test Webhook Trigger → Test Data Processor v2 → AI Agent Logic → FMP Router (Execute Workflow) → Response Formatter
+                                                      ↓
+                                               Child Workflow Natural Execution
+```
+
+### **📊 Test Execution Examples**
+
+#### **Example 1: Basic Financial Analysis Test**
+```javascript
+// MCP Webhook Execution
+const testResult = await n8n_trigger_webhook_workflow({
+  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev?testType=full&parentWorkflow=ai-deepseek&testData.input=Analyze%20AAPL%20financial%20performance&testData.sessionId=first-bird-test-001&monitoring.trackChildExecution=true&monitoring.timeout=60s",
+  httpMethod: "GET",
+  waitForResponse: true
+});
+```
+
+**Expected Response:**
+```json
+{
+  "testExecution": {
+    "executionId": "exec-1693456789123",
+    "status": "success",
+    "timestamp": "2025-08-30T14:45:16.000Z",
+    "parentWorkflow": {
+      "name": "ai-deepseek",
+      "status": "completed",
+      "testType": "full"
+    },
+    "testResults": {
+      "aiResponse": "AAPL financial analysis: Strong Q3 performance with revenue growth...",
+      "childWorkflows": [
+        {
+          "name": "fmp-router",
+          "status": "completed",
+          "callCount": "tracked-automatically"
+        }
+      ]
+    }
+  }
+}
+```
+
+#### **Example 2: Insider Trading Analysis Test**
+```javascript
+// Comprehensive insider trading analysis
+const insiderTradingTest = await n8n_trigger_webhook_workflow({
+  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev?testType=specific&parentWorkflow=ai-deepseek&testData.input=Analyze%20recent%20AAPL%20insider%20trading%20activity&testData.sessionId=insider-test-001&monitoring.trackChildExecution=true",
+  httpMethod: "GET", 
+  waitForResponse: true
+});
+```
+
+#### **Example 3: Error Handling Test**
+```javascript
+// Test error scenarios
+const errorTest = await n8n_trigger_webhook_workflow({
+  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev?testType=quick&parentWorkflow=ai-deepseek&testData.input=Invalid%20stock%20symbol%20XYZ999&testData.sessionId=error-test-001&monitoring.trackChildExecution=true",
+  httpMethod: "GET",
+  waitForResponse: true
+});
+```
+
+### **⚠️ Test Webhook Guidelines**
+
+#### **✅ DO:**
+- **Use n8n MCP tools** для webhook testing
+- **URL-encode parameters** properly для GET requests
+- **Follow test data protocol** structure
+- **Monitor both parent и child execution**
+- **Test различные scenarios** (success, error, edge cases)
+
+#### **❌ DON'T:**
+- **Never use web_fetch** для webhook URLs
+- **Don't hardcode webhook paths** - discover dynamically
+- **Don't skip error handling tests**
+- **Don't test production webhooks** (они не существуют by design)
+
+---
+
 ## 🏗️ Project Workflow Architecture
 
 ### **Current Implementation: DEV Environment**
@@ -104,26 +239,27 @@ First Bird - пилотный automation project demonstrating n8n-workflows-ai 
 First Bird DEV Project (n8n):
 ├── 🤖 AI Deepseek DEV      (ID: 0VAipR4PLHbtkIzw)
 │   ├── Manual Trigger      → Development testing
-│   └── Execute Workflow    → Test Orchestrator integration
+│   ├── Execute Workflow    → Child workflow integration  
+│   └── ✅ Test Webhook     → MCP webhook testing (path: "ai-deepseek-dev")
 ├── 🔗 FMP API Router DEV   (ID: UmUET85BJqPbpRPp)  
 │   ├── Manual Trigger      → Direct API testing
-│   └── Execute Workflow    → AI Deepseek integration + Test Orchestrator
-└── 🧪 Test Orchestrator    (ID: ElnSprIVyJXKlkl3) [Platform Tool]
-    └── Webhook Trigger     → Automated testing coordination
+│   └── Execute Workflow    → AI Deepseek child calls
+└── 🧪 MCP Webhook Testing   [Platform Capability]
+    └── n8n_trigger_webhook_workflow → Automated testing через MCP tools
 
 GitHub Repository Sync:
 └── workflows/first-bird/dev/
-    ├── ai-deepseek-dev.json      ✅ Current
-    └── fmp-router-dev.json       ✅ Current
+    ├── ai-deepseek-dev.json      ✅ Current (with test webhook)
+    └── fmp-router-dev.json       ✅ Current (Execute Workflow ready)
 ```
 
 ### **Planned: PROD Environment**
 ```
-First Bird PROD Project (n8n):        [FUTURE IMPLEMENTATION]
+First Bird PROD Project (n8n):        [FUTURE IMPLEMENTATION - Issue #27]
 ├── 🤖 AI Deepseek PROD
-│   └── Manual Trigger              → Production stability
+│   └── Manual Trigger              → Production stability (NO test webhooks)
 └── 🔗 FMP API Router PROD
-    └── Manual Trigger              → Production stability
+    └── Manual Trigger              → Production stability (NO test webhooks)
 
 GitHub Repository Integration:
 └── workflows/first-bird/prod/         [TO BE CREATED]
@@ -135,46 +271,73 @@ GitHub Repository Integration:
 
 ## 🧪 Project Testing Strategy
 
-### **Test Orchestrator Integration**
-**Testing Tool:** Universal Test Orchestrator (ID: `ElnSprIVyJXKlkl3`)  
-**Status:** ✅ Connected to both First Bird DEV workflows
+### **✅ Test Webhook - Test Execution Approach**
+**Testing Method:** Simplified parent workflow testing через MCP webhook triggers с natural child workflow execution
 
-**Test Execution Flow:**
-1. **Test Request** → POST to `/webhook/test-orchestrator`
-2. **AI Deepseek Testing** → Execute financial query analysis
-3. **FMP Router Testing** → Execute API routing commands  
-4. **Results Aggregation** → Generate comprehensive test report
+**Testing Flow:**
+1. **MCP Webhook Discovery** → `n8n_get_workflow_details(id)` finds webhook capability
+2. **Test Data Preparation** → Format GET parameters according к protocol
+3. **Parent Webhook Execution** → `n8n_trigger_webhook_workflow()` triggers AI Deepseek
+4. **Natural Child Execution** → AI Deepseek naturally calls FMP Router via Execute Workflow
+5. **Result Monitoring** → Track both parent и child workflow execution
+6. **Response Validation** → Verify protocol-compliant test response format
 
-### **Project-Specific Test Configuration:**
+### **Project-Specific Test Scenarios:**
+
+#### **Scenario 1: Financial Analysis Workflow**
 ```json
 {
-  "testSuite": "full",
-  "workflows": ["ai-deepseek", "fmp-router"],
+  "testType": "full",
+  "parentWorkflow": "ai-deepseek",
   "testData": {
-    "ai-deepseek": {
-      "input": "Analyze Apple's insider trading patterns for Q3 2025",
-      "sessionId": "first-bird-test-001"
-    },
-    "fmp-router": {
-      "toolName": "Insider.Trading.Search",
-      "params": {"symbol": "AAPL", "limit": 10}
-    }
+    "input": "Analyze Apple's Q3 2025 financial performance and insider trading patterns",
+    "sessionId": "comprehensive-analysis-test"
+  },
+  "expectedChildCalls": ["fmp-router"],
+  "monitoring": {
+    "trackChildExecution": true,
+    "validateResults": true,
+    "timeout": "60s"
   }
 }
 ```
 
-### **Manual Testing Procedures:**
-- **AI Deepseek Manual Testing** - Financial query validation через n8n UI
-- **FMP Router Manual Testing** - Direct API command execution
-- **Integration Testing** - AI Deepseek → FMP Router workflow chain
-- **Error Scenario Testing** - Invalid inputs и API error handling
+#### **Scenario 2: API Integration Test**
+```json
+{
+  "testType": "specific",
+  "parentWorkflow": "ai-deepseek", 
+  "testData": {
+    "input": "Get latest insider trading data for MSFT",
+    "sessionId": "api-integration-test"
+  },
+  "validation": {
+    "expectFMPApiCalls": true,
+    "validateDataFormat": true
+  }
+}
+```
+
+#### **Scenario 3: Error Handling Test**
+```json
+{
+  "testType": "quick",
+  "parentWorkflow": "ai-deepseek",
+  "testData": {
+    "input": "Analyze invalid stock symbol INVALIDXYZ",
+    "sessionId": "error-handling-test"
+  },
+  "expectedBehavior": "graceful_error_handling"
+}
+```
 
 ### **Success Criteria:**
-- ✅ **API Connectivity** - Successful FMP API data retrieval
-- ✅ **AI Processing** - Valid DeepSeek analysis generation  
-- ✅ **Integration Flow** - AI Deepseek → FMP Router communication
-- ✅ **Error Handling** - Graceful failure scenarios
-- ✅ **Performance** - Sub-10 second response times
+- ✅ **Webhook Discovery** - AI Deepseek webhook discoverable через MCP
+- ✅ **Parent Execution** - AI Deepseek responds to webhook triggers successfully
+- ✅ **Child Integration** - FMP Router executes naturally via Execute Workflow calls
+- ✅ **Data Flow Validation** - Financial data processed end-to-end correctly
+- ✅ **Error Handling** - Edge cases handled gracefully
+- ✅ **Response Format** - Protocol-compliant test responses generated
 
 ---
 
@@ -191,7 +354,13 @@ GitHub Repository Integration:
 
 ### **n8n Node Requirements:**
 - **@n8n/n8n-nodes-langchain** ✅ Available - AI language model nodes
-- **n8n-nodes-base** ✅ Available - HTTP Request, Execute Workflow nodes
+- **n8n-nodes-base** ✅ Available - HTTP Request, Execute Workflow, Webhook nodes
+
+### **✅ Test Webhook Requirements:**
+- **Webhook Trigger nodes** - Configured in parent workflows
+- **Test Data Processing** - Custom Code nodes для parameter handling
+- **Response Formatting** - Protocol-compliant response generation
+- **MCP Tool Access** - n8n_trigger_webhook_workflow availability
 
 ---
 
@@ -201,42 +370,49 @@ GitHub Repository Integration:
 - **AI Deepseek Response Time** - 3-7 seconds (DeepSeek API dependent)
 - **FMP Router Response Time** - 1-3 seconds (FMP API dependent)  
 - **Complete Analysis Cycle** - 5-12 seconds end-to-end
-- **Test Orchestrator Full Suite** - <30 seconds для comprehensive testing
+- **✅ Test Webhook Execution** - <45 seconds для comprehensive parent-child testing
+- **MCP Discovery Time** - <3 seconds для webhook URL discovery
+
+### **✅ Test Webhook Performance:**
+- **Webhook Discovery** - Sub-5 second MCP tool response
+- **Test Data Processing** - 1-2 seconds parameter parsing
+- **Parent-Child Integration** - Natural execution timing
+- **Response Generation** - Protocol-compliant formatting <2 seconds
 
 ### **Monitoring Capabilities:**
 - **n8n Execution Logs** - Detailed workflow execution tracking
 - **API Response Monitoring** - External service availability и performance
 - **Error Tracking** - Failed execution analysis и debugging
-- **Test Results History** - Automated testing success rates
+- **✅ MCP Test Results** - Webhook testing success rates через MCP tools
 
 ---
 
 ## 🎯 Project Development Next Steps
 
-### **Immediate Priorities (Issue #23):**
-1. **Comprehensive Testing Execution** - Full Test Orchestrator validation
-2. **Bug Identification & Resolution** - Address any discovered issues
-3. **Performance Optimization** - Improve response times и reliability
-4. **Error Handling Enhancement** - Robust error scenarios coverage
+### **Immediate Priorities (Issue #27):**
+1. **✅ Test Webhook Validation** - Comprehensive MCP webhook testing
+2. **Parent-Child Flow Testing** - End-to-end workflow integration validation
+3. **Production Deployment Preparation** - Ready для PROD environment
+4. **Documentation Completion** - Update с test webhook procedures
 
 ### **Production Readiness Tasks:**
 1. **PROD Environment Setup** - Create First Bird PROD project в n8n
-2. **PROD Workflow Deployment** - Single-trigger production versions
-3. **Production Testing** - Validate PROD workflow functionality
+2. **PROD Workflow Deployment** - Single-trigger production versions (NO test webhooks)
+3. **Production Testing** - Validate PROD workflow functionality via manual triggers
 4. **Monitoring Setup** - Production performance tracking
 
-### **Documentation Completion:**
-1. **API Response Examples** - Document actual API responses
-2. **Error Scenarios Guide** - Common issues и resolutions
-3. **Performance Benchmarks** - Establish baseline metrics
-4. **Integration Patterns** - Document workflow interaction patterns
+### **✅ Test Webhook Integration Completed:**
+1. **✅ MCP Testing Capability** - AI Deepseek DEV webhook functional
+2. **✅ Protocol Documentation** - Complete test data format specifications  
+3. **✅ Configuration Templates** - Reusable webhook setup patterns
+4. **✅ Integration Examples** - Working test execution examples
 
 ---
 
 ## 🔗 Project Integration Points
 
 ### **Platform Tool Integration:**
-- **Universal Test Orchestrator** - Automated testing и validation
+- **✅ MCP Webhook Testing** - Direct parent workflow testing через MCP tools
 - **GitHub Actions Pipeline** - Workflow validation и quality assurance
 - **Release Management System** - Version control и deployment packaging
 
@@ -246,8 +422,8 @@ GitHub Repository Integration:
 - **n8n Cloud Platform** - Workflow execution environment
 
 ### **Cross-Workflow Communication:**
-- **AI Deepseek** calls **FMP Router** for data retrieval
-- **Test Orchestrator** executes both workflows для validation
+- **AI Deepseek** calls **FMP Router** for data retrieval via Execute Workflow
+- **✅ Test Webhooks** enable direct parent workflow testing
 - **GitHub Repository** maintains workflow version synchronization
 
 ---
@@ -257,11 +433,13 @@ GitHub Repository Integration:
 - **Platform Architecture**: [../../README.md](../../README.md) - Overall platform capabilities
 - **Workflow Architecture**: [../README.md](../README.md) - Project-centric workflow structure  
 - **Platform Roadmap**: [../../docs/roadmap.md](../../docs/roadmap.md) - Development timeline
-- **Testing Strategy**: [../../docs/testing-strategy.md](../../docs/testing-strategy.md) - Universal testing protocols
-- **Active Issue**: [Issue #23](https://github.com/dabalakirev/n8n-workflows-ai/issues/23) - Project finalization
+- **✅ Testing Strategy**: [../../docs/testing-strategy.md](../../docs/testing-strategy.md#-mcp-webhook-testing) - MCP webhook testing protocols
+- **✅ MCP Webhook Guide**: [../../docs/mcp-webhook-testing-guide.md](../../docs/mcp-webhook-testing-guide.md) - Comprehensive MCP testing procedures
+- **✅ AI Agent Protocols**: [../../docs/ai-agent-roles-protocols.md](../../docs/ai-agent-roles-protocols.md#-webhook-testing-protocol-для-ai-agents) - Webhook testing integration
+- **Active Issue**: [Issue #27](https://github.com/dabalakirev/n8n-workflows-ai/issues/27) - First Bird completion через Test Webhook approach
 
 ---
 
 **📅 Last Updated:** August 30, 2025  
-**🎯 Status:** DEV workflows operational, comprehensive testing required (Issue #23)  
-**🚀 Next Milestone:** Production deployment после successful validation
+**🎯 Status:** ✅ Test webhook integration complete, production validation pending (Issue #27)  
+**🚀 Next Milestone:** Production deployment после successful Test Webhook - Test Execution validation
