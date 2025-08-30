@@ -138,6 +138,7 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 
 ### 📚 **Documentation System**
 - **AI Agent Protocols** - Structured development workflows
+- **MCP CI/CD Deployment Protocol** - Comprehensive development lifecycle procedures
 - **Development Guides** - Best practices и procedures
 - **Security Standards** - Credential management и data protection
 - **Testing Procedures** - Quality assurance processes
