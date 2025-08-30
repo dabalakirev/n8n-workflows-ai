@@ -11,6 +11,7 @@
 - [🛠️ Платформенные Инструменты](#️-платформенные-инструменты)
 - [🏗️ Project-Centric Архитектура](#️-project-centric-архитектура)
 - [🚀 Начало Работы](#-начало-работы)
+- [📚 Документация и Протоколы](#-документация-и-протоколы)
 - [🔧 Технологии](#-технологии)
 - [🤝 Правила Разработки](#-правила-разработки)
 - [📞 Поддержка](#-поддержка)
@@ -66,16 +67,49 @@ docs/
 │   ├── ai-agent-roles-protocols.md  
 │   └── mcp-webhook-testing-guide.md 
 └── projects/               # Project-specific documentation
-    └── first-bird/         # Complete project docs
+    └── first-bird/         # Complete project docs [ISOLATED]
 ```
 
 ## 🚀 Начало Работы
 
-### Для AI Agents:
-1. **Study [AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)**
-2. **Read [MCP Webhook Testing Guide](docs/mcp-webhook-testing-guide.md)**
-3. **Follow 5-step execution protocol** для каждого assignment
-4. **Use operational Test Webhook approach** для validation
+### 🤖 Для AI Agents:
+1. **Read [Context Handoff Protocol](docs/context-handoff-protocol.md)** - **START HERE**
+2. **Study [AI Agent Execution Protocol](docs/ai-agent-execution-protocol.md)** - Core procedures
+3. **Review [AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)** - Role definitions
+4. **Use [MCP Webhook Testing Guide](docs/mcp-webhook-testing-guide.md)** - Testing procedures
+
+**⚠️ ВАЖНО:** НЕ читать `docs/projects/` или `workflows/[project]/` без прямого указания
+
+### 👥 Для Human Developers:
+1. **Review Platform Documentation** в `docs/` directory
+2. **Choose Assignment** через GitHub Issues
+3. **Follow Development Protocols** согласно AI Agent guidelines
+4. **Use Testing Framework** для validation
+
+## 📚 Документация и Протоколы
+
+### 🔧 **Core Platform Protocols** (ОБЯЗАТЕЛЬНО):
+- **[Context Handoff Protocol](docs/context-handoff-protocol.md)** - AI agent transitions ⚠️ START HERE
+- **[AI Agent Execution Protocol](docs/ai-agent-execution-protocol.md)** - 5-step development process
+- **[AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)** - Role definitions & responsibilities
+- **[GitHub Issues Protocol](docs/github-issues-protocol.md)** - Issue management procedures
+
+### 🧪 **Testing & Quality**:
+- **[MCP Webhook Testing Guide](docs/mcp-webhook-testing-guide.md)** - Practical testing procedures
+- **[Testing Strategy](docs/testing-strategy.md)** - Comprehensive testing framework
+
+### 🛡️ **Operations & Security**:
+- **[Security Best Practices](docs/security-best-practices.md)** - Security guidelines
+- **[Backup Essentials](docs/backup-essentials.md)** - Backup & recovery procedures
+- **[MCP CI/CD Deployment Protocol](docs/mcp-cicd-deployment-protocol.md)** - Deployment procedures
+
+### 📋 **Maintenance & Consistency**:
+- **[Documentation Consistency Procedure](docs/documentation-consistency-procedure.md)** - Doc maintenance
+- **[Roadmap](docs/roadmap.md)** - Platform development status
+
+### 🚫 **Project Documentation** (НЕ ЧИТАТЬ без указания):
+- `docs/projects/first-bird/` - First Bird project documentation [ISOLATED]
+- `workflows/first-bird/` - First Bird workflows [ISOLATED]
 
 ## 🔧 Технологии
 
@@ -96,10 +130,11 @@ docs/
 6. **Security First** - обязательные [Security Best Practices](docs/security-best-practices.md)
 
 ### Для AI Agents:
-1. **Follow [AI Agent Execution Protocol](docs/ai-agent-execution-protocol.md)**
+1. **Follow [AI Agent Execution Protocol](docs/ai-agent-execution-protocol.md)** - обязательный process
 2. **Use appropriate role** согласно [AI Agent Roles](docs/ai-agent-roles-protocols.md)
 3. **Issue Management** через proven procedures
 4. **MCP Webhook Testing** для validation
+5. **Context Isolation** - НЕ читать project docs без указания
 
 ## 📞 Поддержка
 
