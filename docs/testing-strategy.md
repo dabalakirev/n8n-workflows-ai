@@ -19,6 +19,166 @@ Test Request ──→ Parent Workflow Test Webhook ──→ Parent выпол�
 
 ---
 
+## 🌐 MCP Webhook Testing
+
+**Model Context Protocol (MCP) Webhook Testing** - практический подход к тестированию n8n workflows через MCP tools с использованием webhook triggers для automation и validation.
+
+### **📡 Webhook Discovery Process**
+
+#### **Step 1: Get Workflow Details via MCP**
+```javascript
+// Используйте n8n MCP для получения workflow information
+const workflowDetails = await n8n_get_workflow_details({
+  id: "workflow_id"
+});
+
+// Проверьте response на webhook availability
+if (workflowDetails.hasWebhookTrigger) {
+  const webhookPath = workflowDetails.webhookPath; // e.g., "ai-deepseek-dev"
+  const webhookUrl = `https://dm83.app.n8n.cloud/webhook/${webhookPath}`;
+}
+```
+
+#### **Step 2: Webhook URL Construction**
+```
+Format: https://[n8n-instance]/webhook/[webhookPath]
+Example: https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev
+```
+
+### **🧪 Webhook Execution Methods**
+
+#### **✅ CORRECT: Use n8n MCP Tools**
+```javascript
+// ALWAYS use n8n_trigger_webhook_workflow для webhook testing
+const testResult = await n8n_trigger_webhook_workflow({
+  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev",
+  httpMethod: "GET",
+  waitForResponse: true,
+  data: {} // For POST requests
+});
+
+// For GET parameters, include in URL:
+const testWithParams = await n8n_trigger_webhook_workflow({
+  webhookUrl: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev?testType=full&testData.input=Test%20Query",
+  httpMethod: "GET", 
+  waitForResponse: true
+});
+```
+
+#### **❌ NEVER: Use web_fetch for webhooks**
+```javascript
+// ❌ DON'T DO THIS - web_fetch cannot access n8n webhook URLs
+// await web_fetch({url: "https://dm83.app.n8n.cloud/webhook/ai-deepseek-dev"});
+// Results in 403/permissions errors
+```
+
+### **📊 MCP Test Data Format**
+
+#### **GET Request Parameters Structure:**
+```
+https://[instance]/webhook/[path]?testType=full&parentWorkflow=workflow-name&testData.input=Test%20Query&testData.sessionId=session-id&monitoring.trackChildExecution=true&monitoring.timeout=60s
+```
+
+**Parameter Specifications:**
+- `testType`: "full" | "quick" | "specific"
+- `parentWorkflow`: Workflow identifier для tracking
+- `testData.input`: URL-encoded test input string
+- `testData.sessionId`: Test session identifier
+- `monitoring.trackChildExecution`: "true" | "false" 
+- `monitoring.timeout`: "60s" (or desired timeout)
+
+#### **Expected MCP Response Format:**
+```json
+{
+  "testExecution": {
+    "executionId": "exec-123456789",
+    "status": "success",
+    "timestamp": "2025-08-30T14:20:16.000Z",
+    "parentWorkflow": {
+      "name": "ai-deepseek",
+      "status": "completed",
+      "testType": "full"
+    },
+    "testResults": {
+      "aiResponse": "Generated response text",
+      "childWorkflows": [
+        {
+          "name": "fmp-router",
+          "status": "completed",
+          "callCount": "tracked-automatically"
+        }
+      ]
+    }
+  }
+}
+```
+
+### **⚠️ CRITICAL MCP Testing Guidelines для AI Agents**
+
+#### **DO's:**
+- ✅ **ALWAYS use n8n MCP tools** для webhook discovery и execution
+- ✅ **Use n8n_get_workflow_details** для finding webhook URLs
+- ✅ **Use n8n_trigger_webhook_workflow** для webhook execution
+- ✅ **URL-encode parameters** properly для GET requests
+- ✅ **Wait for response** с waitForResponse: true для complete testing
+
+#### **DON'Ts:**
+- ❌ **NEVER use web_fetch** для n8n webhook URLs (permissions restrictions)
+- ❌ **Don't assume webhook availability** без checking workflow details
+- ❌ **Don't hardcode webhook URLs** - always discover динамически
+- ❌ **Don't skip parameter encoding** для special characters
+- ❌ **Don't test production webhooks** (they don't exist by security design)
+
+### **🔧 MCP Webhook Testing Troubleshooting**
+
+#### **Common Issues и Solutions:**
+
+**Issue: "Webhook URL not found"**
+- **Cause:** Workflow не имеет webhook trigger или incorrect ID
+- **Solution:** Use n8n_get_workflow_details для verification webhook availability
+- **Prevention:** Always check hasWebhookTrigger boolean в response
+
+**Issue: "403 Permission Denied"**
+- **Cause:** Using web_fetch instead of n8n MCP tools
+- **Solution:** Replace web_fetch с n8n_trigger_webhook_workflow
+- **Prevention:** Follow MCP tool guidelines strictly
+
+**Issue: "Invalid test data format"**
+- **Cause:** Incorrect parameter encoding или missing required fields
+- **Solution:** Use proper URL encoding и verify test data structure
+- **Prevention:** Follow established parameter specifications
+
+**Issue: "Timeout during execution"**
+- **Cause:** Workflow complexity или API dependencies delays
+- **Solution:** Increase timeout parameter или check workflow performance
+- **Prevention:** Use realistic timeout values (60s+) для complex workflows
+
+### **📈 MCP Testing Best Practices**
+
+#### **For AI Agent Development:**
+1. **Always discover webhooks динамически** через n8n_get_workflow_details
+2. **Use consistent parameter naming** согласно established protocol
+3. **Implement proper error handling** для webhook execution failures
+4. **Monitor parent-child execution patterns** для comprehensive validation
+5. **Document test scenarios** для reproducible testing
+
+#### **For Platform Integration:**
+1. **Integrate MCP webhook testing** в CI/CD pipelines
+2. **Create reusable test templates** для different project types
+3. **Establish baseline performance metrics** для webhook execution times
+4. **Implement automated validation** result analysis
+5. **Maintain webhook configuration templates** для new projects
+
+### **🎯 MCP Testing Success Indicators**
+
+- **Webhook Discovery**: 100% success rate в finding available webhooks
+- **Execution Reliability**: Consistent webhook execution через MCP tools
+- **Response Validation**: Proper test response format compliance
+- **Error Handling**: Graceful handling edge cases и failures
+- **Performance**: < 60 seconds для complete parent-child test execution
+
+---
+
 ## 🔧 Архитектура parent-child workflows
 
 ### **Parent Workflow структура (пример: AI Deepseek DEV):**
@@ -256,3 +416,8 @@ AI Agent/CI ──→ POST Test Data ──→ Parent Webhook ──→ Parent E
 ---
 
 **Этот testing strategy представляает fundamental improvement в platform testing methodology, eliminates unnecessary complexity while improving testing effectiveness и maintainability через natural parent-child workflow execution patterns.**
+
+### **📚 Связанная документация:**
+- **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** - Comprehensive step-by-step guide
+- **[AI Agent Roles & Protocols](ai-agent-roles-protocols.md)** - Webhook testing integration в AI workflows
+- **[First Bird Project](../workflows/first-bird/README.md)** - Working webhook configuration examples
