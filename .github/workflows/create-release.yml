@@ -281,7 +281,7 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "✅ **Version**: ${{ github.event.inputs.version }}" >> $GITHUB_STEP_SUMMARY
         echo "✅ **Type**: ${{ github.event.inputs.release_type }}" >> $GITHUB_STEP_SUMMARY
-        echo "✅ **Git Tag**: Created and pushed" >> $GITHUB_STEP_STEP_SUMMARY
+        echo "✅ **Git Tag**: Created and pushed" >> $GITHUB_STEP_SUMMARY
         echo "✅ **GitHub Release**: Created with artifacts" >> $GITHUB_STEP_SUMMARY
         echo "✅ **Documentation**: Packaged and included" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
