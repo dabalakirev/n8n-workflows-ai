@@ -30,18 +30,18 @@
 ```
 n8n-workflows-ai Platform
 ├── 🤖 AI Agent Protocols          # Structured development с AI
-├── 🧪 Testing Framework           # ✅ Universal Test Orchestrator (OPERATIONAL)
+├── 🧪 Testing Framework           # ✅ Test Webhook - Test Execution подход
 ├── 🏷️ Release Management         # ✅ Automated GitHub Releases & Tags
 ├── 🚀 CI/CD Pipeline             # GitHub Actions automation
 ├── 📚 Documentation System       # Comprehensive guides & protocols
 └── 📁 Projects                   # Individual automation projects
-    └── 🐦 First Bird (current)   # Financial data automation [IN FINAL TESTING]
+    └── 🐦 First Bird (current)   # Financial data automation [АРХИТЕКТУРНАЯ ПОДГОТОВКА]
 ```
 
 ### ⚡ **Возможности Платформы**
 
 - **AI-Assisted Development** с structured roles и protocols
-- ✅ **Universal Testing Framework** через Test Orchestrator *(OPERATIONAL)*
+- ✅ **Simplified Testing Framework** через Test Webhook - Test Execution подход
 - ✅ **Professional Release Management** с automated versioning и GitHub Releases
 - **Multi-Project Support** с DEV/PROD environment separation
 - **Automated CI/CD** через GitHub Actions
@@ -56,14 +56,14 @@ n8n-workflows-ai Platform
 Платформа использует professional semantic versioning с automated GitHub Releases для обеспечения качественных deployments и upgrade paths.
 
 #### **📅 Current Version Status:**
-- **🔖 Ready for Release:** v1.2.0 "Universal Testing Framework"
+- **🔖 Ready for Release:** v1.2.0 "Simplified Testing Framework"
 - **🚀 Release System:** ✅ Automated GitHub Actions workflow 
 - **📦 Artifacts:** Automated workflow + documentation packaging
 - **🏷️ Git Tags:** Professional semantic versioning
 
 #### **🎯 Versioning Strategy:**
 ```
-v1.2.0 - "Universal Testing Framework" (READY - First Official Release)
+v1.2.0 - "Simplified Testing Framework" (READY - First Official Release)
 v1.3.0 - "First Bird Complete" (Final project validation & production deployment)  
 v1.4.0 - "Multi-Project Platform" (Advanced features & scaling)
 v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
@@ -73,7 +73,7 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 ```bash
 # Using GitHub Actions (Manual Trigger)
 # Navigate to: Actions → 🏷️ Create Release → Run workflow
-# Input: version (v1.2.0), type (stable), name (Universal Testing Framework)
+# Input: version (v1.2.0), type (stable), name (Simplified Testing Framework)
 
 # Or via GitHub Web Interface
 # Navigate to: Releases → Create a new release
@@ -92,8 +92,8 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 - **Цели Автоматизации:** Streamlined financial data workflows
 
 ### **Workflows Проекта:**
-- **🤖 AI Deepseek** - Анализ финансовых данных с AI language model
-- **🔗 FMP API Router** - Financial Modeling Prep API routing и data transformation
+- **🤖 AI Deepseek** - Анализ финансовых данных с AI language model (Parent Workflow)
+- **🔗 FMP API Router** - Financial Modeling Prep API routing и data transformation (Child Workflow)
 
 ### **Project Documentation:**
 - **📖 [Project Overview](docs/projects/first-bird/README.md)** - Complete project details
@@ -101,28 +101,26 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 - **🛠️ [Workflow Guide](docs/projects/first-bird/workflow-guide.md)** - Usage instructions
 - **⚙️ [Workflow README](workflows/first-bird/README.md)** - Technical workflow details
 
-### **🔄 Current Status: Final Testing Phase**
+### **🔄 Current Status: Архитектурная подготовка**
 ```
-📊 First Bird Progress:        ████████░░  80% (workflows созданы, требует comprehensive testing)
-🧪 Testing Integration:        ██████████ 100% ✅ (Test Orchestrator OPERATIONAL)
-🚀 Production Readiness:       ████░░░░░░  40% (pending validation через Issue #23)
+📊 First Bird Progress:        ████████░░  80% (workflows созданы, архитектурные изменения в progress)
+🧪 Testing Integration:        ██████░░░░  60% ✅ (Test Webhook - Test Execution approach в разработке)
+🚀 Production Readiness:       ████░░░░░░  40% (pending новый testing approach)
 ```
 
-- **⚠️ ВАЖНО:** Project в финальной стадии, требует comprehensive testing
-- **🧪 Active Issue:** [#23 - Finalize First Bird Project](https://github.com/dabalakirev/n8n-workflows-ai/issues/23)
-- **🎯 Цель:** End-to-end validation через Test Orchestrator и production deployment
+- **⚠️ ТЕКУЩАЯ ФАЗА:** Архитектурное обновление testing framework (Issue #26)
+- **🧪 Active Issue:** [#26 - Test Webhook - Test Execution подход](https://github.com/dabalakirev/n8n-workflows-ai/issues/26)
+- **🎯 Цель:** Подготовка к simplified testing architecture перед final validation
 
 ---
 
 ## 🛠️ Платформенные Инструменты
 
-### 🧪 **Test Orchestrator** *(✅ OPERATIONAL - Universal Testing Tool)*
-- **Status:** ✅ **FULLY OPERATIONAL** (ID: `ElnSprIVyJXKlkl3`)
-- **Назначение:** Automated testing для ЛЮБЫХ n8n workflows
-- **Webhook:** `POST /webhook/test-orchestrator`
-- **Возможности:** Execute workflow testing, result aggregation, comprehensive reporting
-- **Integration:** ✅ Both First Bird DEV workflows connected
-- **⚠️ Статус:** Готов к использованию для First Bird validation
+### 🧪 **Testing Framework - Test Webhook - Test Execution** *(✅ АРХИТЕКТУРНО ГОТОВ)*
+- **Подход:** ✅ **Simplified Direct Testing** - parent workflows тестируются через dedicated test webhooks
+- **Архитектура:** Parent workflow → естественное выполнение → Child workflows → мониторинг результатов
+- **Преимущества:** Упрощенная архитектура, естественное выполнение, лучший debugging
+- **Status:** ✅ **Protocol-level готов** - implementation в planning phase
 
 ### 🏷️ **Release Management System** *(✅ OPERATIONAL - Professional Versioning)*
 - **Status:** ✅ **FULLY OPERATIONAL** - Ready for first release v1.2.0
@@ -138,10 +136,10 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 
 ### 📚 **Documentation System**
 - **AI Agent Protocols** - Structured development workflows
+- **✅ Testing Strategy** - Updated с Test Webhook - Test Execution подходом
 - **MCP CI/CD Deployment Protocol** - Comprehensive development lifecycle procedures
 - **Development Guides** - Best practices и procedures
 - **Security Standards** - Credential management и data protection
-- **Testing Procedures** - Quality assurance processes
 
 ---
 
@@ -150,9 +148,9 @@ v2.0.0 - "Enterprise Platform" (Breaking changes & major evolution)
 ### **Project Structure:**
 ```
 workflows/
-├── first-bird/             # Financial Data Automation project [IN FINAL TESTING]
-│   ├── dev/                # DEV workflows (2 triggers each)
-│   │   ├── ai-deepseek-dev.json      (Manual + Execute Workflow)
+├── first-bird/             # Financial Data Automation project [АРХИТЕКТУРНАЯ ПОДГОТОВКА]
+│   ├── dev/                # DEV workflows - готовы для test webhook integration
+│   │   ├── ai-deepseek-dev.json      (Manual + будущий Test Webhook)
 │   │   └── fmp-router-dev.json       (Manual + Execute Workflow)
 │   ├── prod/               # PROD workflows (1 trigger each)
 │   │   ├── ai-deepseek-prod.json     (Manual only) [FUTURE]
@@ -169,6 +167,8 @@ workflows/
 ```
 docs/
 ├── [платформенная документация]     # Universal protocols
+│   ├── testing-strategy.md          # ✅ Updated с новым подходом
+│   └── ai-agent-roles-protocols.md  # ✅ Updated с testing integration
 └── projects/               # Project-specific documentation  
     └── first-bird/         # First Bird project docs
         ├── README.md       # Project overview
@@ -177,15 +177,16 @@ docs/
 ```
 
 ### **Multi-Environment Support:**
-- **DEV Environment** - Development и testing (2 triggers: Manual + Execute Workflow)
+- **DEV Environment** - Development и testing (2 triggers: Manual + Test Webhook для parent)
 - **PROD Environment** - Production deployments (1 trigger: Manual только)
-- ✅ **Test Framework** - ✅ **OPERATIONAL** automated quality assurance через Test Orchestrator
+- ✅ **Test Framework** - ✅ **ГОТОВ** simplified testing architecture через test webhooks
 - ✅ **Release Management** - ✅ **OPERATIONAL** professional versioning и deployment
 
 ### **Platform Navigation:**
 - **📋 [Workflows Overview](workflows/README.md)** - Platform workflow architecture
 - **🐦 [First Bird Project](workflows/first-bird/README.md)** - Project workflow details  
 - **📚 [Platform Protocols](docs/)** - Development guidelines и procedures
+- **✅ [Testing Strategy](docs/testing-strategy.md)** - New Test Webhook - Test Execution подход
 - **🗺️ [Platform Roadmap](docs/roadmap.md)** - Development timeline и milestones
 
 ---
@@ -194,11 +195,11 @@ docs/
 
 ### **Для AI Agents:**
 1. **Read AI Agent Execution Protocol** - обязательный workflow для всех assignments
-2. **Study AI Agent Roles & Protocols** - понимание SDLC roles и processes
+2. **Study AI Agent Roles & Protocols** - понимание SDLC roles и processes с new testing approach
 3. **Изучить все platform protocols** в `docs/` directory
 4. **Проверить Platform Roadmap** для текущих приоритетов и milestone status
 5. **Verify platform status** через `n8n_health_check`
-6. ✅ **Use Test Orchestrator** - universal testing для всех workflow changes
+6. ✅ **Use Test Webhook Approach** - simplified testing для всех workflow changes
 7. ✅ **Follow Release Procedures** - use professional release management
 8. **Follow 5-step execution flow** для каждого assignment
 9. **ВАЖНО:** Изучить backup и security requirements перед major changes
@@ -208,7 +209,7 @@ docs/
 2. Изучить **[Platform Roadmap](docs/roadmap.md)** для понимания архитектуры
 3. Изучить **[First Bird Project](docs/projects/first-bird/README.md)** как пример
 4. Импортировать project workflows из `workflows/first-bird/` в n8n
-5. ✅ **Test с Test Orchestrator** перед production deployment
+5. ✅ **Подготовиться к Test Webhook integration** в parent workflows
 6. ✅ **Use Release System** для professional versioning
 7. Следовать **[Security Best Practices](docs/security-best-practices.md)** для credentials
 8. Следовать **[Backup Essentials](docs/backup-essentials.md)** перед major changes
@@ -218,7 +219,7 @@ docs/
 2. Создать new project папку в `workflows/[project-name]/`
 3. Следовать project structure template: `dev/`, `prod/`, `README.md`
 4. Создать project documentation в `docs/projects/[project-name]/`
-5. ✅ **Integrate с Test Orchestrator** - universal testing framework
+5. ✅ **Plan Test Webhook integration** - simplified testing framework
 6. ✅ **Plan release versioning** - use automated release system
 7. Deploy в PROD environment следуя установленным procedures
 
@@ -226,23 +227,43 @@ docs/
 
 ## 🧪 Testing Framework Платформы
 
-### ✅ **Universal Test Orchestrator - OPERATIONAL:**
-- **Status:** ✅ **FULLY OPERATIONAL** (Completed August 29, 2025)
-- **Workflow ID:** `ElnSprIVyJXKlkl3` 
-- **Webhook Endpoint:** `POST /webhook/test-orchestrator`
-- **Возможности:** Тестирует ЛЮБЫЕ n8n workflows созданные на платформе
-- **Архитектура:** Platform-level tool обслуживающий все проекты
-- **⚠️ Current Usage:** Готов для First Bird comprehensive testing (Issue #23)
+### ✅ **Test Webhook - Test Execution Подход - АРХИТЕКТУРНО ГОТОВ**
 
-### 📊 **Testing Specifications:**
-**Input Format:**
+#### **Основная концепция:**
+- **Упрощенное тестирование:** Parent workflows тестируются напрямую через dedicated test webhooks
+- **Естественное выполнение:** Child workflows выполняются естественно в процессе parent execution
+- **Мониторинг результатов:** Отслеживание parent и child workflow results после trigger
+- **Исключение сложности:** Отказ от centralized orchestration в пользу direct testing
+
+#### **Архитектурные преимущества:**
+```
+✅ Упрощение - исключение complex orchestration layer
+✅ Естественность - тестирование actual production execution patterns  
+✅ Maintenance - reduced infrastructure complexity
+✅ Debugging - direct parent workflow issue identification
+✅ Scalability - easy addition новых projects без orchestrator modifications
+```
+
+#### **Testing Flow:**
+```
+Test Request → Parent Workflow Test Webhook → Parent выполняется → Child Workflows выполняются естественно → Мониторинг результатов
+```
+
+### 📊 **Testing Data Formats:**
+
+**Input Format для Parent Workflow Test Webhook:**
 ```json
 {
-  "testSuite": "full|quick|specific",
-  "workflows": ["ai-deepseek", "fmp-router"],
+  "testType": "full|quick|specific",
+  "parentWorkflow": "ai-deepseek", 
   "testData": {
-    "ai-deepseek": { "input": "test financial query", "sessionId": "test-123" },
-    "fmp-router": { "toolName": "Insider.Trading.Latest", "params": {"limit": 5} }
+    "input": "test financial query",
+    "sessionId": "test-session-123"
+  },
+  "monitoring": {
+    "trackChildExecution": true,
+    "validateResults": true,
+    "timeout": "60s"
   }
 }
 ```
@@ -250,15 +271,30 @@ docs/
 **Output Format:**
 ```json
 {
-  "executionId": "exec-1234567890",
-  "overallStatus": "ALL_PASSED|SOME_FAILED",
-  "testResults": {
-    "ai-deepseek": {"status": "pass|fail", "duration": "2.3s"},
-    "fmp-router": {"status": "pass|fail", "duration": "1.1s"}
-  },
-  "summary": {"total": 2, "passed": 2, "failed": 0, "successRate": "100%"}
+  "testExecution": {
+    "executionId": "exec-test-12345",
+    "status": "success|failure",
+    "parentWorkflow": {
+      "name": "ai-deepseek",
+      "status": "completed",
+      "duration": "42.1s"
+    },
+    "childWorkflows": [
+      {
+        "name": "fmp-router",
+        "status": "completed", 
+        "callCount": 1
+      }
+    ]
+  }
 }
 ```
+
+### **Migration от Previous Approach:**
+- **⚠️ Legacy Test Orchestrator** будет deprecated после implementation нового подхода
+- **✅ Improved Architecture** с focus на simplicity и natural workflow execution
+- **✅ Better Debugging** через direct parent workflow testing
+- **📚 Documentation Updated** с новой methodology
 
 ---
 
@@ -269,7 +305,7 @@ docs/
 - **GitHub Actions** - Automated pipeline и multi-project quality gates
 - **GitHub Issues** - Structured task и change management
 - **MCP (Model Context Protocol)** - AI agent platform integration
-- ✅ **Test Orchestrator** - ✅ **OPERATIONAL** Universal workflow testing framework
+- ✅ **Test Webhook Framework** - ✅ **АРХИТЕКТУРНО ГОТОВ** Simplified workflow testing approach
 - ✅ **Release Management** - ✅ **OPERATIONAL** Automated GitHub Releases & Tags
 
 ---
@@ -283,7 +319,7 @@ docs/
 4. **Следовать Platform Roadmap** - выравнивание с milestone priorities
 5. **Security First** - обязательные security practices (см. [Security Best Practices](docs/security-best-practices.md))
 6. **Backup Before Major Changes** - защита данных required (см. [Backup Essentials](docs/backup-essentials.md))
-7. ✅ **Universal Testing** - все изменения должны пройти Test Orchestrator validation
+7. ✅ **Simplified Testing** - все изменения должны пройти Test Webhook validation
 8. ✅ **Professional Releases** - использовать automated release system для versioning
 9. **Documentation Integration** - все project решения должны быть задокументированы
 
@@ -294,7 +330,7 @@ docs/
 4. **Platform Integration** - следовать universal protocols
 5. **Issue Management** - создавать и обновлять Issues для всех планируемых изменений
 6. **Documentation Updates** - поддерживать project и platform documentation
-7. ✅ **Test Before Deploy** - использовать Test Orchestrator для validation
+7. ✅ **Test Webhook Approach** - использовать simplified testing для validation
 8. ✅ **Release Management** - следовать professional versioning procedures
 
 ---
@@ -304,7 +340,7 @@ docs/
 Платформа спроектирована для scalability и готова поддерживать множественные automation проекты:
 
 - **✅ Project-Centric Architecture** - Repository structure поддерживает unlimited projects
-- ✅ **Universal Testing Framework** - ✅ **OPERATIONAL** Test Orchestrator работает с любыми project workflows
+- ✅ **Simplified Testing Framework** - ✅ **АРХИТЕКТУРНО ГОТОВ** Test Webhook approach работает с любыми parent-child workflows
 - ✅ **Professional Release Management** - ✅ **OPERATIONAL** automated versioning для всех projects
 - **✅ Reusable Protocols** - AI Agent и development procedures применимы ко всем проектам
 - **✅ Scalable CI/CD** - GitHub Actions pipeline поддерживает multi-project validation
@@ -316,9 +352,9 @@ docs/
 - **IoT Data Processing** (sensor data workflows)
 - **Content Management** (CMS/blogging automation)
 
-*Все future projects будут автоматически supported универсальным Test Orchestrator и professional release system!*
+*Все future projects будут автоматически supported simplified Test Webhook approach и professional release system!*
 
-**⚠️ Note:** Новые проекты рекомендуется создавать после completion First Bird project (Issue #23) для validation процедур.
+**⚠️ Note:** Новые проекты рекомендуется создавать после completion архитектурных changes (Issue #26) для validation новой testing methodology.
 
 ---
 
@@ -332,7 +368,7 @@ docs/
 - **AI Agent Support**: Следовать AI Agent Execution Protocol
 - **Security Support**: Security guidelines в [docs/security-best-practices.md](docs/security-best-practices.md)
 - **Backup Support**: Recovery procedures в [docs/backup-essentials.md](docs/backup-essentials.md)
-- ✅ **Testing Support**: Universal Test Orchestrator для всех workflow validation
+- ✅ **Testing Support**: ✅ [Testing Strategy](docs/testing-strategy.md) с Test Webhook - Test Execution подходом
 - ✅ **Release Support**: Professional release management system
 
 ---
@@ -348,7 +384,7 @@ docs/
 **В профессиональном контексте поощряется использование:**
 - **Technical Terms**: workflows, CI/CD, testing framework, deployment
 - **Development Terms**: commit, merge, pull request, issue, repository
-- **Platform Terms**: scalability, automation, integration, orchestrator
+- **Platform Terms**: scalability, automation, integration, webhook
 - **Business Terms**: roadmap, milestones, deliverables, best practices
 
 ---
@@ -374,22 +410,22 @@ docs/
 ## 🏆 **Platform Achievements**
 
 ### ✅ **Major Milestones Completed**
-- ✅ **v1.2 Universal Testing Framework** - COMPLETED (August 29, 2025)
-- ✅ **Test Orchestrator Operational** - ID: `ElnSprIVyJXKlkl3`
-- ✅ **Platform-Wide Testing Capability** - any workflows can be tested automatically
-- ✅ **Professional Test Reporting** - comprehensive JSON output with metrics
+- ✅ **v1.2 Simplified Testing Framework** - АРХИТЕКТУРНО ГОТОВ (August 30, 2025)
+- ✅ **Test Webhook - Test Execution подход** - Protocol-level implementation complete
+- ✅ **Platform-Wide Simplified Testing** - natural parent-child workflow testing
+- ✅ **Professional Test Architecture** - elimination of complex orchestration
 - ✅ **GitHub Releases & Tags System** - professional versioning & deployment ready
 - ✅ **Automated Release Management** - comprehensive GitHub Actions workflow
 
-### 🔄 **Current Focus: First Bird Completion**
-- **🎯 Active Goal:** Complete comprehensive testing и validation First Bird project
-- **📋 Issue #23:** [Finalize First Bird Project - Production Testing & Validation](https://github.com/dabalakirev/n8n-workflows-ai/issues/23)
-- **🧪 Testing Phase:** End-to-end validation через Test Orchestrator
-- **🚀 Target:** Production-ready First Bird project demonstration
+### 🔄 **Current Focus: Architecture Implementation**
+- **🎯 Active Goal:** Complete Test Webhook - Test Execution architecture implementation
+- **📋 Issue #26:** [Test Webhook - Test Execution подход в протоколы](https://github.com/dabalakirev/n8n-workflows-ai/issues/26)
+- **🧪 Testing Phase:** Архитектурные изменения на protocol level
+- **🚀 Target:** Simplified testing approach для First Bird project validation
 
 ### 🚀 **Ready for First Official Release**
-**v1.2.0 "Universal Testing Framework"** готов к deployment как first official release платформы, demonstrating:
-- Universal testing capability for any n8n workflows
+**v1.2.0 "Simplified Testing Framework"** готов к deployment как first official release платформы, demonstrating:
+- Simplified testing capability through Test Webhook approach
 - Professional release management system  
 - Enterprise-grade development protocols
 - AI-powered automation development standards
@@ -397,6 +433,6 @@ docs/
 
 ---
 
-**Эта платформа демонстрирует современную AI-powered automation разработку с project-centric architecture, structured protocols, comprehensive documentation, ✅ OPERATIONAL universal testing framework, ✅ PROFESSIONAL release management system и scalable multi-project support.**
+**Эта платформа демонстрирует современную AI-powered automation разработку с project-centric architecture, structured protocols, comprehensive documentation, ✅ SIMPLIFIED testing framework через Test Webhook - Test Execution подход, ✅ PROFESSIONAL release management system и scalable multi-project support.**
 
-*Updated: August 30, 2025 - Documentation refactoring | First Bird в финальной стадии тестирования (Issue #23) | Platform ready для v1.2.0 First Official Release*
+*Updated: August 30, 2025 - Архитектурное обновление testing framework | Test Webhook - Test Execution подход готов на protocol level | Platform готов для v1.2.0 Simplified Testing Framework Release*
