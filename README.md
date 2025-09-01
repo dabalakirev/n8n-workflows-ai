@@ -2,6 +2,7 @@
 
 ![Platform Status](https://img.shields.io/badge/platform-v1.2.1--release--ready-brightgreen)
 ![First Bird](https://img.shields.io/badge/first--bird-100%25--complete-success)
+![Insider Trades](https://img.shields.io/badge/insider--trades-in--progress-yellow)
 ![License](https://img.shields.io/badge/license-Friends%20Only-purple)
 
 **AI-Powered Automation Platform** для разработки n8n workflows с test-driven development и современными DevOps практиками
@@ -51,12 +52,15 @@
 ### Project Structure:
 ```
 workflows/
-├── first-bird/ ✅          # Financial Data Automation [COMPLETE]
-│   ├── dev/                # DEV workflows с test webhook
-│   ├── prod/               # PROD workflows ready
-│   └── README.md           # Project documentation
-├── [future-project]/       # Template для новых проектов
-└── README.md              # Platform workflows guide
+├── first-bird/ ✅              # Financial Data Automation [COMPLETE]
+│   ├── dev/                    # DEV workflows с test webhook
+│   ├── prod/                   # PROD workflows ready
+│   └── README.md               # Project documentation
+├── insider-trades-monitor/ 🔄  # Insider Trades Automation [IN PROGRESS]
+│   ├── dev/                    # DEV workflows (Issue #33)
+│   ├── prod/                   # PROD workflows (planned)
+│   └── README.md               # Project documentation (planned)
+└── README.md                  # Platform workflows guide
 ```
 
 ### Documentation Structure:
@@ -69,7 +73,8 @@ docs/
 ├── procedures/             # Isolated procedures
 │   └── new-project-creation-procedure.md
 └── projects/               # Project-specific documentation
-    └── first-bird/         # Complete project docs [ISOLATED]
+    ├── first-bird/         # Complete project docs [ISOLATED]
+    └── insider-trades-monitor/  # Project docs (Issue #33 planned)
 ```
 
 ## 🚀 Начало Работы
@@ -117,7 +122,9 @@ docs/
 
 ### 🚫 **Project Documentation** (НЕ ЧИТАТЬ без указания):
 - `docs/projects/first-bird/` - First Bird project documentation [ISOLATED]
+- `docs/projects/insider-trades-monitor/` - Insider Trades project documentation [ISOLATED]
 - `workflows/first-bird/` - First Bird workflows [ISOLATED]
+- `workflows/insider-trades-monitor/` - Insider Trades workflows [ISOLATED]
 
 ## 🔧 Технологии
 
@@ -173,4 +180,4 @@ docs/
 
 ---
 
-*Updated: September 1, 2025*
+*Updated: September 2, 2025*
