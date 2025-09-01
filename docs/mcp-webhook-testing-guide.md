@@ -1,5 +1,11 @@
 # MCP Webhook Testing Guide - Compact
 
+## 🏗️ Webhook Architecture
+
+**Test Webhook** = узел внутри Parent Workflow (НЕ отдельный workflow)
+- Parent содержит Webhook узел + основную логику  
+- Child workflows выполняются естественно от Parent
+
 ## 🚨 Critical Rules
 
 **❌ NEVER DO:**
