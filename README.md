@@ -66,6 +66,8 @@ docs/
 │   ├── testing-strategy.md          
 │   ├── ai-agent-roles-protocols.md  
 │   └── mcp-webhook-testing-guide.md 
+├── procedures/             # Isolated procedures
+│   └── new-project-creation-procedure.md
 └── projects/               # Project-specific documentation
     └── first-bird/         # Complete project docs [ISOLATED]
 ```
@@ -85,6 +87,9 @@ docs/
 2. **Choose Assignment** через GitHub Issues
 3. **Follow Development Protocols** согласно AI Agent guidelines
 4. **Use Testing Framework** для validation
+
+### 📋 **Для Product Owners:**
+- **[New Project Creation Procedure](docs/procedures/new-project-creation-procedure.md)** - comprehensive guide для создания новых проектов
 
 ## 📚 Документация и Протоколы
 
@@ -106,6 +111,9 @@ docs/
 ### 📋 **Maintenance & Consistency**:
 - **[Documentation Consistency Procedure](docs/documentation-consistency-procedure.md)** - Doc maintenance
 - **[Roadmap](docs/roadmap.md)** - Platform development status
+
+### 🏗️ **Project Management**:
+- **[New Project Creation Procedure](docs/procedures/new-project-creation-procedure.md)** - Complete standardization guide
 
 ### 🚫 **Project Documentation** (НЕ ЧИТАТЬ без указания):
 - `docs/projects/first-bird/` - First Bird project documentation [ISOLATED]
@@ -165,4 +173,4 @@ docs/
 
 ---
 
-*Updated: August 30, 2025*
+*Updated: September 1, 2025*
