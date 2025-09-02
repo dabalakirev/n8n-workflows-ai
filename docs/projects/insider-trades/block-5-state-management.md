@@ -158,7 +158,7 @@ Block 4 [Done] → 24 (Survey Updates) → 25 (Cycle Completion) → [WORKFLOW E
 ```
 
 ## 🔧 Required Credentials:
-- **MongoDB** - mongoDb credential для узла 24
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
 
 ## 📊 Data Flow Analysis:
 
