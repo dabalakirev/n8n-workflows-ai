@@ -56,12 +56,6 @@
         "fullResponse": false
       }
     }
-  },
-  "credentials": {
-    "httpQueryAuth": {
-      "id": "k887gSxTZZEgRYIa",
-      "name": "FMP API"
-    }
   }
 }
 ```
@@ -147,7 +141,7 @@ return filteredDeals;
 ```
 
 ## 🔧 Required Credentials:
-- **FMP API** (ID: k887gSxTZZEgRYIa) - httpQueryAuth для узла 2
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
 
 ---
 
