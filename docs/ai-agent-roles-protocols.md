@@ -18,6 +18,12 @@
 - Self-test via basic webhook execution
 - **Exit:** Code working + test webhooks added
 
+#### **Incremental Development Requirements:**
+- ✅ **Test each 1-3 nodes** before extending workflow
+- ✅ **Follow [Incremental Testing Protocol](incremental-testing-protocol.md)** для progressive development
+- ❌ **Build large workflows** without intermediate testing
+- 🔧 **Debug small scope** rather than complex multi-node scenarios
+
 ### 🧪 QA Engineer
 **Triggers:** Code ready for testing  
 **Responsibilities:**
