@@ -259,10 +259,10 @@ return [{
 
 ---
 
-## Узел 11: Code (MongoDB Operations)
+## Узел 11: Code (MongoDB Operations Preparation)
 **Тип:** `nodes-base.code` (v2)  
 **📍 НАЗНАЧЕНИЕ:** Формирование MongoDB операций (INSERT/UPDATE) на основе cardAction  
-**🔧 СТАТУС КОДА:** CONCEPT - подготовка операций для различных сценариев
+**🔧 СТАТУС КОДА:** TEMPLATE - n8n-compatible operation preparation
 
 **Режим:** `runOnceForEachItem` - подготавливает операцию для текущей сделки
 
@@ -271,15 +271,16 @@ const processedData = $input.item(0).json;
 const companyProfile = $input.item(1).json?.[0] || {};
 
 const timestamp = new Date().toISOString();
-let mongoOperation;
 
 switch (processedData.cardAction) {
   case 'CREATE_NEW_CARD':
-    mongoOperation = {
-      operation: 'insert',
-      document: {
-        trade_status: 'New',
+    return [{
+      json: {
+        operation: 'insert',
         symbol: processedData.symbol,
+        action: processedData.cardAction,
+        // Document data for INSERT
+        trade_status: 'New',
         company_name: companyProfile.companyName || processedData.symbol,
         company_marketcap: companyProfile.marketCap || 0,
         industry: companyProfile.industry || 'Unknown',
@@ -290,75 +291,87 @@ switch (processedData.cardAction) {
         posted_at: null,
         trades: [processedData.mappedDeal]
       }
-    };
-    break;
+    }];
     
   case 'UPDATE_CURRENT_SESSION':
   case 'UPDATE_PREVIOUS_CARD':
-    mongoOperation = {
-      operation: 'findOneAndUpdate',
-      updateKey: '_id',
-      updateValue: processedData.cardId,
-      updates: {
+    return [{
+      json: {
+        operation: 'findOneAndUpdate',
+        updateTargetId: processedData.cardId,
+        symbol: processedData.symbol,
+        action: processedData.cardAction,
+        // Update data for findOneAndUpdate
         trade_status: processedData.cardStatus,
         updated_at: timestamp,
-        '$push': {
-          trades: processedData.mappedDeal
-        }
+        newTrade: processedData.mappedDeal
       }
-    };
-    break;
+    }];
     
   default:
     return [{ json: { skipped: true, action: processedData.cardAction } }];
 }
-
-return [{ 
-  json: { 
-    mongoOperation: mongoOperation,
-    symbol: processedData.symbol,
-    action: processedData.cardAction
-  }
-}];
 ```
 **💡 ПОЯСНЕНИЕ:**
-- **Switch логика:** 3 различных типа операций на основе cardAction
-- **CREATE_NEW_CARD:** Полная карточка с company profile + первой сделкой
-- **UPDATE operations:** Добавление сделки в существующую карточку + статус update
-- **Fallback data:** Использует symbol как company_name если профиль недоступен
-- **Chart URL generation:** Автоматическая генерация ссылки на график Finviz
+- **n8n Compatible:** Данные подготовлены в формате, который понимает MongoDB node
+- **Separate data structures:** INSERT использует прямые поля, UPDATE использует updateTargetId
+- **ID передача:** updateTargetId передается через workflow data для updateKey
+- **Trade addition:** Новые сделки добавляются через отдельное поле для $push операции
 
 ---
 
 ## Узел 12: MongoDB (Execute Operation)
 **Тип:** `nodes-base.mongoDb` (v1.2)  
-**📍 НАЗНАЧЕНИЕ:** Выполнение подготовленной MongoDB операции (INSERT или UPDATE)  
-**🔧 СТАТУС КОДА:** CONCEPT - dynamic operation execution с universal configuration
+**📍 НАЗНАЧЕНИЕ:** Выполнение подготовленной MongoDB операции (INSERT или findOneAndUpdate)  
+**🔧 СТАТУС КОДА:** TEMPLATE - dynamic operation execution с n8n compatibility
 
 ```json
 {
   "resource": "document",
-  "operation": "={{$json.mongoOperation.operation}}",
+  "operation": "={{$json.operation}}",
   "collection": "deals",
-  "query": "={{$json.mongoOperation.query || '{}'}}",
-  "updateKey": "={{$json.mongoOperation.updateKey || 'id'}}",
-  "fields": "={{Object.keys($json.mongoOperation.document || $json.mongoOperation.updates || {}).join(',')}}",
+  "updateKey": "_id",
+  "fields": "={{$json.operation === 'insert' ? 'trade_status,symbol,company_name,company_marketcap,industry,chart_url,company_about,created_at,updated_at,posted_at,trades' : 'trade_status,updated_at'}}",
   "upsert": false
 }
 ```
+
+**🔧 ADDITIONAL CODE for findOneAndUpdate ($push operation):**
+**Добавить отдельный Code node (12a) перед MongoDB node для UPDATE операций:**
+
+```javascript
+// For UPDATE operations - prepare $push for trades array
+if ($json.operation === 'findOneAndUpdate') {
+  return [{
+    json: {
+      ...$json,
+      // Set the document ID that updateKey will match against
+      _id: $json.updateTargetId,
+      // Prepare $push update for trades
+      '$push': {
+        trades: $json.newTrade
+      }
+    }
+  }];
+} else {
+  // For INSERT operations - pass through
+  return [$input.all()];
+}
+```
+
 **💡 ПОЯСНЕНИЕ:**
-- **Dynamic operation:** INSERT или findOneAndUpdate в зависимости от подготовленной операции
-- **Universal config:** Работает для всех типов операций через conditional properties
-- **Collection:** `deals` - основная коллекция карточек
-- **No upsert:** Строгий контроль операций без автоматического создания
-- **После выполнения** → возврат к Узел 5 для следующей итерации
+- **Dynamic operation:** INSERT или findOneAndUpdate определяется из input data
+- **updateKey="_id":** Поиск документа по _id поля (стандартный MongoDB подход)
+- **Conditional fields:** Различные поля для INSERT vs UPDATE операций
+- **$push operation:** Добавление новых сделок в trades array через MongoDB $push
+- **ID matching:** updateTargetId устанавливается как _id для updateKey matching
 
 ---
 
-## 📋 Block Connections:
+## 📋 Block Connections (UPDATED):
 ```
 5 (Split) [Loop] → 6 (Process) → 7 (Lookup) → 8 (Status) → 9 (Skip Check)
-    ↑                                                            ↑[TRUE] → 10 (Profile) → 11 (Prepare) → 12 (Execute) → 5 [Loop]
+    ↑                                                            ↑[TRUE] → 10 (Profile) → 11 (Prepare) → 12a (Update Logic) → 12 (Execute) → 5 [Loop]
     ↑[Done] → Block 3                                            ↑[FALSE] → 5 [Loop]
 ```
 
@@ -367,5 +380,6 @@ return [{
 
 ---
 
-**📝 STATUS:** ✅ COMPLETE - концептуальная спецификация с пояснениями  
+**📝 STATUS:** ✅ FIXED - MongoDB operations теперь n8n-compatible  
+**🔧 RED FLAG 2:** ✅ RESOLVED - Corrected invalid updateValue, added proper field configuration  
 **🔄 NEXT:** [Block 3: AI Analysis & Intelligence →](block-3-ai-analysis.md)
