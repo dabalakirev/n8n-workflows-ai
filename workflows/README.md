@@ -12,11 +12,17 @@
 
 ## 🚀 Current Projects
 
-### 🐦 First Bird (Active)
+### 🐦 First Bird (Complete)
 - **Domain**: Financial Data Automation  
-- **Status**: DEV ✅ Complete, PROD deployment pending
+- **Status**: ✅ DEV Complete, PROD deployed
 - **Components**: AI Deepseek + FMP API Router
 - **Documentation**: [first-bird/README.md](first-bird/README.md)
+
+### 📊 Insider Trades (Implementation Ready)
+- **Domain**: AI-Powered Insider Trading Analysis
+- **Status**: ✅ Level 3 Architecture Complete (25 nodes, 5 blocks)
+- **Components**: DeepSeek + SerpApi + Telegraph + Telegram
+- **Documentation**: [insider-trades/README.md](insider-trades/README.md)
 
 ## 📋 New Project Template
 
@@ -42,6 +48,7 @@ workflows/your-project/
 - **Platform Roadmap**: [../docs/roadmap.md](../docs/roadmap.md) - Development milestones и progress
 - **Testing Strategy**: [../docs/testing-strategy.md](../docs/testing-strategy.md) - Universal testing protocols
 - **AI Agent Protocols**: [../docs/ai-agent-roles-protocols.md](../docs/ai-agent-roles-protocols.md) - Development procedures
-- **First Bird Project**: [first-bird/README.md](first-bird/README.md) - Active project technical details
+- **First Bird Project**: [first-bird/README.md](first-bird/README.md) - Complete project technical details
+- **Insider Trades Project**: [insider-trades/README.md](insider-trades/README.md) - Implementation-ready architecture
 
 *Platform supports unlimited automation projects with shared testing infrastructure и consistent quality standards.*
