@@ -97,6 +97,11 @@
 - **Notify on completion** - уведомлять о завершении этапов
 - **Handle unexpected issues** - уведомлять о проблемах
 
+### **Progressive Implementation для Workflow Development:**
+- ✅ **Max 1-3 nodes per iteration** + test via webhook before extending
+- ✅ **Follow [Incremental Testing Protocol](incremental-testing-protocol.md)** для complex workflows
+- ❌ **Build large workflows** без intermediate validation
+
 **Результат:** Выполненное задание согласно плану
 
 ---
