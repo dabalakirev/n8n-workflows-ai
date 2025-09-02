@@ -19,6 +19,11 @@ CI/CD процесс для n8n workflow разработки с использ�
 - **DEV триггеры**: Manual + Execute Workflow (для тестирования)
 - Синхронизация с GitHub
 
+### 🔐 **Credentials Requirements**
+- **Source:** Use exact credential IDs from `docs/projects/[project]/credentials-reference.md`  
+- **Format:** Copy credential objects with ID + name from reference file
+- **Validation:** Verify credential names match n8n instance before deployment
+
 ### 3. **🧪 Testing**
 - Выполнение тестов workflow
 - Анализ результатов выполнения
