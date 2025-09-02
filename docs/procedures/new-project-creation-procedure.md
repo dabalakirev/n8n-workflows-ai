@@ -1,6 +1,6 @@
 # New Project Creation Procedure
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Status:** READY  
 **Target:** Product Owners, AI Agents, Developers
 
@@ -18,7 +18,9 @@
 
 **КРИТИЧЕСКИ ВАЖНО:** Все проекты ДОЛЖНЫ пройти трехуровневую систему документации перед началом разработки.
 
-### 📝 **1) Бриф (идея)**
+### 📝 **Level 1: Бриф (идея)**
+**Что это:** Нетехническое описание проекта для понимания бизнес-цели
+
 Здесь должна описана сама идея на простом не техническом языке. Требования: она должна быть понятной, последовательной, не противоречивой и потенциально технически реализуемой на n8n. Должны быть упомянуты все источники данных и есть ли доступ к ним.
 
 **✅ Критерии готовности:**
@@ -27,7 +29,9 @@
 - [ ] Все источники данных перечислены с указанием доступности
 - [ ] Реализуемость на n8n платформе подтверждена
 
-### 🔧 **2) Технический бриф**
+### 🔧 **Level 2: Технический бриф**
+**Что это:** Детальные технические требования БЕЗ конкретной архитектуры n8n
+
 Этот документ должен раскрывать все технические детали, необходимые для реализации идеи, содержать последовательный сценарий обработки данных, техническую логику этого сценария, описывать все внешние инструменты, которыми мы будем пользоваться, а также четко, технически описывать подробно как именно мы будем работать с этими инструментами. Вместе с тем этот документ не должен предлагать саму архитектуру узлов и workflow n8n. Документ должен быть провалидирован прежде всего на то, "ничего ли мы не забыли" с технической точки зрения, начиная разработку.
 
 **✅ Критерии готовности:**
@@ -37,7 +41,9 @@
 - [ ] НЕ содержит конкретной n8n архитектуры
 - [ ] Валидация "ничего не забыли" пройдена
 
-### 🏗️ **3) Архитектурное решение**
+### 🏗️ **Level 3: Архитектурное решение**
+**Что это:** Конкретная структура n8n workflows с обоснованием каждого узла
+
 Этот документ предлагает конкретное архитектурное решение в виде конкретной структуры workflow и их узлов. Для каждого узла он должен обосновывать смысл и оптимальность. Необходима сверка с документацией n8n - будет ли работать этот узел так, как мы планируем, со ссылкой на документацию n8n. Предлагать возможные fallback и обходные пути, если предложенная часть схемы не работает. Документ должен быть провалидирован на то, что решение оптимально и не избыточно, соответствует документации n8n, надежно и без сомнений реализуемо. Если есть сомнения - описать в чем и пути обходных решений.
 
 **✅ Критерии готовности:**
@@ -47,254 +53,176 @@
 - [ ] Оптимальность и отсутствие избыточности подтверждены
 - [ ] Все сомнения описаны с путями решения
 
-### 🔄 **CI/CD Integration с Documentation Levels**
+### 🔄 **Sequential Validation Process**
 
-**Sequential Gates Approach:**
-```
-Level 1: Бриф → Feeds into → Phase 1: Requirement Analysis
-Level 2: Технический бриф → Feeds into → Phase 2: Project Architecture  
-Level 3: Архитектурное решение → Ready for → Phase 3: Implementation
-```
-
-**STOP RULES:**
-- 🛑 **Level 1 не пройден** → НЕ переходить к техническому анализу
-- 🛑 **Level 2 не пройден** → НЕ начинать архитектурное планирование  
-- 🛑 **Level 3 не пройден** → НЕ начинать implementation
+**STOP RULES - обязательная последовательность:**
+- 🛑 **Level 1 не пройден** → НЕ переходить к Level 2
+- 🛑 **Level 2 не пройден** → НЕ переходить к Level 3  
+- 🛑 **Level 3 не пройден** → НЕ начинать разработку
 
 ---
 
-## 📋 Phase 1: Requirement Analysis & Validation
+## 📋 Phase 1: Requirement Analysis
+*Базируется на Level 1-2 документации*
 
-### 🔍 **Requirement Completeness Validation**
-**(Enhanced с Documentation Level 1 & 2 validation)**
+### 🔍 **1.1 Business Requirements Validation**
+**Source:** Level 1 документация должна предоставить:
+- [ ] **Business Objective** - четко определена цель проекта
+- [ ] **Success Criteria** - измеримые результаты
+- [ ] **Input Data Sources** - источники данных с подтвержденным доступом
+- [ ] **Output Requirements** - ожидаемые результаты
 
-**ОБЯЗАТЕЛЬНАЯ процедура перед началом любого проекта:**
+### ⚙️ **1.2 Technical Requirements Assessment**  
+**Source:** Level 2 документация должна предоставить:
+- [ ] **Data Processing Logic** - полный сценарий обработки
+- [ ] **External APIs** - endpoints, authentication, rate limits
+- [ ] **Credential Requirements** - все необходимые credentials
+- [ ] **Integration Points** - детали интеграций
 
-#### **1.1 Product Owner Input Analysis**
-**Checklist вводных данных (должен соответствовать Level 1-2 документации):**
-- [ ] **Business Objective** - четко определена цель проекта ✅ Level 1
-- [ ] **Success Criteria** - measurable outcomes ✅ Level 1
-- [ ] **Input Data Sources** - откуда поступают данные ✅ Level 1
-- [ ] **Output Requirements** - что должно быть на выходе ✅ Level 2
-- [ ] **Integration Points** - с какими системами интегрироваться ✅ Level 2
-- [ ] **Performance Expectations** - SLA, throughput, response time ✅ Level 2
-- [ ] **Security Requirements** - data sensitivity ✅ Level 2
-
-#### **1.2 Sufficiency Validation**
-**Проверка BEFORE начала разработки (должна соответствовать Level 2):**
+### ❓ **1.3 Completeness Check**
 ```markdown
-## ❓ Missing Information Checklist
-- [ ] Неясные business rules?
-- [ ] Отсутствующие API specifications?
-- [ ] Неопределенные data formats?
-- [ ] Unclear error handling expectations?
-- [ ] Missing credential requirements?
-- [ ] Undefined integration boundaries?
+Отсутствуют:
+- [ ] Business rules?
+- [ ] API specifications? 
+- [ ] Data formats?
+- [ ] Error handling expectations?
+- [ ] Security requirements?
 ```
 
-**STOP RULE:** НЕ продолжать без complete requirements + validated Level 1-2 documentation
-
-### 🔍 **Dependencies Analysis**
-- **External Services** - APIs, databases, third-party tools ✅ из Level 2
-- **Platform Dependencies** - existing workflows, shared resources
-- **Credential Dependencies** - authentication requirements ✅ из Level 2
-- **Data Dependencies** - input sources, data quality expectations ✅ из Level 1-2
-
-### ⚙️ **Technical Requirements Assessment**
-- **API Endpoints** - documentation, rate limits, authentication ✅ из Level 2
-- **Database Requirements** - schemas, connections, permissions ✅ из Level 2  
-- **Credentials Mapping** - what credentials needed where ✅ из Level 2
-- **External Tools** - integrations requirements ✅ из Level 2
+**GATE:** НЕ продолжать без полных Level 1-2 requirements
 
 ---
 
-## 🏗️ Phase 2: Project Architecture
-**(Enhanced с Level 3 Архитектурное решение validation)**
+## 🏗️ Phase 2: Project Architecture  
+*Базируется на Level 3 документации*
 
-### ⚙️ **Workflow Architecture Planning**
+### 📐 **2.1 Workflow Structure Planning**
+**Source:** Level 3 архитектурное решение определяет:
 
-#### **2.1 Workflow Architecture Design**
-**Определение структуры (должно соответствовать Level 3 документации):**
-- **Single Workflow** - если проект простой и самодостаточный
-- **Multiple Workflows** - если требуется разделение логики:
-  ```
-  Parent Workflow (Orchestrator):
-  ├── Main Business Logic
-  ├── Error Handling & Validation
-  ├── Test Webhook Support ⚠️ MANDATORY
-  └── Child Workflow Orchestration (if needed)
+**Single Workflow:** Простые проекты с единой логикой
+**Multiple Workflows:** Сложные проекты с разделением ответственности:
+```
+Parent Workflow (Main):
+├── Business Logic Implementation
+├── Error Handling & Validation  
+├── Child Workflow Coordination
+└── Results Aggregation
 
-  Child Workflows (Specialized):
-  ├── Specific Domain Logic
-  ├── External API Integration
-  └── Data Processing Tasks
-  ```
-- **Principle:** Architecture должна соответствовать business requirements + Level 3 design
+Child Workflows (Specialized):
+├── Data Collection & Processing
+├── External API Integration
+└── Specific Domain Logic
+```
 
-#### **2.2 Data Flow Architecture**
-- **Input → Processing → Output** flow design ✅ из Level 3
-- **Error propagation** strategy ✅ из Level 3
-- **Data validation** points ✅ из Level 3
-- **State management** approach ✅ из Level 3
+### 🔧 **2.2 Node Selection Validation**
+**Requirements:** Level 3 документация должна содержать:
+- [ ] **Each node justified** - обоснование выбора каждого узла
+- [ ] **n8n documentation links** - ссылки на официальную документацию
+- [ ] **Configuration details** - точные настройки узлов
+- [ ] **Fallback scenarios** - альтернативные решения
 
-### 🔌 **Node Selection Strategy**
+### 🔄 **2.3 Flow Validation**
+- [ ] **Data flow logic** соответствует Level 2 сценарию
+- [ ] **Error handling** покрывает все критические сценарии
+- [ ] **Performance expectations** реалистичны
+- [ ] **No circular dependencies** между workflows
 
-#### **2.3 Node Selection Principles**
-**Выбор nodes исходя из Level 3 архитектурного решения:**
-- **Follow Level 3 node specifications** с n8n documentation validation
-- **Verify каждый узел** против n8n documentation (required в Level 3)
-- **Implement fallback strategies** согласно Level 3 planning
-- **Optimize for performance** - balance functionality vs simplicity
-
-**Level 3 Integration Requirements:**
-- **Each node justified** according to Level 3 documentation
-- **n8n documentation links** verified and accessible
-- **Fallback scenarios** planned and documented
-- **No redundancy** confirmed in architecture
-
-### 🔄 **Execution Flow Validation**
-
-#### **2.4 Flow Safety Checklist (Enhanced с Level 3 validation)**
-- [ ] **No circular dependencies** между workflows ✅ проверено в Level 3
-- [ ] **Clear error termination** paths ✅ из Level 3 fallback scenarios
-- [ ] **Resource cleanup** after execution ✅ planned в Level 3
-- [ ] **Timeout handling** для long-running processes ✅ из Level 3
-
-### 📈 **Performance Considerations**
-
-#### **2.5 Scalability Planning (из Level 2-3 документации)**
-- **Data Volume** - expected throughput ✅ из Level 2
-- **Response Time** - SLA requirements ✅ из Level 2  
-- **Resource Optimization** - efficient node usage ✅ из Level 3
-- **Caching Strategy** - где appropriate ✅ из Level 3
+**GATE:** Architecture должна полностью соответствовать Level 3 specifications
 
 ---
 
 ## 🛠️ Phase 3: Implementation Setup
 
-### 📁 **Project Structure Creation**
-
-#### **3.1 Standard Directory Structure**
+### 📁 **3.1 Project Structure Creation**
 ```
-workflows/
-└── [project-name]/
-    ├── dev/                    # DEV environment workflows
-    │   └── [workflow-files].json
-    ├── prod/                   # PROD environment workflows  
-    │   └── [workflow-files].json
-    └── README.md              # Project documentation (ЕМКО!)
+workflows/[project-name]/
+├── dev/                    # DEV workflows
+├── prod/                   # PROD workflows  
+└── README.md              # Project summary
 
-docs/
-└── projects/
-    └── [project-name]/
-        ├── README.md              # ЕДИНСТВЕННЫЙ файл - структурированный
-        ├── brief-idea.md          # Level 1: Бриф (идея)
-        ├── technical-brief.md     # Level 2: Технический бриф
-        └── architecture.md        # Level 3: Архитектурное решение
+docs/projects/[project-name]/
+├── README.md              # Project overview
+├── brief-idea.md          # Level 1: Бриф (идея)  
+├── technical-brief.md     # Level 2: Технический бриф
+└── architecture.md        # Level 3: Архитектурное решение
 ```
 
-**Принцип документации:** **STRUCTURED LEVELS + ЕМКОСТЬ**
-- **Level 1-3 documents** - отдельные файлы для каждого уровня
-- **Project README** - summary + links к levels
-- Deployment процедуры - следовать existing CI/CD protocol
+### 📚 **3.2 Documentation Templates**
 
-### 📚 **Documentation Templates**
-
-#### **3.2 Project README Template (Enhanced)**
+#### **Project README Template:**
 ```markdown
 # [Project Name]
 
-## 📋 Содержание
-- [Documentation Levels](#documentation-levels)
-- [Business Objective](#business-objective)
-- [Architecture Summary](#architecture-summary)  
-- [Implementation Status](#implementation-status)
-
 ## Documentation Levels
-**📝 Level 1:** [Бриф (идея)](brief-idea.md) - ✅ APPROVED
-**🔧 Level 2:** [Технический бриф](technical-brief.md) - ✅ APPROVED  
-**🏗️ Level 3:** [Архитектурное решение](architecture.md) - ✅ APPROVED
-
-## Business Objective
-[Clear business goal - summary from Level 1]
-
-## Architecture Summary
-[Workflow structure - summary from Level 3]
+- **📝 Level 1:** [Бриф (идея)](brief-idea.md) - ✅ APPROVED
+- **🔧 Level 2:** [Технический бриф](technical-brief.md) - ✅ APPROVED  
+- **🏗️ Level 3:** [Архитектурное решение](architecture.md) - ✅ APPROVED
 
 ## Implementation Status
-**Documentation:** ✅ All levels completed
-**DEV:** [Status]
-**PROD:** [Status]
+- **Documentation:** ✅ All levels completed
+- **DEV:** [Current Status]
+- **PROD:** [Current Status]
+
+## Quick Reference
+- **Business Goal:** [One-line summary from Level 1]
+- **Tech Stack:** [Key technologies from Level 2]
+- **Architecture:** [Workflow structure from Level 3]
 ```
 
-### 🔒 **Security & Credential Setup**
-
-#### **3.3 Security Checklist (Enhanced с Level 2 validation)**
-- [ ] **Credential inventory** - все credentials из Level 2 определены
-- [ ] **Data sensitivity** - classification из Level 1-2 
-- [ ] **Security requirements** из Level 2 implemented
-
-#### **3.4 Credential Management Plan**
+### 🔒 **3.3 Security & Credentials**
+**Source:** Level 2 technical specifications
 ```markdown
-## Required Credentials (из Level 2 Technical Brief)
-1. **[Service Name]** - [Purpose from Level 2]
-   - Type: API Key/OAuth/Basic Auth
-   - n8n Credential Name: [Name in n8n]
-   - Usage: [Which workflows - from Level 3]
-
-2. **[Database/API Name]** - [Purpose from Level 2]
-   - Connection Details: [Requirements from Level 2]
-   - Permissions: [From Level 2 analysis]
+## Required Credentials
+1. **[Service]** - [Purpose from Level 2]
+   - Type: [Authentication method]
+   - n8n Name: [Credential name]
+   - Usage: [Workflows that use it]
 ```
 
-### 🧪 **Testing Strategy Implementation**
-
-#### **3.5 Testing Protocol (Level 3 architecture validation)**
-**Следовать стандартным протоколам + Level 3 specifications:**
-- **Test Webhook pattern** - согласно Level 3 architecture
-- **Parent workflow testing** - validate Level 3 node selections
-- **Fallback scenarios testing** - verify Level 3 backup plans
+### 🧪 **3.4 Testing Strategy**
+**Based on:** Level 3 architecture specifications
+- **Test scenarios** from Level 1 success criteria
+- **Technical validation** against Level 2 logic
+- **Architecture testing** per Level 3 design
 
 ---
 
-## 📋 Implementation Checklist (Enhanced)
+## ✅ Implementation Checklist
 
-### **Pre-Implementation Validation:**
-- [ ] **✅ Level 1: Бриф approved** - идея validated
-- [ ] **✅ Level 2: Technical Brief approved** - technical details complete
-- [ ] **✅ Level 3: Architecture approved** - n8n implementation ready
-- [ ] **All requirements complete** (Phase 1 validation passed)
-- [ ] **Resources allocated** (credentials, access, dependencies)
+### **Pre-Implementation:**
+- [ ] **✅ Level 1 APPROVED** - Business idea validated
+- [ ] **✅ Level 2 APPROVED** - Technical details complete  
+- [ ] **✅ Level 3 APPROVED** - Architecture design ready
+- [ ] **All documentation levels** accessible and complete
 
 ### **During Implementation:**
 - [ ] **Follow Level 3 architecture** exactly as specified
-- [ ] **Implement planned nodes** с n8n documentation compliance
-- [ ] **Test fallback scenarios** from Level 3
-- [ ] **Follow existing CI/CD protocol** для deployment
+- [ ] **Implement planned nodes** with n8n documentation compliance
+- [ ] **Validate against Level 2** technical requirements
+- [ ] **Test Level 1 success criteria** achievement
 
 ### **Post-Implementation:**
-- [ ] **Level 1-3 documentation** archived и accessible
-- [ ] **Testing procedures validated** через MCP tools
-- [ ] **Architecture performance** matches Level 2-3 expectations
+- [ ] **All documentation levels** archived and accessible
+- [ ] **Testing complete** against all three levels
+- [ ] **Performance matches** Level 2-3 expectations
+- [ ] **Business objectives** from Level 1 achieved
 
 ---
 
-## 🎯 Success Criteria (Enhanced)
+## 🎯 Success Criteria
 
-**✅ Project считается properly created когда:**
-- ✅ **Level 1-3 Documentation complete** и approved
-- ✅ **Sequential validation passed** через все levels
-- ✅ **n8n architecture matches** Level 3 specifications
-- ✅ **Performance meets** Level 2 expectations
-- ✅ **Standard structure** implemented
-- ✅ **Test Webhook pattern** working (if needed)
-- ✅ **Security checklist** completed
+**✅ Project успешен когда:**
+- ✅ **Sequential validation** пройдена через все levels
+- ✅ **Implementation matches** Level 3 architecture 
+- ✅ **Technical performance** соответствует Level 2 specs
+- ✅ **Business objectives** из Level 1 достигнуты
+- ✅ **Documentation complete** и accessible
 
-**❌ Project НЕ ready если:**
-- ❌ **Any documentation level missing** или not approved
-- ❌ **Level 3 architecture not validated** против n8n docs
-- ❌ **Technical requirements incomplete** (Level 2 gaps)
-- ❌ Performance not planned или tested
+**❌ Project НЕ готов если:**
+- ❌ **Любой documentation level** missing или incomplete
+- ❌ **Implementation diverges** от Level 3 architecture
+- ❌ **Performance gap** относительно Level 2 requirements
+- ❌ **Business goals unclear** или unmet
 
 ---
 
@@ -307,7 +235,10 @@ docs/
 
 ---
 
-**Created:** September 1, 2025  
-**Updated:** September 2, 2025 - Added Documentation Hierarchy  
+**Version History:**
+- **v1.0:** Original procedure
+- **v1.1:** Added Documentation Hierarchy  
+- **v1.2:** Streamlined structure, removed webhook confusion, clarified Level definitions
+
 **Author:** Technical Writer AI Agent  
 **Review Required:** Product Owner approval before implementation
