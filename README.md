@@ -101,6 +101,7 @@ docs/
 ### 🧪 **Testing & Quality**:
 - **[MCP Webhook Testing Guide](docs/mcp-webhook-testing-guide.md)** - Practical testing procedures
 - **[Testing Strategy](docs/testing-strategy.md)** - Comprehensive testing framework
+- **[Incremental Testing Protocol](docs/incremental-testing-protocol.md)** - Progressive development methodology
 
 ### 🛡️ **Operations & Security**:
 - **[Security Best Practices](docs/security-best-practices.md)** - Security guidelines
