@@ -2,7 +2,7 @@
 
 **🎯 НАЗНАЧЕНИЕ БЛОКА:** Идемпотентная обработка сделок, управление карточками компаний, дедупликация, статусная модель (New/Renew/Old)
 
-**🔗 NAVIGATION:** [← Block 1](block-1-data-collection.md) | [Architecture Overview](architecture.md) | [Next: Block 3 →](block-3-ai-analysis.md)
+**🔗 NAVIGATION:** [← Block 1](block-1-data-collection.md) | [Architecture Overview](../architecture.md) | [Next: Block 3 →](block-3-ai-analysis.md)
 
 ---
 
