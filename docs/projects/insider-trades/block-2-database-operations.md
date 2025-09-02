@@ -20,10 +20,9 @@
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - logic node
 - `batchSize: 1` - обрабатываем по одной сделке (критично для дедупликации)
 - `reset: false` - сохраняем состояние между итерациями
-- **Loop output** → Узел 6 (обработка сделки)
-- **Done output** → Block 3 (переход к следующему блоку)
 
 ---
 
@@ -84,21 +83,22 @@ return [{
 }];
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - pure JavaScript processing node
 - **Dedup key:** Композитный ключ из 6 полей для уникальности сделок
 - **30-card window:** Оптимизация поиска - только последние 30 карточек по дате
 - **Data mapping:** FMP формат → MongoDB schema согласно Level 2 спецификации
-- **Value calculation:** Автоматический расчет стоимости сделки (price × shares)
-- **Type conversion:** Безопасное преобразование строк в числа с fallback
 
 ---
 
 ## Узел 7: MongoDB (Card Lookup)
 **Тип:** `nodes-base.mongoDb` (v1.2)  
 **📍 НАЗНАЧЕНИЕ:** Поиск существующих карточек компании в базе данных (30-карточное окно)  
-**🔧 СТАТУС КОДА:** TEMPLATE - стандартная конфигурация MongoDB find operation
+**🔧 СТАТУС КОДА:** TEMPLATE - стандартная конфигурация MongoDB find с explicit credential
 
 ```json
 {
+  "authentication": "predefinedCredentialType",
+  "nodeCredentialType": "mongoDb",
   "resource": "document",
   "operation": "find",
   "collection": "deals",
@@ -110,10 +110,9 @@ return [{
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **Credential:** `nodeCredentialType: "mongoDb"` - использует MongoDB credential (ID: Jb779SAaphmHAOGs)
 - **Dynamic query:** Использует подготовленный query из предыдущего узла
 - **Collection:** `deals` - основная коллекция карточек компаний
-- **Sort:** `created_at DESC` - новейшие карточки первыми
-- **Limit:** 30 карточек для оптимизации (согласно Level 2)
 
 ---
 
@@ -194,11 +193,10 @@ return [{
 }];
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - pure JavaScript processing node
 - **Дедупликация:** Проверка против всех существующих сделок в карточках
 - **Current session логика:** Карточки созданные сегодня со статусом 'New'
 - **Статусная модель:** New (текущая сессия) → Renew (следующие сессии) → Old (опубликовано)
-- **Action determination:** 4 возможных действия на основе состояния карточек
-- **Data preservation:** Передает все данные + решение о действии
 
 ---
 
@@ -222,24 +220,24 @@ return [{
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - logic node
 - **Condition:** `skipProcessing === false` - обрабатывать только non-duplicate сделки
 - **TRUE path** → Узел 10 (продолжение обработки)
 - **FALSE path** → Обратно к Узел 5 (следующая итерация без обработки)
-- Оптимизация: избегает ненужных API calls для дубликатов
 
 ---
 
 ## Узел 10: HTTP Request (Company Profile)
 **Тип:** `nodes-base.httpRequest` (v4.2)  
 **📍 НАЗНАЧЕНИЕ:** Получение профиля компании от FMP для новых карточек  
-**🔧 СТАТУС КОДА:** CONCEPT - conditional API call с dynamic URL
+**🔧 СТАТУС КОДА:** TEMPLATE - conditional API call с explicit credential selection
 
 ```json
 {
   "method": "GET",
   "url": "={{`https://financialmodelingprep.com/api/v3/profile/${$json.symbol}`}}",
-  "authentication": "genericCredentialType",
-  "genericAuthType": "httpQueryAuth",
+  "authentication": "predefinedCredentialType",
+  "nodeCredentialType": "httpQueryAuth",
   "options": {
     "timeout": 30000,
     "response": {
@@ -252,10 +250,9 @@ return [{
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **Credential:** `nodeCredentialType: "httpQueryAuth"` - использует FMP API credential (ID: k887gSxTZZEgRYIa)
 - **Dynamic URL:** Использует symbol из текущей сделки
 - **neverError: true** - продолжает работу даже если профиль недоступен
-- **Timeout:** 30 секунд для внешнего API
-- Выполняется только для non-duplicate сделок
 
 ---
 
@@ -313,20 +310,21 @@ switch (processedData.cardAction) {
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - pure JavaScript processing node
 - **n8n Compatible:** Данные подготовлены в формате, который понимает MongoDB node
 - **Separate data structures:** INSERT использует прямые поля, UPDATE использует updateTargetId
-- **ID передача:** updateTargetId передается через workflow data для updateKey
-- **Trade addition:** Новые сделки добавляются через отдельное поле для $push операции
 
 ---
 
 ## Узел 12: MongoDB (Execute Operation)
 **Тип:** `nodes-base.mongoDb` (v1.2)  
 **📍 НАЗНАЧЕНИЕ:** Выполнение подготовленной MongoDB операции (INSERT или findOneAndUpdate)  
-**🔧 СТАТУС КОДА:** TEMPLATE - dynamic operation execution с n8n compatibility
+**🔧 СТАТУС КОДА:** TEMPLATE - dynamic operation execution с explicit credential
 
 ```json
 {
+  "authentication": "predefinedCredentialType",
+  "nodeCredentialType": "mongoDb",
   "resource": "document",
   "operation": "={{$json.operation}}",
   "collection": "deals",
@@ -360,11 +358,9 @@ if ($json.operation === 'findOneAndUpdate') {
 ```
 
 **💡 ПОЯСНЕНИЕ:**
+- **Credential:** `nodeCredentialType: "mongoDb"` - использует MongoDB credential (ID: Jb779SAaphmHAOGs)
 - **Dynamic operation:** INSERT или findOneAndUpdate определяется из input data
 - **updateKey="_id":** Поиск документа по _id поля (стандартный MongoDB подход)
-- **Conditional fields:** Различные поля для INSERT vs UPDATE операций
-- **$push operation:** Добавление новых сделок в trades array через MongoDB $push
-- **ID matching:** updateTargetId устанавливается как _id для updateKey matching
 
 ---
 
@@ -375,11 +371,24 @@ if ($json.operation === 'findOneAndUpdate') {
     ↑[Done] → Block 3                                            ↑[FALSE] → 5 [Loop]
 ```
 
-## 🔧 Required Credentials:
-**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
+## 🔐 Required Credentials:
+
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage patterns.
+
+| Node | Credential Type | Credential Name | ID Reference |
+|------|----------------|-----------------|--------------|
+| **Узел 7 (MongoDB Lookup)** | `mongoDb` | MongoDB account | `Jb779SAaphmHAOGs` |
+| **Узел 10 (FMP Profile)** | `httpQueryAuth` | FMP API | `k887gSxTZZEgRYIa` |
+| **Узел 12 (MongoDB Execute)** | `mongoDb` | MongoDB account | `Jb779SAaphmHAOGs` |
+| **Узлы 5,6,8,9,11,12a** | _No credentials_ | N/A | N/A |
+
+**💡 Credential Usage:**
+- **MongoDB credentials** automatically handle connection, authentication, and database selection
+- **FMP API credential** automatically injects API key via query parameter
+- **All credential assignments** use predefined credential approach: `"nodeCredentialType": "[type]"`
 
 ---
 
-**📝 STATUS:** ✅ FIXED - MongoDB operations теперь n8n-compatible  
-**🔧 RED FLAG 2:** ✅ RESOLVED - Corrected invalid updateValue, added proper field configuration  
+**📝 STATUS:** ✅ FIXED - explicit credential specification added  
+**🔧 RED FLAG 4:** ✅ PROGRESS - Block 2 credential selection standardized  
 **🔄 NEXT:** [Block 3: AI Analysis & Intelligence →](block-3-ai-analysis.md)
