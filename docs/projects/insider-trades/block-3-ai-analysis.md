@@ -2,7 +2,7 @@
 
 **🎯 НАЗНАЧЕНИЕ БЛОКА:** Получение карточек со статусом "New", AI анализ компаний через DeepSeek + web search, создание surveys записей в MongoDB
 
-**🔗 NAVIGATION:** [← Block 2](block-2-database-operations.md) | [Architecture Overview](architecture.md) | [Next: Block 4 →](block-4-content-publishing.md)
+**🔗 NAVIGATION:** [← Block 2](block-2-database-operations.md) | [Architecture Overview](../architecture.md) | [Next: Block 4 →](block-4-content-publishing.md)
 
 ---
 
@@ -131,6 +131,8 @@
 **📍 НАЗНАЧЕНИЕ:** Обработка JSON ответа от AI Agent, валидация и подготовка для surveys коллекции  
 **🔧 СТАТУС КОДА:** CONCEPT - обработка AI output с error handling
 
+**Режим:** `runOnceForEachItem` - обрабатывает AI ответ для текущей компании
+
 ```javascript
 const companyCard = $input.item(0).json; // From Split In Batches
 const aiResponse = $input.item(1).json; // From AI Agent
@@ -203,6 +205,12 @@ return [{
   }
 }];
 ```
+**💡 ПОЯСНЕНИЕ:**
+- **JSON parsing:** Извлечение структурированного ответа из AI Agent output
+- **Error handling:** Fallback на default QA при parsing ошибках
+- **Data validation:** Проверка структуры и ограничение длины ответов
+- **Token calculation:** Оценка стоимости AI Agent вызова
+- **Survey preparation:** Подготовка документа для MongoDB surveys коллекции
 
 ---
 
@@ -219,6 +227,12 @@ return [{
   "fields": "symbol,polled_at,qa,tokens_used,cost_usd,telegraph_url,processing_error"
 }
 ```
+**💡 ПОЯСНЕНИЕ:**
+- **Collection:** `surveys` - отдельная коллекция для AI анализа
+- **Operation:** INSERT - всегда новая запись для каждого анализа
+- **Document source:** Использует подготовленный surveyDocument из предыдущего узла
+- **Fields:** Все поля surveys schema согласно Level 2 спецификации
+- **После выполнения** → возврат к Узел 14 для следующей компании
 
 ---
 
@@ -240,4 +254,4 @@ AI Agent Ecosystem:
 ---
 
 **📝 STATUS:** ✅ COMPLETE - концептуальная спецификация с AI Agent ecosystem  
-**🔄 NEXT:** [Block 4: Content Generation & Publishing →](block-4-content-publishing.md)
+**🔄 NEXT:** [Block 4: Content Generation & Publishing →](block-4-content-publishing.md) *(pending)*
