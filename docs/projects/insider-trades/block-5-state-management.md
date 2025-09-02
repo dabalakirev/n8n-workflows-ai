@@ -1,42 +1,43 @@
 # Block 5: State Management & Completion (Узлы 24-25)
 
-**🎯 НАЗНАЧЕНИЕ БЛОКА:** Финализация цикла workflow - обновление surveys с telegraph_url, перевод статусов карточек New/Renew → Old, установка posted_at timestamps, завершение 60-минутного цикла
+**🎯 НАЗНАЧЕНИЕ БЛОКА:** Финализация цикла workflow - перевод статусов карточек New/Renew → Old, установка posted_at timestamps, завершение 60-минутного цикла
 
 **🔗 NAVIGATION:** [← Block 4](block-4-content-publishing.md) | [Architecture Overview](../architecture.md) | **FINAL BLOCK**
 
 ---
 
-## Узел 24: MongoDB (Survey Telegraph Updates)
+## Узел 24: MongoDB (Card Status Finalization)
 **Тип:** `nodes-base.mongoDb` (v1.2)  
-**📍 НАЗНАЧЕНИЕ:** Bulk update surveys коллекции с telegraph_url из Block 4 processing  
-**🔧 СТАТУС КОДА:** CONCEPT - bulk update операция с data consistency
+**📍 НАЗНАЧЕНИЕ:** Bulk update карточек New/Renew → Old статус для завершения publishing cycle  
+**🔧 СТАТУС КОДА:** TEMPLATE - bulk status update операция с timestamp management
 
 ```json
 {
   "resource": "document",
   "operation": "updateMany",
-  "collection": "surveys",
-  "query": "{{ JSON.stringify({ telegraph_url: null }) }}",
-  "updateDocument": "{{ JSON.stringify({\n  $set: {\n    telegraph_url: $json.telegraphUrl,\n    updated_at: new Date().toISOString(),\n    publishing_status: 'completed'\n  }\n}) }}",
+  "collection": "deals",
+  "query": "{{ JSON.stringify({ trade_status: { $in: ['New', 'Renew'] } }) }}",
+  "updateDocument": "{{ JSON.stringify({\n  $set: {\n    trade_status: 'Old',\n    posted_at: new Date().toISOString(),\n    updated_at: new Date().toISOString(),\n    cycle_completed: true\n  }\n}) }}",
   "options": {
     "upsert": false
   }
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
-- **Operation:** updateMany для batch обновления surveys
-- **Filter:** `telegraph_url: null` - только неопубликованные surveys из текущего цикла
-- **Updates:** telegraph_url + updated_at timestamp + publishing status
-- **Input:** Done output из Block 4 (все Telegraph статьи созданы)
-- **Data consistency:** Atomic update operation для всех обработанных surveys
-- **Purpose:** Связывание surveys с созданными Telegraph статьями
+- **Operation:** updateMany для batch обновления всех active карточек
+- **Filter:** `trade_status: { $in: ['New', 'Renew'] }` - все cards готовые к finalization
+- **Status transition:** New/Renew → Old (published state)
+- **Timestamp:** posted_at установка для audit trail
+- **Cycle marker:** cycle_completed flag для tracking
+- **Input:** Done output из Block 4 (все Telegraph статьи созданы и surveys updated)
+- **Purpose:** Финализация card statuses после successful publishing
 
 ---
 
-## Узел 25: Code (Cycle Completion & Status Management)
+## Узел 25: Code (Cycle Completion & Statistics)
 **Тип:** `nodes-base.code` (v2)  
-**📍 НАЗНАЧЕНИЕ:** Финализация workflow цикла - обновление статусов карточек, установка timestamps, completion logging  
-**🔧 СТАТУС КОДА:** CONCEPT - comprehensive cycle completion с bulk operations
+**📍 НАЗНАЧЕНИЕ:** Финализация workflow цикла - completion logging, statistics calculation, next cycle preparation  
+**🔧 СТАТУС КОДА:** TEMPLATE - comprehensive cycle completion с performance metrics
 
 **Режим:** `runOnceForAllItems` - обрабатывает completion для всего цикла
 
@@ -45,68 +46,39 @@
 const cycleStartTime = new Date();
 const cycleId = `cycle-${Date.now()}`;
 
-// Step 1: Update all published cards to "Old" status
-const currentTime = cycleStartTime.toISOString();
-
-// Prepare bulk operations for deals collection
-const bulkDealsOperations = [];
-
 try {
-  // Update all New/Renew cards that have been successfully published
-  // These are cards that went through the complete pipeline
-  const statusUpdateOperation = {
-    updateMany: {
-      filter: { 
-        trade_status: { $in: ["New", "Renew"] }
-      },
-      update: {
-        $set: {
-          trade_status: "Old",
-          posted_at: currentTime,
-          updated_at: currentTime,
-          cycle_id: cycleId
-        }
-      }
-    }
-  };
+  // Get MongoDB update result from previous node
+  const cardUpdateResult = $input.first().json;
   
-  bulkDealsOperations.push(statusUpdateOperation);
-  
-  console.log(`Cycle ${cycleId}: Finalizing card statuses New/Renew → Old`);
-  
-  // Step 2: Calculate cycle statistics
+  // Calculate cycle statistics
   const cycleStats = {
     cycle_id: cycleId,
     started_at: cycleStartTime.toISOString(),
     completed_at: new Date().toISOString(),
     duration_seconds: Math.round((Date.now() - cycleStartTime.getTime()) / 1000),
     
+    // Card status transitions
+    cards_finalized: cardUpdateResult.modifiedCount || 0,
+    cards_published: cardUpdateResult.matchedCount || 0,
+    
     // These would be populated from previous blocks in real implementation
     deals_processed: $input.all().length || 0,
-    cards_created: 0, // Would come from Block 2 output
-    cards_updated: 0, // Would come from Block 2 output  
-    ai_analyses_completed: 0, // Would come from Block 3 output
-    telegraph_articles_created: 0, // Would come from Block 4 output
-    telegram_messages_sent: 0, // Would come from Block 4 output
+    ai_analyses_completed: 0, // Would come from Block 3 statistics
+    telegraph_articles_created: 0, // Would come from Block 4 individual updates
+    telegram_messages_sent: 0, // Would come from Block 4 Telegram publishing
     
-    status: "completed"
+    status: "completed",
+    next_execution: new Date(Date.now() + 60 * 60 * 1000).toISOString() // +60 minutes
   };
   
-  // Step 3: Log completion metrics
+  // Log completion metrics
   console.log(`=== CYCLE COMPLETION REPORT ===`);
   console.log(`Cycle ID: ${cycleStats.cycle_id}`);
   console.log(`Duration: ${cycleStats.duration_seconds} seconds`);
-  console.log(`Cards Status Updated: New/Renew → Old`);
-  console.log(`Timestamp Set: ${cycleStats.completed_at}`);
-  console.log(`Next Cycle: +60 minutes`);
-  console.log(`=== END CYCLE REPORT ===`);
-  
-  // Step 4: Prepare MongoDB bulk operations payload
-  const mongoOperations = {
-    collection: "deals",
-    operations: bulkDealsOperations,
-    cycleStats: cycleStats
-  };
+  console.log(`Cards Finalized: ${cycleStats.cards_finalized} (New/Renew → Old)`);
+  console.log(`Posted Timestamp: ${cycleStats.completed_at}`);
+  console.log(`Next Cycle: ${cycleStats.next_execution}`);
+  console.log(`=== WORKFLOW CYCLE COMPLETE ===`);
   
   return [{
     json: {
@@ -114,12 +86,12 @@ try {
         success: true,
         cycleId: cycleId,
         completedAt: cycleStats.completed_at,
-        operations: mongoOperations,
+        cardsFinalized: cycleStats.cards_finalized,
         message: "Workflow cycle completed successfully"
       },
-      mongoOperations: mongoOperations,
       cycleStats: cycleStats,
-      nextExecution: new Date(Date.now() + 60 * 60 * 1000).toISOString() // +60 minutes
+      workflowStatus: "ready_for_next_cycle",
+      nextExecution: cycleStats.next_execution
     }
   }];
   
@@ -134,27 +106,26 @@ try {
         error: error.message,
         completedAt: new Date().toISOString()
       },
-      mongoOperations: null,
-      cycleStats: null
+      cycleStats: null,
+      workflowStatus: "error_requires_review"
     }
   }];
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
-- **Cycle management:** Генерация уникального cycle_id для отслеживания
-- **Bulk status updates:** Подготовка MongoDB bulk operations для efficiency
-- **Status transitions:** New/Renew → Old для всех опубликованных карточек
-- **Timestamp management:** posted_at и updated_at установка
-- **Completion logging:** Comprehensive cycle statistics и metrics
-- **Error handling:** Graceful handling с error logging
-- **Next cycle preparation:** Расчет времени следующего выполнения
-- **MongoDB operations:** Подготовка bulk updates для atomic execution
+- **Focus on card finalization:** Primary responsibility перевод статусов карточек
+- **Statistics calculation:** Performance metrics для monitoring workflow health
+- **Completion logging:** Comprehensive cycle reports для operational visibility
+- **Next cycle preparation:** Ready state для следующего Cron trigger
+- **Error handling:** Graceful failure handling с proper error logging
+- **No Telegraph URL management:** Responsibility перенесена в Block 4
+- **Clean separation:** Block 4 = individual publishing, Block 5 = bulk finalization
 
 ---
 
-## 📋 Block Connections:
+## 📋 Block Connections (UPDATED):
 ```
-Block 4 [Done] → 24 (Survey Updates) → 25 (Cycle Completion) → [WORKFLOW END]
+Block 4 [Done] → 24 (Card Status Finalization) → 25 (Cycle Completion) → [WORKFLOW END]
 ```
 
 ## 🔧 Required Credentials:
@@ -163,32 +134,32 @@ Block 4 [Done] → 24 (Survey Updates) → 25 (Cycle Completion) → [WORKFLOW E
 ## 📊 Data Flow Analysis:
 
 ### Input Requirements:
-- **Block 4 completion** - все Telegraph статьи созданы и Telegram сообщения отправлены
-- **Telegraph URLs** - успешно созданные статьи для survey updates
+- **Block 4 completion** - все Telegraph статьи созданы, surveys individually updated, Telegram сообщения отправлены
 - **Active card states** - карточки со статусами New/Renew готовые к финализации
+- **Publishing confirmation** - Telegraph URLs assigned per survey в Block 4
 
 ### Output Deliverables:
-- **Updated surveys** - telegraph_url поля populated, publishing_status = 'completed'
 - **Finalized card statuses** - все New/Renew карточки → Old
-- **Posted timestamps** - posted_at установлен для всех опубликованных карточек
+- **Posted timestamps** - posted_at установлен для всех опубликованных карточек  
 - **Cycle completion** - workflow готов к следующему 60-минутному циклу
+- **Performance metrics** - cycle statistics для monitoring
 
 ### Completion Strategy:
-- **Atomic operations** - bulk updates для data consistency
-- **Comprehensive logging** - cycle statistics и performance metrics
-- **Status tracking** - clear indication что цикл завершен
-- **Error resilience** - graceful handling completion failures
-- **Next cycle ready** - система готова к следующему запуску
+- **Card status management:** Focus на bulk card transitions New/Renew → Old
+- **Timestamp tracking:** posted_at establishment для audit trail
+- **Statistics logging:** Comprehensive performance и operational metrics
+- **Clean state reset:** Sistema готова к следующему Cron cycle
+- **Error resilience:** Graceful handling completion failures
 
 ---
 
 ## 🎯 Cycle Completion Checklist:
 
 ### ✅ Data Finalization:
-- [ ] **Survey records updated** - telegraph_url связи установлены
 - [ ] **Card statuses finalized** - все New/Renew → Old transitions
 - [ ] **Timestamps set** - posted_at для tracking публикации
 - [ ] **Cycle metadata** - cycle_id, duration, statistics logged
+- [ ] **Publishing confirmation** - surveys уже updated с individual Telegraph URLs в Block 4
 
 ### ✅ System State Reset:
 - [ ] **Workflow completion** - готовность к следующему Cron trigger
@@ -202,7 +173,14 @@ Block 4 [Done] → 24 (Survey Updates) → 25 (Cycle Completion) → [WORKFLOW E
 - [ ] **Audit trail** - полная прослеживаемость операций цикла
 - [ ] **Idempotency** - повторный запуск не нарушит data consistency
 
+### **🔧 RED FLAG 3 ARCHITECTURAL CORRECTION:**
+- ✅ **Telegraph URL assignment removed** - теперь handled в Block 4 individually
+- ✅ **Focus on card lifecycle** - Block 5 responsibility четко defined
+- ✅ **Data consistency maintained** - no more bulk telegraph_url overwrites
+- ✅ **Clear separation of concerns** - Block 4 = publishing, Block 5 = finalization
+
 ---
 
-**📝 STATUS:** ✅ COMPLETE - финализация архитектуры с comprehensive cycle management  
-**🏁 ACHIEVEMENT:** 25 узлов workflow архитектуры ЗАВЕРШЕНЫ - 100% Level 3 ready для validation
+**📝 STATUS:** ✅ FIXED - Block 5 refocused на card status management only  
+**🔧 RED FLAG 3:** ✅ RESOLVED - Removed incorrect telegraph_url bulk updates, clean architectural separation  
+**🏁 ACHIEVEMENT:** 25 узлов workflow архитектуры с CORRECTED Telegraph URL logic
