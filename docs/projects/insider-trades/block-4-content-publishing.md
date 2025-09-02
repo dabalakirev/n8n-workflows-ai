@@ -91,10 +91,10 @@
 
 ---
 
-## Узел 21: Code (Telegraph Response Processing)
+## Узел 21: Code (Telegraph Response Processing & Survey Update)
 **Тип:** `nodes-base.code` (v2)  
-**📍 НАЗНАЧЕНИЕ:** Обработка Telegraph API response и подготовка данных для Telegram публикации  
-**🔧 СТАТУС КОДА:** CONCEPT - response parsing с fallback logic
+**📍 НАЗНАЧЕНИЕ:** Обработка Telegraph API response и подготовка данных для individual survey update  
+**🔧 СТАТУС КОДА:** TEMPLATE - response parsing с individual MongoDB update preparation
 
 **Режим:** `runOnceForEachItem` - обрабатывает Telegraph response для текущего survey
 
@@ -104,6 +104,7 @@ const telegraphResponse = $input.first().json.telegraphResponse;
 
 let telegraphUrl = null;
 let processingError = null;
+let mongoUpdateOperation = null;
 
 try {
   // Parse Telegraph API response
@@ -116,6 +117,18 @@ try {
     } else {
       throw new Error('No URL or path in Telegraph response');
     }
+    
+    // SUCCESS: Prepare MongoDB update for individual survey
+    mongoUpdateOperation = {
+      operation: 'findOneAndUpdate',
+      surveyId: surveyData._id,
+      updates: {
+        telegraph_url: telegraphUrl,
+        updated_at: new Date().toISOString(),
+        publishing_status: 'telegraph_created'
+      }
+    };
+    
   } else {
     throw new Error(`Telegraph API error: ${telegraphResponse?.error || 'Unknown error'}`);
   }
@@ -124,12 +137,20 @@ try {
   processingError = error.message;
   console.log(`Telegraph processing error for ${surveyData.symbol}: ${error.message}`);
   
-  // Fallback: skip Telegraph URL (will be handled in Telegram publishing)
-  telegraphUrl = null;
+  // ERROR: Prepare MongoDB update with error status
+  mongoUpdateOperation = {
+    operation: 'findOneAndUpdate',
+    surveyId: surveyData._id,
+    updates: {
+      telegraph_url: null,
+      updated_at: new Date().toISOString(),
+      publishing_status: 'telegraph_failed',
+      publishing_error: error.message
+    }
+  };
 }
 
-// Prepare data for Telegram publishing
-// Need to fetch the corresponding company card from deals collection
+// Prepare data for next nodes
 const telegramPayload = {
   symbol: surveyData.symbol,
   telegraphUrl: telegraphUrl,
@@ -140,18 +161,72 @@ const telegramPayload = {
 
 return [{
   json: {
+    mongoUpdateOperation: mongoUpdateOperation,
     telegramPayload: telegramPayload,
     surveyData: surveyData,
-    telegraphSuccess: !!telegraphUrl
+    telegraphSuccess: !!telegraphUrl,
+    requiresMongoUpdate: true
   }
 }];
 ```
 **💡 ПОЯСНЕНИЕ:**
-- **Response parsing:** Извлечение Telegraph URL из API response
-- **URL construction:** Обработка как полных URLs так и path references
-- **Error handling:** Graceful fallback при Telegraph API ошибках
-- **Data preparation:** Подготовка payload для Telegram publishing
-- **Status tracking:** Boolean flag успешности Telegraph создания
+- **Individual survey targeting:** Использует surveyData._id для точного обновления
+- **Success path:** telegraph_url + publishing_status = 'telegraph_created'
+- **Error path:** null URL + publishing_status = 'telegraph_failed' + error message
+- **MongoDB operation:** Подготовка findOneAndUpdate для individual survey
+- **Data flow:** Сохранение всех данных для следующих узлов
+
+---
+
+## Узел 21a: MongoDB (Individual Survey Telegraph Update)
+**Тип:** `nodes-base.mongoDb` (v1.2)  
+**📍 НАЗНАЧЕНИЕ:** Individual обновление survey с Telegraph URL или error status  
+**🔧 СТАТУС КОДА:** TEMPLATE - individual survey update с proper error handling
+
+```json
+{
+  "resource": "document",
+  "operation": "findOneAndUpdate",
+  "collection": "surveys",
+  "updateKey": "_id",
+  "fields": "telegraph_url,updated_at,publishing_status,publishing_error",
+  "upsert": false
+}
+```
+
+**🔧 ADDITIONAL CODE for survey ID and updates:**
+**Добавить отдельный Code node (21b) перед MongoDB node:**
+
+```javascript
+const operationData = $input.first().json;
+
+if (operationData.requiresMongoUpdate && operationData.mongoUpdateOperation) {
+  const updateOp = operationData.mongoUpdateOperation;
+  
+  return [{
+    json: {
+      ...operationData,
+      // Set the survey ID for updateKey matching
+      _id: updateOp.surveyId,
+      // Set update fields
+      telegraph_url: updateOp.updates.telegraph_url,
+      updated_at: updateOp.updates.updated_at,
+      publishing_status: updateOp.updates.publishing_status,
+      publishing_error: updateOp.updates.publishing_error || null
+    }
+  }];
+} else {
+  // Pass through without update
+  return [$input.all()];
+}
+```
+
+**💡 ПОЯСНЕНИЕ:**
+- **Individual targeting:** updateKey="_id" с конкретным survey ID
+- **Conditional updates:** Только surveys с успешным/failed Telegraph processing
+- **Status tracking:** publishing_status для мониторинга process
+- **Error logging:** publishing_error для debugging failed Telegraph creations
+- **Data integrity:** Каждая survey получает правильный telegraph_url
 
 ---
 
@@ -214,15 +289,15 @@ return [{
 - **Caption formatting:** HTML markup с company info и trades список
 - **Market cap:** Человекочитаемый формат (3.5T, 950B, 12.3B)
 - **Trades display:** Максимум 5 recent сделок с форматированием
-- **Inline keyboard:** "ПОДРОБНЕЕ" кнопка → Telegraph URL
+- **Inline keyboard:** "ПОДРОБНЕЕ" кнопка → Telegraph URL (individual для каждого survey)
 - **Error handling:** 3 retry attempts для network reliability
 - **Fallback URL:** Channel link если Telegraph недоступен
 
 ---
 
-## 📋 Block Connections:
+## 📋 Block Connections (UPDATED):
 ```
-18 (Survey Query) → 19 (Split) [Loop] → 20 (Telegraph) → 21 (Process) → 22 (Card Lookup) → 23 (Telegram) → 19 [Loop]
+18 (Survey Query) → 19 (Split) [Loop] → 20 (Telegraph) → 21 (Process) → 21b (Update Prep) → 21a (Survey Update) → 22 (Card Lookup) → 23 (Telegram) → 19 [Loop]
                          ↑[Done] → Block 5
 ```
 
@@ -239,16 +314,24 @@ return [{
 
 ### Output Deliverables:
 - **Telegraph articles** - published статьи с QA content
-- **Telegram messages** - канальные сообщения с photos и inline кнопками
-- **Survey updates** - telegraph_url поля populated
+- **Individual survey updates** - каждая survey получает правильный telegraph_url
+- **Telegram messages** - канальные сообщения с photos и individual inline кнопками
+- **Status tracking** - publishing_status для каждого survey (success/failed)
 
 ### Error Handling Strategy:
-- **Telegraph failures** → skip article creation, log error, continue
-- **Telegram failures** → retry 3 times, maintain card status для re-processing
+- **Telegraph failures** → survey marked as 'telegraph_failed', error logged, Telegram continues с fallback
+- **Telegram failures** → retry 3 times, maintain survey status для re-processing
 - **Missing company data** → fallback values, simplified message format
 - **Chart URL failures** → text-only Telegram message
 
+### **🔧 RED FLAG 3 RESOLUTION:**
+- ✅ **Individual Telegraph URL assignment** - каждая survey получает свой URL
+- ✅ **Block 5 освобожден** от неправильных telegraph_url updates  
+- ✅ **Data integrity maintained** - никакой loss индивидуальных URLs
+- ✅ **Error handling improved** - individual survey status tracking
+
 ---
 
-**📝 STATUS:** ✅ COMPLETE - детальная спецификация с Telegraph + Telegram integration  
+**📝 STATUS:** ✅ FIXED - Telegraph URL assignment теперь individual per survey  
+**🔧 RED FLAG 3:** ✅ RESOLVED - Eliminated bulk telegraph_url overwrites, implemented individual updates  
 **🔄 NEXT:** [Block 5: State Management & Completion →](block-5-state-management.md)
