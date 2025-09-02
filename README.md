@@ -2,7 +2,6 @@
 
 ![Platform Status](https://img.shields.io/badge/platform-v1.2.1--release--ready-brightgreen)
 ![First Bird](https://img.shields.io/badge/first--bird-100%25--complete-success)
-![Insider Trades](https://img.shields.io/badge/insider--trades-phase--1--setup-yellow)
 ![License](https://img.shields.io/badge/license-Friends%20Only-purple)
 
 **AI-Powered Automation Platform** для разработки n8n workflows с test-driven development и современными DevOps практиками
@@ -56,10 +55,6 @@ workflows/
 │   ├── dev/                    # DEV workflows с test webhook
 │   ├── prod/                   # PROD workflows ready
 │   └── README.md               # Project documentation
-├── insider-trades-monitor/ 🚀  # Insider Trades Automation [PHASE 1 SETUP]
-│   ├── dev/                    # DEV workflows (Issues #35, #36, #37)
-│   ├── prod/                   # PROD workflows (planned)
-│   └── README.md               # Project documentation ✅
 └── README.md                  # Platform workflows guide
 ```
 
@@ -73,8 +68,7 @@ docs/
 ├── procedures/             # Isolated procedures
 │   └── new-project-creation-procedure.md
 └── projects/               # Project-specific documentation
-    ├── first-bird/         # Complete project docs [ISOLATED]
-    └── insider-trades-monitor/ ✅  # Project docs (Phase 1 setup complete)
+    └── first-bird/         # Complete project docs [ISOLATED]
 ```
 
 ## 🚀 Начало Работы
@@ -122,13 +116,10 @@ docs/
 
 ### 🚫 **Project Documentation** (НЕ ЧИТАТЬ без указания):
 - `docs/projects/first-bird/` - First Bird project documentation [ISOLATED]
-- `docs/projects/insider-trades-monitor/` - Insider Trades project documentation [ISOLATED]
 - `workflows/first-bird/` - First Bird workflows [ISOLATED]
-- `workflows/insider-trades-monitor/` - Insider Trades workflows [ISOLATED]
 
 ### 🎯 **Active Projects:**
 - **[First Bird Project](workflows/first-bird/)** - Financial Data Automation [100% COMPLETE]
-- **[Insider Trades Monitor](workflows/insider-trades-monitor/)** - Insider Trades Automation [PHASE 1 SETUP]
 
 ## 🔧 Технологии
 
