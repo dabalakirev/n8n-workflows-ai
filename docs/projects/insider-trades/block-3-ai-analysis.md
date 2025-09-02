@@ -247,11 +247,9 @@ AI Agent Ecosystem:
 ```
 
 ## 🔧 Required Credentials:
-- **MongoDB** - mongoDb credential для узлов 13, 17
-- **DeepSeek API** - deepSeekApi credential для узла 15a
-- **SerpApi** - serpApi credential для узла 15b
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
 
 ---
 
 **📝 STATUS:** ✅ COMPLETE - концептуальная спецификация с AI Agent ecosystem  
-**🔄 NEXT:** [Block 4: Content Generation & Publishing →](block-4-content-publishing.md) *(pending)*
+**🔄 NEXT:** [Block 4: Content Generation & Publishing →](block-4-content-publishing.md)
