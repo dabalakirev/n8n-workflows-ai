@@ -81,6 +81,7 @@
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **Authentication:** Node credential system автоматически добавляет access_token из Telegraph credential
 - **Method:** POST к Telegraph createPage API
 - **Title:** `"SYMBOL - Первый вопрос"` для читаемости
 - **Content:** Динамическое форматирование QA pairs как HTML параграфы
@@ -207,6 +208,7 @@ return [{
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **Authentication:** Node credential system автоматически добавляет bot token в URL
 - **Method:** sendPhoto для сообщений с изображениями
 - **Photo:** chart_url из company card (fallback если недоступен)
 - **Caption formatting:** HTML markup с company info и trades список
@@ -226,6 +228,8 @@ return [{
 
 ## 🔧 Required Credentials:
 **See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
+
+**⚠️ Development Note:** Use `nodeCredentialType` approach - n8n credential system automatically injects API keys/tokens into requests.
 
 ## 📊 Data Flow Analysis:
 
