@@ -31,14 +31,14 @@
 ## Узел 2: HTTP Request (FMP API)
 **Тип:** `nodes-base.httpRequest` (v4.2)  
 **📍 НАЗНАЧЕНИЕ:** Получение последних 500 инсайдерских сделок от FMP Latest Insider Trading API  
-**🔧 СТАТУС КОДА:** CONCEPT - основная структура с credential integration
+**🔧 СТАТУС КОДА:** TEMPLATE - ready configuration с explicit credential selection
 
 ```json
 {
   "method": "GET",
   "url": "https://financialmodelingprep.com/stable/insider-trading/latest",
-  "authentication": "genericCredentialType",
-  "genericAuthType": "httpQueryAuth",
+  "authentication": "predefinedCredentialType",
+  "nodeCredentialType": "httpQueryAuth",
   "sendQuery": true,
   "specifyQuery": "keypair",
   "queryParameters": {
@@ -60,7 +60,7 @@
 }
 ```
 **💡 ПОЯСНЕНИЕ:** 
-- `httpQueryAuth` - передает API key через query parameter (стандарт FMP)
+- **Credential:** `nodeCredentialType: "httpQueryAuth"` - использует FMP API credential (ID: k887gSxTZZEgRYIa)
 - `limit: 500` - максимальная выборка согласно Level 2 ограничениям
 - `timeout: 30000` - 30 секунд для внешнего API call
 - `neverError: false` - позволяет workflow остановиться при API failures
@@ -97,10 +97,10 @@ console.log(`Original: ${$input.all().length}, Filtered: ${filteredDeals.length}
 return filteredDeals;
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - pure JavaScript processing node
 - **Фильтр 1:** `transactionType === "P-Purchase"` - только покупки инсайдеров
 - **Фильтр 2:** `securityName` проверка против whitelist - исключает опционы/варранты
 - **Фильтр 3:** Валидация required fields - предотвращает обработку неполных данных
-- **Логирование:** Счетчики до/после фильтрации для мониторинга
 
 ---
 
@@ -126,10 +126,10 @@ return filteredDeals;
 }
 ```
 **💡 ПОЯСНЕНИЕ:**
+- **No credentials required** - logic node
 - **Condition:** `array.length > 0` - проверяет наличие отфильтрованных сделок
 - **TRUE path** → Block 2 (продолжение обработки)
 - **FALSE path** → Workflow end (экономия ресурсов при пустых результатах)
-- `looseTypeValidation: false` - строгая проверка типов
 
 ---
 
@@ -140,10 +140,21 @@ return filteredDeals;
                                             ↑[FALSE] → END
 ```
 
-## 🔧 Required Credentials:
-**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
+## 🔐 Required Credentials:
+
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage patterns.
+
+| Node | Credential Type | Credential Name | ID Reference |
+|------|----------------|-----------------|--------------|
+| **Узел 2 (FMP API)** | `httpQueryAuth` | FMP API | `k887gSxTZZEgRYIa` |
+| **Узел 1,3,4** | _No credentials_ | N/A | N/A |
+
+**💡 Credential Usage:**
+- **FMP API credential** automatically injects API key via query parameter
+- **Узел 2** uses predefined credential approach: `"nodeCredentialType": "httpQueryAuth"`
 
 ---
 
-**📝 STATUS:** ✅ COMPLETE - концептуальная спецификация с пояснениями  
+**📝 STATUS:** ✅ COMPLETE - explicit credential specification added  
+**🔧 RED FLAG 4:** ✅ PROGRESS - Block 1 credential selection standardized  
 **🔄 NEXT:** [Block 2: Database Operations & Card Management →](block-2-database-operations.md)
