@@ -66,7 +66,7 @@
   "nodeCredentialType": "telegraphApi",
   "sendBody": true,
   "bodyContentType": "json",
-  "jsonBody": "={{ JSON.stringify({\n  access_token: $credentials.telegraphApi.accessToken,\n  title: `${$json.symbol} - ${$json.qa[0]?.q || 'Анализ компании'}`,\n  content: $json.qa.map(item => ({\n    tag: 'p',\n    children: [\n      { tag: 'strong', children: [item.q + ':'] },\n      { tag: 'br' },\n      item.a\n    ]\n  })),\n  return_content: false,\n  author_name: 'Insider Trades Bot',\n  author_url: 'https://t.me/insider_trades_channel'\n}) }}",
+  "jsonBody": "={{ JSON.stringify({\n  title: `${$json.symbol} - ${$json.qa[0]?.q || 'Анализ компании'}`,\n  content: $json.qa.map(item => ({\n    tag: 'p',\n    children: [\n      { tag: 'strong', children: [item.q + ':'] },\n      { tag: 'br' },\n      item.a\n    ]\n  })),\n  return_content: false,\n  author_name: 'Insider Trades Bot',\n  author_url: 'https://t.me/insider_trades_channel'\n}) }}",
   "options": {
     "timeout": 10000,
     "retry": {
@@ -82,7 +82,6 @@
 ```
 **💡 ПОЯСНЕНИЕ:**
 - **Method:** POST к Telegraph createPage API
-- **Authentication:** Telegraph credentials из n8n credential system
 - **Title:** `"SYMBOL - Первый вопрос"` для читаемости
 - **Content:** Динамическое форматирование QA pairs как HTML параграфы
 - **Author fields:** Branding для Insider Trades
@@ -226,9 +225,7 @@ return [{
 ```
 
 ## 🔧 Required Credentials:
-- **MongoDB** - mongoDb credential для узлов 18, 22
-- **Telegraph API** - telegraphApi credential для узла 20  
-- **Telegram Bot** - telegramBot credential для узла 23
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
 
 ## 📊 Data Flow Analysis:
 
@@ -250,4 +247,4 @@ return [{
 ---
 
 **📝 STATUS:** ✅ COMPLETE - детальная спецификация с Telegraph + Telegram integration  
-**🔄 NEXT:** [Block 5: State Management & Completion →](block-5-state-management.md) *(pending)*
+**🔄 NEXT:** [Block 5: State Management & Completion →](block-5-state-management.md)
