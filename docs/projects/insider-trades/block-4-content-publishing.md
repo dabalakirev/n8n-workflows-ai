@@ -146,8 +146,8 @@
 
 ## Узел 23: HTTP Request (Telegram Publishing)
 **Тип:** `nodes-base.httpRequest` (v4.2)  
-**📍 НАЗНАЧЕНИЕ:** Публикация сообщения с фото и inline кнопкой в Telegram канал  
-**🔧 СТАТУС КОДА:** TEMPLATE - Telegram Bot API с explicit credential
+**📍 НАЗНАЧЕНИЕ:** Публикация сообщения с фото и inline кнопкой в Telegram канал с HTML formatting  
+**🔧 СТАТУС КОДА:** TEMPLATE - Telegram Bot API с explicit credential и HTML parse mode
 
 ```json
 {
@@ -157,7 +157,7 @@
   "nodeCredentialType": "telegramApi",
   "sendBody": true,
   "bodyContentType": "json",
-  "jsonBody": "[Existing dynamic JSON body code...]",
+  "jsonBody": "={{ JSON.stringify({\n  chat_id: $json.telegramPayload.chat_id,\n  photo: $json.telegramPayload.photo_url,\n  caption: $json.telegramPayload.caption,\n  parse_mode: 'HTML',\n  reply_markup: $json.telegramPayload.reply_markup\n}) }}",
   "options": {
     "timeout": 15000,
     "retry": {
@@ -171,9 +171,33 @@
   }
 }
 ```
+
+**🔧 TELEGRAM CAPTION HTML FORMATTING EXAMPLES:**
+```javascript
+// Example caption with HTML formatting for insider trades
+const caption = `<b>${companyCard.company_name} (${companyCard.symbol})</b>\n\n` +
+  `<i>💰 Market Cap:</i> $${formatMarketCap(companyCard.company_marketcap)}\n` +
+  `<i>🏭 Industry:</i> ${companyCard.industry}\n\n` +
+  `<b>🔥 Recent Insider Activity:</b>\n` +
+  companyCard.trades.slice(0, 3).map(trade => 
+    `• <code>${trade.insider_name}</code> - ${trade.shares.toLocaleString()} shares @ $${trade.price}`
+  ).join('\n') +
+  `\n\n📊 <a href="${telegraphUrl}">View Full Analysis</a>`;
+```
+
+**📋 SUPPORTED HTML TAGS:**
+- **`<b>text</b>`** - bold text для headers и emphasis
+- **`<i>text</i>`** - italic text для labels и descriptions  
+- **`<code>text</code>`** - monospace text для numbers и data
+- **`<a href="URL">text</a>`** - inline links к Telegraph статьям
+- **`<strong>text</strong>`** - alternative bold formatting
+- **`<em>text</em>`** - alternative italic formatting
+
 **💡 ПОЯСНЕНИЕ:**
 - **Credential:** `nodeCredentialType: "telegramApi"` - использует Telegram credential (ID: IPk73kQxS5AUJ1Ni)
 - **Method:** sendPhoto для сообщений с изображениями
+- **🔧 RED FLAG 6 FIX:** Added `parse_mode: 'HTML'` parameter for proper HTML tag rendering
+- **Caption formatting:** Supports rich HTML formatting для professional financial content
 
 ---
 
@@ -203,6 +227,28 @@
 
 ---
 
-**📝 STATUS:** ✅ FIXED - explicit credential specification added  
-**🔧 RED FLAG 4:** ✅ PROGRESS - Block 4 credential selection standardized  
+## 🔧 **RED FLAG 6 RESOLUTION - COMPLETE:**
+
+### **✅ IMPLEMENTED FIXES:**
+1. **Added `parse_mode: 'HTML'` parameter** to Node 23 Telegram sendPhoto request
+2. **Documented supported HTML tags** для caption formatting
+3. **Provided caption formatting examples** с practical insider trading context
+4. **Specified HTML tag usage patterns** для professional financial content
+
+### **📋 HTML FORMATTING BENEFITS:**
+- **Enhanced readability** - bold headers, italic labels для better UX
+- **Professional appearance** - structured financial data presentation  
+- **Interactive elements** - inline links к Telegraph detailed analysis
+- **Data highlighting** - monospace formatting для numbers и metrics
+
+### **🎯 BUSINESS IMPACT:**
+- **Improved user engagement** через better formatted Telegram messages
+- **Professional branding** для insider trades channel
+- **Enhanced information hierarchy** с proper text formatting
+- **Better click-through rates** к Telegraph full analysis
+
+---
+
+**📝 STATUS:** ✅ FIXED - HTML parse mode support implemented  
+**🔧 RED FLAG 6:** ✅ RESOLVED - Telegram HTML formatting fully documented and configured  
 **🔄 NEXT:** [Block 5: State Management & Completion →](block-5-state-management.md)
