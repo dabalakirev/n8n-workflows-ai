@@ -114,7 +114,6 @@ return [{
 - **Collection:** `deals` - основная коллекция карточек компаний
 - **Sort:** `created_at DESC` - новейшие карточки первыми
 - **Limit:** 30 карточек для оптимизации (согласно Level 2)
-- **Credential:** Использует существующий `mongoDb` credential
 
 ---
 
@@ -254,7 +253,6 @@ return [{
 ```
 **💡 ПОЯСНЕНИЕ:**
 - **Dynamic URL:** Использует symbol из текущей сделки
-- **Same authentication:** Переиспользует FMP API credential
 - **neverError: true** - продолжает работу даже если профиль недоступен
 - **Timeout:** 30 секунд для внешнего API
 - Выполняется только для non-duplicate сделок
@@ -365,8 +363,7 @@ return [{
 ```
 
 ## 🔧 Required Credentials:
-- **FMP API** (ID: k887gSxTZZEgRYIa) - httpQueryAuth для узла 10
-- **MongoDB** - mongoDb credential для узлов 7, 12
+**See:** [credentials-reference.md](credentials-reference.md) for exact credential IDs and usage
 
 ---
 
