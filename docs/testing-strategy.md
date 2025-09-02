@@ -44,6 +44,14 @@ Related Workflows: НЕ добавляем Test Webhook (вызываются е
 
 ---
 
+## 🔧 Incremental Testing
+
+**Development Integration:** See **[Incremental Testing Protocol](incremental-testing-protocol.md)** for progressive node-by-node development methodology.
+
+**Key Principle:** Test 1-3 nodes per iteration via parent workflow webhook before extending workflow complexity.
+
+---
+
 ## 🏗️ Project Environment Structure
 
 ### **DEV Environment (Testable):**
@@ -171,4 +179,5 @@ Related Workflows: НЕ добавляем Test Webhook (вызываются е
 
 **Related Documentation:**
 - **[MCP Webhook Testing Guide](mcp-webhook-testing-guide.md)** - **Detailed step-by-step procedures**
+- **[Incremental Testing Protocol](incremental-testing-protocol.md)** - **Progressive development methodology**
 - **[AI Agent Roles & Protocols](ai-agent-roles-protocols.md)** - Testing integration in AI workflows
