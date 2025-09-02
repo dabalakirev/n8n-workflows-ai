@@ -2,7 +2,7 @@
 
 **🎯 НАЗНАЧЕНИЕ БЛОКА:** Получение инсайдерских сделок от FMP API, строгая фильтрация согласно Level 2 требованиям, early exit при пустых результатах
 
-**🔗 NAVIGATION:** [← Architecture Overview](architecture.md) | [Next: Block 2 →](block-2-database-operations.md)
+**🔗 NAVIGATION:** [← Architecture Overview](../architecture.md) | [Next: Block 2 →](block-2-database-operations.md)
 
 ---
 
