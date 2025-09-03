@@ -102,9 +102,9 @@ return [{
   "resource": "document",
   "operation": "find",
   "collection": "deals",
-  "query": "={{JSON.parse($json.mongoQuery.find.query)}}",
+  "query": "={{JSON.stringify($json.mongoQuery.find.query)}}",
   "options": {
-    "sort": "={{JSON.parse($json.mongoQuery.find.options.sort)}}",
+    "sort": "={{JSON.stringify($json.mongoQuery.find.options.sort)}}",
     "limit": "={{$json.mongoQuery.find.options.limit}}"
   }
 }
@@ -364,11 +364,13 @@ if ($json.operation === 'findOneAndUpdate') {
 
 ---
 
-## 📋 Block Connections (UPDATED):
+## 📋 Block Connections
+
 ```
-5 (Split) [Loop] → 6 (Process) → 7 (Lookup) → 8 (Status) → 9 (Skip Check)
-    ↑                                                            ↑[TRUE] → 10 (Profile) → 11 (Prepare) → 12a (Update Logic) → 12 (Execute) → 5 [Loop]
-    ↑[Done] → Block 3                                            ↑[FALSE] → 5 [Loop]
+5 (Split) [Batch] → 6 (Process) → 7 (Lookup) → 8 (Status) → 9 (Skip Check)
+                                                                ↓[TRUE] → 10 (Profile) → 11 (Prepare) → 12 (Execute)
+                                                                ↓[FALSE] → (End processing)
+5 (Split) [Done] → Block 3
 ```
 
 ## 🔐 Required Credentials:
