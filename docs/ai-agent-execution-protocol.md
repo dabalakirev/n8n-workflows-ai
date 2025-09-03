@@ -97,6 +97,16 @@
 - **Notify on completion** - уведомлять о завершении этапов
 - **Handle unexpected issues** - уведомлять о проблемах
 
+### **🔧 Workflow Activation Requirement**
+**Before testing any workflow:**
+- ✅ **Workflow created** via MCP tools
+- ⚠️ **Manual activation required** - AI agent CANNOT activate workflows
+- 🚫 **No development continuation** until workflow activated
+- ✅ **Human activates workflow** in n8n UI
+- ✅ **Webhook testing proceeds** after activation
+
+**Protocol:** Always request manual activation before webhook testing phase.
+
 ### **Progressive Implementation для Workflow Development:**
 - ✅ **Max 1-3 nodes per iteration** + test via webhook before extending
 - ✅ **Follow [Incremental Testing Protocol](incremental-testing-protocol.md)** для complex workflows
