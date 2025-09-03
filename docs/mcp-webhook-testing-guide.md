@@ -22,6 +22,20 @@
 
 ---
 
+## 🚨 **CRITICAL: Manual Activation Required**
+
+**MCP CANNOT activate workflows** - human must activate in n8n UI after creation
+
+**Process:**
+1. **Create workflow via MCP** ✅
+2. **Configure webhook node via MCP** ✅  
+3. **ACTIVATE workflow manually** ⚠️ - **HUMAN REQUIRED**
+4. **Test via MCP** ✅
+
+**Without manual activation:** Webhook returns 404 "not registered" error
+
+---
+
 ## 🏗️ Webhook Architecture
 
 **Test Webhook** = узел внутри Parent Workflow (НЕ отдельный workflow)
@@ -34,45 +48,47 @@
 - Use `web_fetch` for webhooks → 403 Forbidden
 - Hardcode URLs → Use dynamic discovery
 - Skip URL encoding → Use `URLSearchParams`
-- **CONTINUE development without successful webhook testing** ⚠️ **NEW**
+- **Use Code node with responseNode mode** → "No Respond to Webhook node" error
+- **CONTINUE development without successful webhook testing** ⚠️
 
 **✅ ONLY METHOD:**
 - Use `n8n_trigger_webhook_workflow()` MCP tool
+- Use `n8n-nodes-base.respondToWebhook` node for responses
 
-## ⚡ 3-Step Testing Process
+## ⚡ 4-Step Testing Process
 
-### 1. Discovery
+### 1. Create & Configure
 ```javascript
-const workflow = await n8n_get_workflow_details({id: "workflow-id"});
-if (!workflow.hasWebhookTrigger) throw new Error("No webhook");
-const url = `https://dm83.app.n8n.cloud/webhook/${workflow.webhookPath}`;
+const workflow = await n8n_create_workflow({
+  nodes: [{
+    type: "n8n-nodes-base.webhook",
+    parameters: {path: "test-webhook", httpMethod: "GET", responseMode: "responseNode"}
+  }, {
+    type: "n8n-nodes-base.respondToWebhook", // ✅ CORRECT node type
+    parameters: {respondWith: "json", responseBody: "{\"status\": \"success\"}"}
+  }],
+  connections: {"Test Webhook": {"main": [[{"node": "Respond to Webhook"}]]}}
+});
 ```
 
-### 2. Execute
-```javascript
-// GET with parameters
-const params = new URLSearchParams({
-  testType: "full",
-  "testData.input": testInput,
-  "testData.sessionId": `test-${Date.now()}`
-});
+### 2. Manual Activation (HUMAN REQUIRED)
+**MCP cannot activate - human must activate in n8n UI**
 
+### 3. Execute & Test
+```javascript
 const result = await n8n_trigger_webhook_workflow({
-  webhookUrl: `${url}?${params.toString()}`,
+  webhookUrl: `https://dm83.app.n8n.cloud/webhook/${workflow.webhookPath}`,
   httpMethod: "GET",
   waitForResponse: true
 });
 ```
 
-### 3. Validate
+### 4. Validate Response
 ```javascript
-if (result.testExecution?.status !== "success") {
-  throw new Error(`Test failed: ${result.testExecution?.error?.message}`);
-}
-
-// ⚠️ NEW: If webhook testing fails - HALT development
-if (result.status === 404 || result.data?.code === 404) {
-  throw new Error("CRITICAL: Webhook testing failed - development must be halted");
+if (result.status === 200) {
+  console.log("✅ Webhook test successful");
+} else {
+  throw new Error("🛑 HALT development - webhook test failed");
 }
 ```
 
@@ -86,9 +102,9 @@ if (result.status === 404 || result.data?.code === 404) {
 5. **INVESTIGATE ROOT CAUSE** - resolve webhook infrastructure before continuing
 
 ### **No Development Activities Until:**
-- ✅ Webhook registration working
+- ✅ Manual activation completed
 - ✅ MCP webhook testing successful  
-- ✅ Complete 3-step testing process validated
+- ✅ 200 OK response received
 
 ## 📋 Required Parameters
 
@@ -101,13 +117,10 @@ if (result.status === 404 || result.data?.code === 404) {
 ## 🎯 Success Response Format
 ```json
 {
-  "testExecution": {
-    "status": "success",
-    "executionId": "exec-123",
-    "testResults": {
-      "aiResponse": "...",
-      "childWorkflows": [{"name": "...", "status": "completed"}]
-    }
+  "status": 200,
+  "data": {
+    "message": "Webhook test successful",
+    "testStatus": "PASS"
   }
 }
 ```
@@ -117,9 +130,10 @@ if (result.status === 404 || result.data?.code === 404) {
 | Error | Cause | Fix | Development Impact |
 |-------|-------|-----|-------------------|
 | 403 Forbidden | Used `web_fetch` | Use `n8n_trigger_webhook_workflow` | Continue after fix |
-| 404 Not Found | Wrong URL | Check `workflow.webhookPath` | **HALT development** ⚠️ |
+| 404 Not Found | Workflow not activated | **Manual activation required** | **HALT development** ⚠️ |
+| "No Respond to Webhook node" | Used Code node with responseNode mode | Use `respondToWebhook` node | **HALT development** ⚠️ |
+| SERVER_ERROR | Workflow execution error | Debug with `n8n_get_execution` | **HALT development** ⚠️ |
 | Malformed URL | No encoding | Use `URLSearchParams` | Continue after fix |
-| No test data | Missing params | Add required parameters | Continue after fix |
 | Webhook not registered | Infrastructure issue | **INVESTIGATE n8n instance** | **HALT development** ⚠️ |
 
 ## 📝 Complete Working Example
@@ -139,7 +153,7 @@ async function testWebhook(workflowId, testInput) {
     "testData.sessionId": `test-${Date.now()}`
   });
   
-  // 3. Execute
+  // 3. Execute (requires manual activation first!)
   const result = await n8n_trigger_webhook_workflow({
     webhookUrl: `${baseUrl}?${params.toString()}`,
     httpMethod: "GET", 
@@ -147,21 +161,21 @@ async function testWebhook(workflowId, testInput) {
   });
   
   // 4. Validate + Development Gate
-  if (result.status === 404 || result.data?.code === 404) {
-    throw new Error("🛑 DEVELOPMENT GATE: Webhook testing failed - must halt all development");
+  if (result.status === 404) {
+    throw new Error("🛑 DEVELOPMENT GATE: Manual activation required");
   }
   
-  if (result.testExecution?.status === "success") {
+  if (result.status === 200) {
     console.log("✅ Test passed - development may continue");
     return result;
   } else {
-    throw new Error(`❌ Test failed: ${result.testExecution?.error?.message}`);
+    throw new Error(`🛑 DEVELOPMENT GATE: Webhook test failed - ${result.error}`);
   }
 }
 ```
 
 ---
 
-**Critical Protocol:** Webhook testing success is **mandatory gate** for all workflow development. No exceptions.
+**Critical Protocol:** Webhook testing success is **mandatory gate** for all workflow development. Manual activation required.
 
-**Usage:** `await testWebhook("workflow-id", "Your test input")`
+**Usage:** Create workflow → Human activates → `await testWebhook("workflow-id", "test input")`
