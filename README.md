@@ -106,7 +106,7 @@ docs/
 ### 🛡️ **Operations & Security**:
 - **[Security Best Practices](docs/security-best-practices.md)** - Security guidelines
 - **[Backup Essentials](docs/backup-essentials.md)** - Backup & recovery procedures
-- **[MCP CI/CD Deployment Protocol](docs/mcp-cicd-deployment-protocol.md)** - Deployment procedures
+- **[MCP CI/CD Deployment Protocol](docs/mcp-cicd-deployment-protocol.md)** - n8n development procedures (read when developing)
 
 ### 📋 **Maintenance & Consistency**:
 - **[Documentation Consistency Procedure](docs/documentation-consistency-procedure.md)** - Doc maintenance
@@ -176,4 +176,4 @@ docs/
 
 ---
 
-*Updated: September 2, 2025*
+*Updated: September 3, 2025*
