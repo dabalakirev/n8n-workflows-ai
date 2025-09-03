@@ -1,93 +1,111 @@
-# MCP CI/CD Deployment Protocol
+# Simplified MCP CI/CD Protocol
 
 ## ⚠️ ОБЯЗАТЕЛЬНЫЙ ПРОТОКОЛ
-Это ФУНДАМЕНТАЛЬНЫЙ план действий, который ОБЯЗАТЕЛЬНО должен выполняться в строгой последовательности. Переход к следующему пункту БЕЗ выполнения предыдущих ЗАПРЕЩЕН.
+Упрощенный CI/CD процесс для n8n workflow разработки с unified Developer-Tester ролью и incremental подходом.
 
 ## 🎯 Цель
-CI/CD процесс для n8n workflow разработки с использованием MCP-first подхода.
+Streamlined разработка n8n workflows через MCP с built-in testing и architecture validation.
 
-## 🔄 Основные фазы
+---
 
-### 1. **🏗️ Architecture Design**
-- Анализ требований и планирование
-- Создание Issues с критериями успеха
-- Определение MCP подхода
+## 📚 Documentation Dependencies
 
-### 2. **💻 MCP-First Development**
-- Анализ текущего состояния (`n8n_list_workflows`)
-- Реализация через MCP (`n8n_create_workflow`, `n8n_update_full_workflow`)
-- **DEV триггеры**: Manual + Execute Workflow (для тестирования)
-- Синхронизация с GitHub
+### **🔧 ОБЯЗАТЕЛЬНЫЕ ПЛАТФОРМЕННЫЕ ПРОТОКОЛЫ:**
+- **[AI Agent Execution Protocol](docs/ai-agent-execution-protocol.md)** - 5-step workflow для всех задач
+- **[AI Agent Roles & Protocols](docs/ai-agent-roles-protocols.md)** - Role definitions (Developer роль)
+- **[MCP Webhook Testing Guide](docs/mcp-webhook-testing-guide.md)** - Testing procedures
+- **[GitHub Issues Protocol](docs/github-issues-protocol.md)** - Issue management
 
-### 🔐 **Credentials Requirements**
-- **Source:** Use exact credential IDs from `docs/projects/[project]/credentials-reference.md`  
-- **Format:** Copy credential objects with ID + name from reference file
-- **Validation:** Verify credential names match n8n instance before deployment
+### **📋 PROJECT-SPECIFIC ДОКУМЕНТАЦИЯ:**
+- **Architecture Overview** - `docs/projects/[project]/architecture.md`
+  - **⚠️ ВАЖНО:** Из architecture.md найти нужный блок и читать ТОЛЬКО его
+  - НЕ загружать всю архитектуру в context одновременно
+- **Credentials Reference** - `docs/projects/[project]/credentials-reference.md`
 
-### 3. **🧪 Testing**
-- Выполнение тестов workflow
-- Анализ результатов выполнения
-- Создание Bug Issues при необходимости
+### **🔍 n8n PLATFORM DOCUMENTATION:**
+- **n8n Node Documentation** - через MCP `get_node_documentation(nodeType)`
+- **Validate configuration** - `validate_node_operation(nodeType, config)`
 
-### 4. **🔄 DEV-GitHub Sync**
-- **ПОСЛЕ успешных тестов**: синхронизация DEV workflows с GitHub
-- Обновление DEV файлов в папке проекта
-- Валидация соответствия n8n ↔ GitHub
+---
 
-### 5. **🚀 Production Deployment**
-- **PROD триггер**: только Manual (безопасность)
-- Удаление Execute Workflow триггера из DEV версии
-- Валидация и синхронизация с GitHub
+## 🎭 Developer-Tester Role
 
-### 6. **🏷️ Release Management**
-- Семантическое версioning
-- Создание GitHub Release
-- Публикация release notes
+### **UNIFIED RESPONSIBILITIES:**
+- **Verify architecture** против n8n documentation перед началом
+- **Develop minimal node groups** (1-3 nodes max)
+- **Test each group** immediately после creation
+- **Document progress** в Issue comments
 
-### 7. **📚 Documentation**
-- Обновление документации workflow
-- Поддержка cross-references
+---
 
-## 🚨 Критические требования
+## 🚨 Architecture Issue Escalation
 
-### **Триггеры:**
-- **DEV workflows**: 2 триггера (Manual + Execute Workflow)
-- **PROD workflows**: 1 триггер (только Manual)
+**ЕСЛИ обнаружены проблемы в architecture:**
 
-### **MCP-First подход:**
-```bash
-# Development
-n8n_create_workflow({name, nodes, connections})
+1. **🛑 STOP Development** - документировать проблему в Issue
+2. **📝 Request Approval** для изменения architecture
+3. **⏳ Wait for Approval** перед продолжением
+4. **✅ Update Architecture** после одобрения
 
-# Testing  
-n8n_get_execution(executionId) // анализ результатов
-
-# DEV-GitHub Sync
-github-mcp:create_or_update_file("workflows/project/dev/")
-
-# Production
-n8n_create_workflow(prodConfig) // без Execute Workflow триггера
+**Issue Comment Format:**
+```markdown
+## ⚠️ ARCHITECTURE ISSUE
+**Problem:** [technical issue]
+**Proposed Solution:** [brief description]
+**Requesting approval** to proceed
 ```
 
-### **UI Escalation протокол:**
-При ограничениях MCP:
-1. **Убедиться**, что ограничение реально (прописано в документации n8n)
-2. **Если ограничение реально**: документировать в комментарии текущего Issue
-3. **Создать подробную пошаговую инструкцию** для выполнения действия через UI платформы n8n
-4. Добавить label "🔴 manual-ui-required"
+---
 
-## 📋 Quality Gates
-- [ ] JSON Schema валидация
-- [ ] Workflow тестирование
-- [ ] DEV-GitHub синхронизация
-- [ ] Architecture review
-- [ ] Security review (для PROD)
+## 🔄 Development Workflow
 
-## 🔄 Role Switching формат
+### **PROCESS:**
+1. **Read architecture.md** - найти нужный блок для task
+2. **Validate architecture** против n8n documentation
+3. **Create minimal node group** (1-3 nodes)
+4. **Test via webhook** immediately
+5. **Document progress** в Issue comments
+6. **Clean temporary nodes** (keep input webhook)
+7. **Repeat** для next group
+
+---
+
+## 📝 Development Journal
+
+**ОБЯЗАТЕЛЬНО документировать в Issue comments:**
+
+**Session Start:**
+```markdown
+🚀 **Development Session**
+Target: [node group]
+Plan: [brief plan]
 ```
-🎭 [ROLE SWITCH] Current → Next
-Reason: [причина перехода]
-Context: [контекст проекта]
+
+**Progress:**
+```markdown
+✅ **Progress Update**  
+Completed: [achievements]
+Next: [next steps]
+Notes: [important details]
 ```
 
-*Протокол обеспечивает систематическую разработку workflow с MCP автоматизацией и production-ready deployment.*
+**Issues:**
+```markdown
+⚠️ **Problem Found**
+Issue: [description] 
+Solution: [what you did]
+```
+
+---
+
+## 🚨 Critical Rules
+
+- **NO architecture changes без approval**
+- **ALWAYS test each node group immediately**  
+- **Document progress в Issue comments**
+- **Read ONLY нужный architecture block**
+- **Clean temporary nodes after testing**
+
+---
+
+*Protocol ensures systematic n8n workflow development с built-in quality controls и streamlined developer experience.*
