@@ -57,16 +57,30 @@ Streamlined разработка n8n workflows через MCP с built-in testin
 
 ---
 
-## 🔄 Development Workflow
+## 🔄 3-Step Development Cycle
 
-### **PROCESS:**
-1. **Read architecture.md** - найти нужный блок для task
-2. **Validate architecture** против n8n documentation
-3. **Create minimal node group** (1-3 nodes)
-4. **Test via webhook** immediately
-5. **Document progress** в Issue comments
-6. **Clean temporary nodes** (keep input webhook)
-7. **Repeat** для next group
+### **MANDATORY DEVELOPMENT WORKFLOW:**
+
+#### **Step 1: n8n Development (MCP Tools)**
+- **Develop workflows** непосредственно на n8n instance через MCP
+- **Start from current state** - ориентируясь на активный Issue и записи в нем
+- **Create minimal node groups** (1-3 nodes max)
+- **Test via webhook** immediately после каждой группы
+
+#### **Step 2: GitHub Sync**
+- **Export workflow JSON** из n8n после успешного тестирования
+- **Sync DEV files** в `workflows/[project]/dev/` папку на GitHub
+- **Create/Update workflow files** с descriptive названиями
+- **Commit changes** с clear commit message
+
+#### **Step 3: Issue Progress Update**
+- **Update Issue comments** с progress status
+- **Document achievements** - что именно completed
+- **Note next steps** - план для following iteration
+- **Fix any issues** if discovered durante sync
+
+### **REPEAT CYCLE:**
+**Повторять 3-step цикл до тех пор, пока проект не будет готов к PROD deployment**
 
 ---
 
@@ -79,21 +93,52 @@ Streamlined разработка n8n workflows через MCP с built-in testin
 🚀 **Development Session**
 Target: [node group]
 Plan: [brief plan]
+Current n8n State: [описание текущего состояния]
 ```
 
-**Progress:**
+**After GitHub Sync:**
 ```markdown
-✅ **Progress Update**  
+✅ **Progress Update - Synced to GitHub**  
 Completed: [achievements]
+Files Updated: workflows/[project]/dev/[files]
 Next: [next steps]
 Notes: [important details]
 ```
 
-**Issues:**
+**Issues Found:**
 ```markdown
 ⚠️ **Problem Found**
 Issue: [description] 
 Solution: [what you did]
+GitHub Status: [synced/pending sync]
+```
+
+---
+
+## 📁 GitHub Sync Procedures
+
+### **File Organization:**
+```
+workflows/[project]/
+├── dev/                    # DEV workflows (active development)
+│   ├── main-workflow.json  # Primary workflow file
+│   └── [additional-files]  # Support files if needed
+└── prod/                   # PROD workflows (after deployment)
+```
+
+### **Sync Process:**
+1. **Export from n8n** - через MCP tools get workflow JSON
+2. **Update dev files** - replace/create workflow files в dev/ folder
+3. **Commit changes** - descriptive message с progress indication
+4. **Update Issue** - confirm sync completed
+
+### **Commit Message Format:**
+```
+[PROJECT] Block X development - [brief description]
+
+- Added nodes: [list]
+- Testing status: [passed/in progress]
+- Next: [next development step]
 ```
 
 ---
@@ -101,11 +146,13 @@ Solution: [what you did]
 ## 🚨 Critical Rules
 
 - **NO architecture changes без approval**
-- **ALWAYS test each node group immediately**  
-- **Document progress в Issue comments**
+- **ALWAYS follow 3-step cycle**: n8n Dev → GitHub Sync → Issue Update
+- **Test each node group** immediately на n8n
+- **Sync to GitHub** only after successful testing
+- **Document progress** в Issue comments after each sync
 - **Read ONLY нужный architecture block**
-- **Clean temporary nodes after testing**
+- **Clean temporary nodes** after testing (keep input webhook)
 
 ---
 
-*Protocol ensures systematic n8n workflow development с built-in quality controls и streamlined developer experience.*
+*Protocol ensures systematic n8n workflow development с built-in quality controls, GitHub synchronization, и streamlined developer experience.*
