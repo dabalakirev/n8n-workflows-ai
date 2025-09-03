@@ -1,5 +1,27 @@
 # MCP Webhook Testing Guide - Compact
 
+## 🚨 **CRITICAL CI/CD RULE - NO EXCEPTIONS**
+
+### ⚠️ **MANDATORY WEBHOOK TESTING GATE**
+
+**🛑 NEVER CONTINUE development if webhook testing FAILS**
+
+**Policy:**
+- ✅ **Webhook test PASS** → continue development  
+- ❌ **Webhook test FAIL** → **HALT all development activities**
+- 🚫 **No workarounds** - no alternative validation methods
+- 🚫 **No "temporary skips"** - webhook testing is mandatory gate
+
+**Protocol Violation Consequences:**
+- **Immediate rollback** of all development work
+- **Delete workflows** created without webhook validation  
+- **Remove documentation** of unsuccessful implementations
+- **Block Issue progression** until webhook testing resolved
+
+**Enforcement:** This rule applies to ALL workflow development - no exceptions for "simple" workflows or "quick fixes".
+
+---
+
 ## 🏗️ Webhook Architecture
 
 **Test Webhook** = узел внутри Parent Workflow (НЕ отдельный workflow)
@@ -12,6 +34,7 @@
 - Use `web_fetch` for webhooks → 403 Forbidden
 - Hardcode URLs → Use dynamic discovery
 - Skip URL encoding → Use `URLSearchParams`
+- **CONTINUE development without successful webhook testing** ⚠️ **NEW**
 
 **✅ ONLY METHOD:**
 - Use `n8n_trigger_webhook_workflow()` MCP tool
@@ -46,7 +69,26 @@ const result = await n8n_trigger_webhook_workflow({
 if (result.testExecution?.status !== "success") {
   throw new Error(`Test failed: ${result.testExecution?.error?.message}`);
 }
+
+// ⚠️ NEW: If webhook testing fails - HALT development
+if (result.status === 404 || result.data?.code === 404) {
+  throw new Error("CRITICAL: Webhook testing failed - development must be halted");
+}
 ```
+
+## 🚫 **Development Gate Enforcement**
+
+### **If Webhook Testing Fails:**
+1. **IMMEDIATE HALT** - stop all development activities
+2. **ROLLBACK CHANGES** - delete unsuccessful workflows  
+3. **REMOVE ARTIFACTS** - delete implementation logs/documentation
+4. **UPDATE ISSUE** - mark as blocked by webhook testing failure
+5. **INVESTIGATE ROOT CAUSE** - resolve webhook infrastructure before continuing
+
+### **No Development Activities Until:**
+- ✅ Webhook registration working
+- ✅ MCP webhook testing successful  
+- ✅ Complete 3-step testing process validated
 
 ## 📋 Required Parameters
 
@@ -72,12 +114,13 @@ if (result.testExecution?.status !== "success") {
 
 ## 🚨 Error Troubleshooting
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| 403 Forbidden | Used `web_fetch` | Use `n8n_trigger_webhook_workflow` |
-| 404 Not Found | Wrong URL | Check `workflow.webhookPath` |
-| Malformed URL | No encoding | Use `URLSearchParams` |
-| No test data | Missing params | Add required parameters |
+| Error | Cause | Fix | Development Impact |
+|-------|-------|-----|-------------------|
+| 403 Forbidden | Used `web_fetch` | Use `n8n_trigger_webhook_workflow` | Continue after fix |
+| 404 Not Found | Wrong URL | Check `workflow.webhookPath` | **HALT development** ⚠️ |
+| Malformed URL | No encoding | Use `URLSearchParams` | Continue after fix |
+| No test data | Missing params | Add required parameters | Continue after fix |
+| Webhook not registered | Infrastructure issue | **INVESTIGATE n8n instance** | **HALT development** ⚠️ |
 
 ## 📝 Complete Working Example
 
@@ -103,9 +146,13 @@ async function testWebhook(workflowId, testInput) {
     waitForResponse: true
   });
   
-  // 4. Validate
+  // 4. Validate + Development Gate
+  if (result.status === 404 || result.data?.code === 404) {
+    throw new Error("🛑 DEVELOPMENT GATE: Webhook testing failed - must halt all development");
+  }
+  
   if (result.testExecution?.status === "success") {
-    console.log("✅ Test passed");
+    console.log("✅ Test passed - development may continue");
     return result;
   } else {
     throw new Error(`❌ Test failed: ${result.testExecution?.error?.message}`);
@@ -114,4 +161,7 @@ async function testWebhook(workflowId, testInput) {
 ```
 
 ---
+
+**Critical Protocol:** Webhook testing success is **mandatory gate** for all workflow development. No exceptions.
+
 **Usage:** `await testWebhook("workflow-id", "Your test input")`
