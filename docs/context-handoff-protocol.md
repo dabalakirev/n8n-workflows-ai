@@ -48,6 +48,13 @@ Prevent duplication и maintain consistency
 ### 🔄 [Roadmap](roadmap.md)
 Текущий статус платформы и приоритеты
 
+## 🎯 Context-Specific Protocols
+
+**Читать ТОЛЬКО при specific work types:**
+- **n8n Development:** [MCP CI/CD Deployment Protocol](mcp-cicd-deployment-protocol.md) - 3-step cycle
+- **Release Management:** [Release protocols] (when applicable)
+- **[Other specialized protocols as needed]**
+
 ## 🔄 Процедура смены агента
 
 ### При завершении сессии:
