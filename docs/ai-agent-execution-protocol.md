@@ -94,6 +94,7 @@
 
 **Во время выполнения:**
 - **Follow approved plan** - строго по плану
+- **For n8n development work: Read [MCP CI/CD Protocol](mcp-cicd-deployment-protocol.md)** - 3-step development cycle
 - **Notify on completion** - уведомлять о завершении этапов
 - **Handle unexpected issues** - уведомлять о проблемах
 
